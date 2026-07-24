@@ -1,0 +1,70 @@
+﻿@model IEnumerable<BookMvc.Models.Book>
+
+@{
+    ViewData["Title"] = "Book Collection";
+}
+
+<h2>📚 My Book Collection</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">➕ Add New Book</a>
+</p>
+
+<form asp-action="Search" method="get">
+    <div class="input-group mb-3">
+        <input type="text" name="searchTerm" class="form-control" placeholder="Search by title or author..." />
+        <button type="submit" class="btn btn-outline-secondary">🔍 Search</button>
+    </div>
+</form>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-info">
+        No books found. Click "Add New Book" to add your first book!
+    </div>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Genre</th>
+                <th>Status</th>
+                <th>Rating</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Title</td>
+                    <td>@item.Author</td>
+                    <td>@item.Genre</td>
+                    <td>
+                        @if (item.IsRead)
+                        {
+                            <span class="badge bg-success">✅ Read</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning text-dark">📖 Unread</span>
+                        }
+                    </td>
+                    <td>⭐ @item.Rating/5</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">📄</a>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">✏️</a>
+                        @if (!item.IsRead)
+                        {
+                            <a asp-action="MarkRead" asp-route-id="@item.Id" class="btn btn-sm btn-success">✅</a>
+                        }
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">🗑️</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

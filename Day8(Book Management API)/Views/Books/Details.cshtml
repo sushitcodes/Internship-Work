@@ -1,0 +1,48 @@
+﻿@model BookMvc.Models.Book
+
+@{
+    ViewData["Title"] = "Book Details";
+}
+
+<h2>📄 Book Details</h2>
+
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Title</dt>
+            <dd class="col-sm-9">@Model.Title</dd>
+
+            <dt class="col-sm-3">Author</dt>
+            <dd class="col-sm-9">@Model.Author</dd>
+
+            <dt class="col-sm-3">Genre</dt>
+            <dd class="col-sm-9">@Model.Genre</dd>
+
+            <dt class="col-sm-3">Published Year</dt>
+            <dd class="col-sm-9">@Model.PublishedYear</dd>
+
+            <dt class="col-sm-3">Rating</dt>
+            <dd class="col-sm-9">⭐ @Model.Rating/5</dd>
+
+            <dt class="col-sm-3">Status</dt>
+            <dd class="col-sm-9">
+                @if (Model.IsRead)
+                {
+                    <span class="badge bg-success">✅ Read</span>
+                }
+                else
+                {
+                    <span class="badge bg-warning text-dark">📖 Unread</span>
+                }
+            </dd>
+
+            <dt class="col-sm-3">Added Date</dt>
+            <dd class="col-sm-9">@Model.AddedDate.ToString("MMMM dd, yyyy")</dd>
+        </dl>
+    </div>
+</div>
+
+<div class="mt-3">
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">✏️ Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">📚 Back to List</a>
+</div>
