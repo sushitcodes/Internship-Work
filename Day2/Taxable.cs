@@ -1,0 +1,4 @@
+﻿ interface Taxable
+{
+    double CalculateTax();
+}

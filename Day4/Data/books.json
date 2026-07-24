@@ -1,0 +1,16 @@
+[
+  {
+    "Id": 1,
+    "Title": "BlackClover",
+    "Author": "Asta",
+    "Isbn": "1021",
+    "IsAvailable": false
+  },
+  {
+    "Id": 2,
+    "Title": "OnePiece",
+    "Author": "Oda",
+    "Isbn": "1456",
+    "IsAvailable": true
+  }
+]

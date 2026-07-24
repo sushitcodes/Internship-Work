@@ -1,0 +1,10 @@
+[
+  {
+    "Id": 1,
+    "BookId": 1,
+    "MemberId": 1,
+    "BorrowedOn": "2026-07-24T11:29:17.5343266+05:45",
+    "ReturnedOn": null,
+    "IsActive": true
+  }
+]
