@@ -1,0 +1,35 @@
+@Day_9_HostAddress = http://localhost:5017
+
+GET {{Day_9_HostAddress}}/api/books
+Accept: application/json
+
+###
+GET {{Day_9_HostAddress}}/api/books/2
+Accept: application/json
+
+###
+POST {{Day_9_HostAddress}}/api/books
+Content-Type: application/json
+{
+  "title": "C# Programming",
+  "author": "John Doe",
+  "genre": "Programming",
+  "rating": 5,
+  "isRead": true
+}
+
+###
+PUT {{Day_9_HostAddress}}/api/books/2
+Content-Type: application/json
+{
+    "id":2, 
+    "title": "One Piece",
+    "author": "Oda",
+    "genre": "Action",
+    "isRead": true,
+    "rating": 4.99
+}
+###
+DELETE {{Day_9_HostAddress}}/api/books/1
+Accept: application/json
+

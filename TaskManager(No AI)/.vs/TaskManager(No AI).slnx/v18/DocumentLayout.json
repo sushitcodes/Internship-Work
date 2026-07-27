@@ -1,0 +1,58 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "G:\\C#\\TaskManager(No AI)\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{50EB5891-7FEB-4489-824A-405DC0EFC4F8}|TaskManager(No AI).csproj|g:\\c#\\taskmanager(no ai)\\task.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50EB5891-7FEB-4489-824A-405DC0EFC4F8}|TaskManager(No AI).csproj|solutionrelative:task.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50EB5891-7FEB-4489-824A-405DC0EFC4F8}|TaskManager(No AI).csproj|g:\\c#\\taskmanager(no ai)\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50EB5891-7FEB-4489-824A-405DC0EFC4F8}|TaskManager(No AI).csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Task.cs",
+              "DocumentMoniker": "G:\\C#\\TaskManager(No AI)\\Task.cs",
+              "RelativeDocumentMoniker": "Task.cs",
+              "ToolTip": "G:\\C#\\TaskManager(No AI)\\Task.cs",
+              "RelativeToolTip": "Task.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-27T10:41:33.643Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "G:\\C#\\TaskManager(No AI)\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "G:\\C#\\TaskManager(No AI)\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-27T10:40:33.699Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
