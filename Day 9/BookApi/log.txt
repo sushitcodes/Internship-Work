@@ -1,0 +1,8 @@
+Info:Getting all books from database
+Info:Deleting book with ID:8
+Info:Book deleted successfully8
+Info:Deleting book with ID:8
+Info:Deleting book with ID:10
+Info:Book deleted successfully10
+Info:Adding new book: Jacktion
+Info:Book added with ID:13

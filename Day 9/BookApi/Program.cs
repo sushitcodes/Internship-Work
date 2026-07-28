@@ -1,10 +1,12 @@
 using BookApi.Data;
 using BookApi.Services;
+using Day_9.Services;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 Console.OutputEncoding = System.Text.Encoding.UTF8;
+
 // Add services to the container.
 builder.Host.UseSerilog((context, config) =>
 {
@@ -17,8 +19,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddControllers();
-
+builder.Services.AddScoped<ILogginService, FileLoggerService>();
 builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IEmailService, MockEmailService>();
+builder.Services.AddScoped<IBookRepository, BookRepository>();
+builder.Services.AddMemoryCache();
+builder.Services.AddScoped<ICacheService, MemoryCacheService>();
+//builder.Services.AddScoped<IlogginService, FileLoggerService>();
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();

@@ -1,83 +1,122 @@
-﻿using BookApi.Data;
-using BookApi.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using BookApi.Models;
+using Day_9.Services;
 
 namespace BookApi.Services
 {
     public class BookService : IBookService
     {
-        private readonly AppDbContext _context;
-        private readonly ILogger<BookService> _logger;
+        private readonly IBookRepository _repository;
+        private readonly ILogginService _logger;
+        private readonly IEmailService _emailService;
+        private readonly ICacheService _cache;
 
 
-        public BookService(AppDbContext context, ILogger<BookService> logger)
+        public BookService(
+            IBookRepository repository,
+            ILogginService logger,
+            IEmailService emailService,
+            ICacheService cache)
         {
-            _context = context;
+            _repository = repository;
             _logger = logger;
+            _emailService = emailService;
+            _cache = cache;
         }
 
         public async Task<IEnumerable<Book>> GetAllBooksAsync()
         {
-            _logger.LogInformation("Getting all books from database");
-            return await _context.Books.ToListAsync();
+            string cacheKey = "all_books";
+
+            var cachedBooks = _cache.Get<IEnumerable<Book>>(cacheKey);
+
+            if (cachedBooks != null)
+            {
+                _logger.LogInfo("Getting books from cache");
+                return cachedBooks;
+            }
+
+            _logger.LogInfo("Cache empty. Getting books from database");
+
+            var books = await _repository.GetAllAsync();
+
+            _cache.Set(cacheKey, books);
+
+            return books;
         }
 
-        public async Task<Book> GetBookByIdAsync(int id)
+        public async Task<Book?> GetBookByIdAsync(int id)
         {
-            _logger.LogInformation("Getting book with ID: {Id}", id);
-            return await _context.Books.FindAsync(id);
+            string cacheKey = $"book_{id}";
+
+            var cachedBook = _cache.Get<Book>(cacheKey);
+
+            if (cachedBook != null)
+            {
+                _logger.LogInfo($"Getting book {id} from cache");
+                return cachedBook;
+            }
+
+            _logger.LogInfo($"Getting book {id} from database");
+
+            var book = await _repository.GetByIdAsync(id);
+
+            if (book != null)
+            {
+                _cache.Set(cacheKey, book);
+            }
+
+            return book;
         }
 
         public async Task<Book> AddBookAsync(Book book)
         {
-            _logger.LogInformation("Adding new book: {Title}", book.Title);
+            _logger.LogInfo($"Adding new book: {book.Title}");
 
             book.CreatedAt = DateTime.Now;
-            _context.Books.Add(book);
-            await _context.SaveChangesAsync();
 
-            _logger.LogInformation("Book added with ID: {Id}", book.Id);
-            return book;
+            var addedBook = await _repository.AddAsync(book);
+
+            await _emailService.SendEmailAsync(
+                "test@test.com",
+                "Book Added",
+                book.Title);
+
+            _logger.LogInfo($"Book added with ID: {addedBook.Id}");
+
+            return addedBook;
         }
 
-        public async Task<Book> UpdateBookAsync(int id, Book book)
+        public async Task<Book?> UpdateBookAsync(int id, Book book)
         {
-            _logger.LogInformation("Updating book with ID: {Id}", id);
+            _logger.LogInfo($"Updating book with ID: {id}");
 
-            var existingBook = await _context.Books.FindAsync(id);
-            if (existingBook == null)
-                return null;
+            var updatedBook = await _repository.UpdateAsync(id, book);
 
-            existingBook.Title = book.Title;
-            existingBook.Author = book.Author;
-            existingBook.Genre = book.Genre;
-            existingBook.IsRead = book.IsRead;
-            existingBook.Rating = book.Rating;
+            if (updatedBook != null)
+            {
+                _logger.LogInfo($"Book updated successfully: {id}");
+            }
 
-            await _context.SaveChangesAsync();
-            _logger.LogInformation("Book {Id} updated successfully", id);
-
-            return existingBook;
+            return updatedBook;
         }
 
         public async Task<bool> DeleteBookAsync(int id)
         {
-            _logger.LogInformation("Deleting book with ID: {Id}", id);
+            _logger.LogInfo($"Deleting book with ID: {id}");
 
-            var book = await _context.Books.FindAsync(id);
-            if (book == null)
-                return false;
+            var deleted = await _repository.DeleteAsync(id);
 
-            _context.Books.Remove(book);
-            await _context.SaveChangesAsync();
+            if (deleted)
+            {
+                _logger.LogInfo($"Book deleted successfully: {id}");
+            }
 
-            _logger.LogInformation("Book {Id} deleted successfully", id);
-            return true;
+            return deleted;
         }
 
         public async Task<bool> BookExistsAsync(int id)
         {
-            return await _context.Books.AnyAsync(b => b.Id == id);
+            return await _repository.ExistsAsync(id);
         }
     }
 }

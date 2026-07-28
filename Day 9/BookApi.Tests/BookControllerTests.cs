@@ -2,6 +2,7 @@ using BookApi.Controllers;
 using BookApi.Data;
 using BookApi.Models;
 using BookApi.Services;
+using Day_9.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -35,12 +36,22 @@ namespace SimpleBookApi.Tests
             _context.SaveChanges();
 
             // Create service with mocked logger
-            var loggerMock = new Mock<ILogger<BookService>>();
-            _service = new BookService(_context, loggerMock.Object);
+            var loggerMock = new Mock<ILogginService>();
+            var emailMock = new Mock<IEmailService>();
+            var repositoryMock = new Mock<IBookRepository>();
+            var cacheMock = new Mock<ICacheService>();
+
+            _service = new BookService(
+                repositoryMock.Object,
+                loggerMock.Object,
+                emailMock.Object,
+                cacheMock.Object);
 
             // Create controller with mocked logger
             var controllerLoggerMock = new Mock<ILogger<BooksController>>();
+
             _controller = new BooksController(_service, controllerLoggerMock.Object);
+
         }
 
         [TearDown]
