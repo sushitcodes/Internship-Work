@@ -3,110 +3,16 @@
   "WorkspaceRootPath": "G:\\C#\\Day 9\\BookApi\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|g:\\c#\\day 9\\bookapi\\services\\memorycacheservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|solutionrelative:services\\memorycacheservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|g:\\c#\\day 9\\bookapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|g:\\c#\\day 9\\bookapi\\services\\bookservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|solutionrelative:services\\bookservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|g:\\c#\\day 9\\bookapi\\services\\bookrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|solutionrelative:services\\bookrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6895A32A-4D9B-4E6B-A7A6-A7A57451B7CD}|..\\BookApi.Tests\\BookApi.Tests.csproj|g:\\c#\\day 9\\bookapi.tests\\bookcontrollertests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|g:\\c#\\day 9\\bookapi\\services\\icacheservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|solutionrelative:services\\icacheservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|g:\\c#\\day 9\\bookapi\\services\\ibookrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|solutionrelative:services\\ibookrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|g:\\c#\\day 9\\bookapi\\services\\ibookservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|solutionrelative:services\\ibookservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|g:\\c#\\day 9\\bookapi\\services\\iemailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|solutionrelative:services\\iemailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|g:\\c#\\day 9\\bookapi\\services\\consoleloggerservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|solutionrelative:services\\consoleloggerservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|g:\\c#\\day 9\\bookapi\\services\\mockemailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|solutionrelative:services\\mockemailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|g:\\c#\\day 9\\bookapi\\services\\fileloggerservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|solutionrelative:services\\fileloggerservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|g:\\c#\\day 9\\bookapi\\services\\ilogginservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|solutionrelative:services\\ilogginservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|g:\\c#\\day 9\\bookapi\\logs\\api-20260727.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|solutionrelative:logs\\api-20260727.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|g:\\c#\\day 9\\bookapi\\controllers\\bookscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|solutionrelative:controllers\\bookscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|g:\\c#\\day 9\\bookapi\\logs\\api-20260727_002.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|solutionrelative:logs\\api-20260727_002.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|g:\\c#\\day 9\\bookapi\\logs\\api-20260728.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|solutionrelative:logs\\api-20260728.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|g:\\c#\\day 9\\bookapi\\logs\\api-20260727_001.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|solutionrelative:logs\\api-20260727_001.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|g:\\c#\\day 9\\bookapi\\bookapi.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|solutionrelative:bookapi.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0420860C-C864-4BF4-A35F-455C77438ED7}|..\\BookApi.Consumer\\BookApi.Consumer.csproj|g:\\c#\\day 9\\bookapi.consumer\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0420860C-C864-4BF4-A35F-455C77438ED7}|..\\BookApi.Consumer\\BookApi.Consumer.csproj|g:\\c#\\day 9\\bookapi.consumer\\bookapiclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0420860C-C864-4BF4-A35F-455C77438ED7}|..\\BookApi.Consumer\\BookApi.Consumer.csproj|g:\\c#\\day 9\\bookapi.consumer\\bookapi.consumer.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|g:\\c#\\day 9\\bookapi\\models\\book.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|solutionrelative:models\\book.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6895A32A-4D9B-4E6B-A7A6-A7A57451B7CD}|..\\BookApi.Tests\\BookApi.Tests.csproj|g:\\c#\\day 9\\bookapi.tests\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6895A32A-4D9B-4E6B-A7A6-A7A57451B7CD}|..\\BookApi.Tests\\BookApi.Tests.csproj|g:\\c#\\day 9\\bookapi.tests\\bookapi.tests.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6895A32A-4D9B-4E6B-A7A6-A7A57451B7CD}|..\\BookApi.Tests\\BookApi.Tests.csproj|g:\\c#\\day 9\\bookapi.tests\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6895A32A-4D9B-4E6B-A7A6-A7A57451B7CD}|..\\BookApi.Tests\\BookApi.Tests.csproj|g:\\c#\\day 9\\bookapi.tests\\bookapi.tests.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6895A32A-4D9B-4E6B-A7A6-A7A57451B7CD}|..\\BookApi.Tests\\BookApi.Tests.csproj|g:\\c#\\day 9\\bookapi.tests\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|G:\\C#\\Day 9\\BookApi.Tests\\obj\\Debug\\net10.0\\MicrosoftTestingPlatformEntryPoint.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|g:\\c#\\day 9\\bookapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{D8A388AC-8C87-4549-0DB5-CF944C07AA01}|BookApi.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -125,371 +31,40 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "MemoryCacheService.cs",
-              "DocumentMoniker": "G:\\C#\\Day 9\\BookApi\\Services\\MemoryCacheService.cs",
-              "RelativeDocumentMoniker": "Services\\MemoryCacheService.cs",
-              "ToolTip": "G:\\C#\\Day 9\\BookApi\\Services\\MemoryCacheService.cs",
-              "RelativeToolTip": "Services\\MemoryCacheService.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAAQwBoAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-28T11:00:11.654Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "ICacheService.cs",
-              "DocumentMoniker": "G:\\C#\\Day 9\\BookApi\\Services\\ICacheService.cs",
-              "RelativeDocumentMoniker": "Services\\ICacheService.cs",
-              "ToolTip": "G:\\C#\\Day 9\\BookApi\\Services\\ICacheService.cs",
-              "RelativeToolTip": "Services\\ICacheService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-28T10:55:41.75Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "BookRepository.cs",
-              "DocumentMoniker": "G:\\C#\\Day 9\\BookApi\\Services\\BookRepository.cs",
-              "RelativeDocumentMoniker": "Services\\BookRepository.cs",
-              "ToolTip": "G:\\C#\\Day 9\\BookApi\\Services\\BookRepository.cs",
-              "RelativeToolTip": "Services\\BookRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAADMAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-28T10:18:53.296Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "IBookRepository.cs",
-              "DocumentMoniker": "G:\\C#\\Day 9\\BookApi\\Services\\IBookRepository.cs",
-              "RelativeDocumentMoniker": "Services\\IBookRepository.cs",
-              "ToolTip": "G:\\C#\\Day 9\\BookApi\\Services\\IBookRepository.cs",
-              "RelativeToolTip": "Services\\IBookRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-28T10:10:02.87Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "MockEmailService.cs",
-              "DocumentMoniker": "G:\\C#\\Day 9\\BookApi\\Services\\MockEmailService.cs",
-              "RelativeDocumentMoniker": "Services\\MockEmailService.cs",
-              "ToolTip": "G:\\C#\\Day 9\\BookApi\\Services\\MockEmailService.cs",
-              "RelativeToolTip": "Services\\MockEmailService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-28T09:42:32.449Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "IEmailService.cs",
-              "DocumentMoniker": "G:\\C#\\Day 9\\BookApi\\Services\\IEmailService.cs",
-              "RelativeDocumentMoniker": "Services\\IEmailService.cs",
-              "ToolTip": "G:\\C#\\Day 9\\BookApi\\Services\\IEmailService.cs",
-              "RelativeToolTip": "Services\\IEmailService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-28T09:38:59.366Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "BooksController.cs",
-              "DocumentMoniker": "G:\\C#\\Day 9\\BookApi\\Controllers\\BooksController.cs",
-              "RelativeDocumentMoniker": "Controllers\\BooksController.cs",
-              "ToolTip": "G:\\C#\\Day 9\\BookApi\\Controllers\\BooksController.cs",
-              "RelativeToolTip": "Controllers\\BooksController.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAgAAAAnAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-28T07:03:53.985Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 16,
-              "Title": "api-20260728.txt",
-              "DocumentMoniker": "G:\\C#\\Day 9\\BookApi\\logs\\api-20260728.txt",
-              "RelativeDocumentMoniker": "logs\\api-20260728.txt",
-              "ToolTip": "G:\\C#\\Day 9\\BookApi\\logs\\api-20260728.txt",
-              "RelativeToolTip": "logs\\api-20260728.txt",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
-              "WhenOpened": "2026-07-28T08:39:23.425Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 15,
-              "Title": "api-20260727_002.txt",
-              "DocumentMoniker": "G:\\C#\\Day 9\\BookApi\\logs\\api-20260727_002.txt",
-              "RelativeDocumentMoniker": "logs\\api-20260727_002.txt",
-              "ToolTip": "G:\\C#\\Day 9\\BookApi\\logs\\api-20260727_002.txt",
-              "RelativeToolTip": "logs\\api-20260727_002.txt",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAABMAAAAcAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
-              "WhenOpened": "2026-07-28T08:39:21.961Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 17,
-              "Title": "api-20260727_001.txt",
-              "DocumentMoniker": "G:\\C#\\Day 9\\BookApi\\logs\\api-20260727_001.txt",
-              "RelativeDocumentMoniker": "logs\\api-20260727_001.txt",
-              "ToolTip": "G:\\C#\\Day 9\\BookApi\\logs\\api-20260727_001.txt",
-              "RelativeToolTip": "logs\\api-20260727_001.txt",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
-              "WhenOpened": "2026-07-28T08:39:20.685Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "FileLoggerService.cs",
-              "DocumentMoniker": "G:\\C#\\Day 9\\BookApi\\Services\\FileLoggerService.cs",
-              "RelativeDocumentMoniker": "Services\\FileLoggerService.cs",
-              "ToolTip": "G:\\C#\\Day 9\\BookApi\\Services\\FileLoggerService.cs",
-              "RelativeToolTip": "Services\\FileLoggerService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAnAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-28T06:28:01.454Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "ConsoleLoggerService.cs",
-              "DocumentMoniker": "G:\\C#\\Day 9\\BookApi\\Services\\ConsoleLoggerService.cs",
-              "RelativeDocumentMoniker": "Services\\ConsoleLoggerService.cs",
-              "ToolTip": "G:\\C#\\Day 9\\BookApi\\Services\\ConsoleLoggerService.cs",
-              "RelativeToolTip": "Services\\ConsoleLoggerService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-28T06:18:40.618Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "ILogginService.cs",
-              "DocumentMoniker": "G:\\C#\\Day 9\\BookApi\\Services\\ILogginService.cs",
-              "RelativeDocumentMoniker": "Services\\ILogginService.cs",
-              "ToolTip": "G:\\C#\\Day 9\\BookApi\\Services\\ILogginService.cs",
-              "RelativeToolTip": "Services\\ILogginService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-28T06:13:04.966Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 22,
-              "Title": "Book.cs",
-              "DocumentMoniker": "G:\\C#\\Day 9\\BookApi\\Models\\Book.cs",
-              "RelativeDocumentMoniker": "Models\\Book.cs",
-              "ToolTip": "G:\\C#\\Day 9\\BookApi\\Models\\Book.cs",
-              "RelativeToolTip": "Models\\Book.cs",
-              "ViewState": "AgIAAAoAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-27T09:53:42.31Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "IBookService.cs",
-              "DocumentMoniker": "G:\\C#\\Day 9\\BookApi\\Services\\IBookService.cs",
-              "RelativeDocumentMoniker": "Services\\IBookService.cs",
-              "ToolTip": "G:\\C#\\Day 9\\BookApi\\Services\\IBookService.cs",
-              "RelativeToolTip": "Services\\IBookService.cs",
-              "ViewState": "AgIAAAEAAAAAAAAAAAAQwA4AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-27T09:53:10.301Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "BookService.cs",
-              "DocumentMoniker": "G:\\C#\\Day 9\\BookApi\\Services\\BookService.cs",
-              "RelativeDocumentMoniker": "Services\\BookService.cs",
-              "ToolTip": "G:\\C#\\Day 9\\BookApi\\Services\\BookService.cs",
-              "RelativeToolTip": "Services\\BookService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACwAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-27T09:53:07.809Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
               "Title": "Program.cs",
               "DocumentMoniker": "G:\\C#\\Day 9\\BookApi\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
               "ToolTip": "G:\\C#\\Day 9\\BookApi\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAABoAAAAAAAAAAIAwwCMAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAACcAAAAAAAAAAAAAADsAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-27T09:52:53.786Z",
+              "WhenOpened": "2026-07-29T04:56:06.713Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "api-20260727.txt",
-              "DocumentMoniker": "G:\\C#\\Day 9\\BookApi\\logs\\api-20260727.txt",
-              "RelativeDocumentMoniker": "logs\\api-20260727.txt",
-              "ToolTip": "G:\\C#\\Day 9\\BookApi\\logs\\api-20260727.txt",
-              "RelativeToolTip": "logs\\api-20260727.txt",
-              "ViewState": "AgIAAAsBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
-              "WhenOpened": "2026-07-27T09:52:41.997Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 26,
-              "Title": "BookApi.Tests.http",
-              "DocumentMoniker": "G:\\C#\\Day 9\\BookApi.Tests\\BookApi.Tests.http",
-              "RelativeDocumentMoniker": "..\\BookApi.Tests\\BookApi.Tests.http",
-              "ToolTip": "G:\\C#\\Day 9\\BookApi.Tests\\BookApi.Tests.http",
-              "RelativeToolTip": "..\\BookApi.Tests\\BookApi.Tests.http",
+              "DocumentIndex": 1,
+              "Title": "BooksController.cs",
+              "DocumentMoniker": "G:\\C#\\Day 9\\BookApi\\Controllers\\BooksController.cs",
+              "RelativeDocumentMoniker": "Controllers\\BooksController.cs",
+              "ToolTip": "G:\\C#\\Day 9\\BookApi\\Controllers\\BooksController.cs",
+              "RelativeToolTip": "Controllers\\BooksController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003502|",
-              "WhenOpened": "2026-07-27T09:37:17.681Z"
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-29T04:54:19.265Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
+              "DocumentIndex": 2,
               "Title": "appsettings.json",
-              "DocumentMoniker": "G:\\C#\\Day 9\\BookApi.Tests\\appsettings.json",
-              "RelativeDocumentMoniker": "..\\BookApi.Tests\\appsettings.json",
-              "ToolTip": "G:\\C#\\Day 9\\BookApi.Tests\\appsettings.json",
-              "RelativeToolTip": "..\\BookApi.Tests\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "DocumentMoniker": "G:\\C#\\Day 9\\BookApi\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "G:\\C#\\Day 9\\BookApi\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-07-27T09:37:16.48Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 23,
-              "Title": "appsettings.Development.json",
-              "DocumentMoniker": "G:\\C#\\Day 9\\BookApi.Tests\\appsettings.Development.json",
-              "RelativeDocumentMoniker": "..\\BookApi.Tests\\appsettings.Development.json",
-              "ToolTip": "G:\\C#\\Day 9\\BookApi.Tests\\appsettings.Development.json",
-              "RelativeToolTip": "..\\BookApi.Tests\\appsettings.Development.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-07-27T09:37:14.896Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 25,
-              "Title": "launchSettings.json",
-              "DocumentMoniker": "G:\\C#\\Day 9\\BookApi.Tests\\Properties\\launchSettings.json",
-              "RelativeDocumentMoniker": "..\\BookApi.Tests\\Properties\\launchSettings.json",
-              "ToolTip": "G:\\C#\\Day 9\\BookApi.Tests\\Properties\\launchSettings.json",
-              "RelativeToolTip": "..\\BookApi.Tests\\Properties\\launchSettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-07-27T09:36:52.492Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "BookControllerTests.cs",
-              "DocumentMoniker": "G:\\C#\\Day 9\\BookApi.Tests\\BookControllerTests.cs",
-              "RelativeDocumentMoniker": "..\\BookApi.Tests\\BookControllerTests.cs",
-              "ToolTip": "G:\\C#\\Day 9\\BookApi.Tests\\BookControllerTests.cs",
-              "RelativeToolTip": "..\\BookApi.Tests\\BookControllerTests.cs",
-              "ViewState": "AgIAAB8AAAAAAAAAAAAnwC8AAAAiAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-27T09:35:08.629Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 28,
-              "Title": "MicrosoftTestingPlatformEntryPoint.cs",
-              "DocumentMoniker": "G:\\C#\\Day 9\\BookApi.Tests\\obj\\Debug\\net10.0\\MicrosoftTestingPlatformEntryPoint.cs",
-              "RelativeDocumentMoniker": "..\\BookApi.Tests\\obj\\Debug\\net10.0\\MicrosoftTestingPlatformEntryPoint.cs",
-              "ToolTip": "G:\\C#\\Day 9\\BookApi.Tests\\obj\\Debug\\net10.0\\MicrosoftTestingPlatformEntryPoint.cs",
-              "RelativeToolTip": "..\\BookApi.Tests\\obj\\Debug\\net10.0\\MicrosoftTestingPlatformEntryPoint.cs",
-              "ViewState": "AgIAAAUAAAAAAAAAAAAnwA8AAAALAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-27T09:27:26.154Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 20,
-              "Title": "BookApiClient.cs",
-              "DocumentMoniker": "G:\\C#\\Day 9\\BookApi.Consumer\\BookApiClient.cs",
-              "RelativeDocumentMoniker": "..\\BookApi.Consumer\\BookApiClient.cs",
-              "ToolTip": "G:\\C#\\Day 9\\BookApi.Consumer\\BookApiClient.cs",
-              "RelativeToolTip": "..\\BookApi.Consumer\\BookApiClient.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAdAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-27T09:26:12.051Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 19,
-              "Title": "Program.cs",
-              "DocumentMoniker": "G:\\C#\\Day 9\\BookApi.Consumer\\Program.cs",
-              "RelativeDocumentMoniker": "..\\BookApi.Consumer\\Program.cs",
-              "ToolTip": "G:\\C#\\Day 9\\BookApi.Consumer\\Program.cs",
-              "RelativeToolTip": "..\\BookApi.Consumer\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-27T09:25:02.983Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 18,
-              "Title": "BookApi.csproj",
-              "DocumentMoniker": "G:\\C#\\Day 9\\BookApi\\BookApi.csproj",
-              "RelativeDocumentMoniker": "BookApi.csproj",
-              "ToolTip": "G:\\C#\\Day 9\\BookApi\\BookApi.csproj",
-              "RelativeToolTip": "BookApi.csproj",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAYAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2026-07-27T09:23:53.875Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 24,
-              "Title": "BookApi.Tests.csproj",
-              "DocumentMoniker": "G:\\C#\\Day 9\\BookApi.Tests\\BookApi.Tests.csproj",
-              "RelativeDocumentMoniker": "..\\BookApi.Tests\\BookApi.Tests.csproj",
-              "ToolTip": "G:\\C#\\Day 9\\BookApi.Tests\\BookApi.Tests.csproj",
-              "RelativeToolTip": "..\\BookApi.Tests\\BookApi.Tests.csproj",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2026-07-27T09:23:40.334Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 21,
-              "Title": "BookApi.Consumer.csproj",
-              "DocumentMoniker": "G:\\C#\\Day 9\\BookApi.Consumer\\BookApi.Consumer.csproj",
-              "RelativeDocumentMoniker": "..\\BookApi.Consumer\\BookApi.Consumer.csproj",
-              "ToolTip": "G:\\C#\\Day 9\\BookApi.Consumer\\BookApi.Consumer.csproj",
-              "RelativeToolTip": "..\\BookApi.Consumer\\BookApi.Consumer.csproj",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAgwAkAAAAYAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2026-07-27T09:22:52.544Z",
+              "WhenOpened": "2026-07-29T04:48:22.428Z",
               "EditorCaption": ""
             }
           ]

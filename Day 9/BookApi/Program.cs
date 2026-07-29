@@ -56,5 +56,7 @@ using (var scope = app.Services.CreateScope())
     Log.Information("✅ Database created/verified");
 }
 Log.Information("🚀 Application starting");
+app.MapGet("/", () => Results.Redirect("/swagger"))
+  .ExcludeFromDescription();
 
 app.Run();

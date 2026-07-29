@@ -6,3 +6,6 @@ Info:Deleting book with ID:10
 Info:Book deleted successfully10
 Info:Adding new book: Jacktion
 Info:Book added with ID:13
+Info:Cache empty. Getting books from database
+Info:Getting books from cache
+Info:Getting books from cache
