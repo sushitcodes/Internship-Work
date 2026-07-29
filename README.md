@@ -65,12 +65,12 @@ StudentManager/
 ```
 
 
-- **Unit 6:** ASP.NET Core Web API — building RESTful APIs
-- Already Done Test using the Swagger and the internal https where I test the GET,GET by ID, POST ,DELETE,UPDATE,PATCH
-- **Unit 7:** Testing & Debugging (NUnit/MSTest, logging)
--I learn about the Logging and made a custom logging and also test the project I made and also debug using the exception and BreakPoint
-- **Unit 8:** Git & GitHub collaboration workflows
-- I learn about the git init, git add . , git commit -m , git remote add (URL),git git git push, git branch like that .
+## **Unit 6:**ASP.NET Core Web API — building RESTful APIs
+Already Done Test using the Swagger and the internal https where I test the GET,GET by ID, POST ,DELETE,UPDATE,PATCH
+## **Unit 7:** Testing & Debugging (NUnit/MSTest, logging)
+I learn about the Logging and made a custom logging and also test the project I made and also debug using the exception and BreakPoint
+## **Unit 8:** Git & GitHub collaboration workflows
+I learn about the git init, git add . , git commit -m , git remote add (URL),git git git push, git branch like that .
 
 
 ## Coming Up Next
