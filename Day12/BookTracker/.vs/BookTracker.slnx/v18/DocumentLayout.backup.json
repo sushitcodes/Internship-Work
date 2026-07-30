@@ -1,0 +1,157 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "G:\\C#\\Day12\\BookTracker\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{95F37A3A-6333-4FC8-A1AE-A507FD0B1CF4}|..\\BookTracker.Tests\\BookTracker.Tests.csproj|g:\\c#\\day12\\booktracker.tests\\test1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{95F37A3A-6333-4FC8-A1AE-A507FD0B1CF4}|..\\BookTracker.Tests\\BookTracker.Tests.csproj|g:\\c#\\day12\\booktracker.tests\\mstestsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{53A6821F-E8A2-4FCB-B379-6621DFBA8264}|BookTracker.csproj|g:\\c#\\day12\\booktracker\\models\\book.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{53A6821F-E8A2-4FCB-B379-6621DFBA8264}|BookTracker.csproj|solutionrelative:models\\book.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{95F37A3A-6333-4FC8-A1AE-A507FD0B1CF4}|..\\BookTracker.Tests\\BookTracker.Tests.csproj|g:\\c#\\day12\\booktracker.tests\\booktracker.tests.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{53A6821F-E8A2-4FCB-B379-6621DFBA8264}|BookTracker.csproj|g:\\c#\\day12\\booktracker\\booktracker.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{53A6821F-E8A2-4FCB-B379-6621DFBA8264}|BookTracker.csproj|solutionrelative:booktracker.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{53A6821F-E8A2-4FCB-B379-6621DFBA8264}|BookTracker.csproj|g:\\c#\\day12\\booktracker\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{53A6821F-E8A2-4FCB-B379-6621DFBA8264}|BookTracker.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{53A6821F-E8A2-4FCB-B379-6621DFBA8264}|BookTracker.csproj|g:\\c#\\day12\\booktracker\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{53A6821F-E8A2-4FCB-B379-6621DFBA8264}|BookTracker.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{53A6821F-E8A2-4FCB-B379-6621DFBA8264}|BookTracker.csproj|g:\\c#\\day12\\booktracker\\data\\bookcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{53A6821F-E8A2-4FCB-B379-6621DFBA8264}|BookTracker.csproj|solutionrelative:data\\bookcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MSTestSettings.cs",
+              "DocumentMoniker": "G:\\C#\\Day12\\BookTracker.Tests\\MSTestSettings.cs",
+              "RelativeDocumentMoniker": "..\\BookTracker.Tests\\MSTestSettings.cs",
+              "ToolTip": "G:\\C#\\Day12\\BookTracker.Tests\\MSTestSettings.cs",
+              "RelativeToolTip": "..\\BookTracker.Tests\\MSTestSettings.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-30T10:11:29.245Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "BookTracker.Tests",
+              "DocumentMoniker": "G:\\C#\\Day12\\BookTracker.Tests\\BookTracker.Tests.csproj",
+              "RelativeDocumentMoniker": "..\\BookTracker.Tests\\BookTracker.Tests.csproj",
+              "ToolTip": "G:\\C#\\Day12\\BookTracker.Tests\\BookTracker.Tests.csproj",
+              "RelativeToolTip": "..\\BookTracker.Tests\\BookTracker.Tests.csproj",
+              "ViewState": "AgIAAAYAAAAAAAAAAADwvx8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-07-30T10:07:08.314Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Test1.cs",
+              "DocumentMoniker": "G:\\C#\\Day12\\BookTracker.Tests\\Test1.cs",
+              "RelativeDocumentMoniker": "..\\BookTracker.Tests\\Test1.cs",
+              "ToolTip": "G:\\C#\\Day12\\BookTracker.Tests\\Test1.cs",
+              "RelativeToolTip": "..\\BookTracker.Tests\\Test1.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAA2wCEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-30T10:07:00.501Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "BookContext.cs",
+              "DocumentMoniker": "G:\\C#\\Day12\\BookTracker\\Data\\BookContext.cs",
+              "RelativeDocumentMoniker": "Data\\BookContext.cs",
+              "ToolTip": "G:\\C#\\Day12\\BookTracker\\Data\\BookContext.cs",
+              "RelativeToolTip": "Data\\BookContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-30T06:22:46.792Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Book.cs",
+              "DocumentMoniker": "G:\\C#\\Day12\\BookTracker\\Models\\Book.cs",
+              "RelativeDocumentMoniker": "Models\\Book.cs",
+              "ToolTip": "G:\\C#\\Day12\\BookTracker\\Models\\Book.cs",
+              "RelativeToolTip": "Models\\Book.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-30T06:17:00.67Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "G:\\C#\\Day12\\BookTracker\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "G:\\C#\\Day12\\BookTracker\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAACHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-07-30T06:02:17.585Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "BookTracker",
+              "DocumentMoniker": "G:\\C#\\Day12\\BookTracker\\BookTracker.csproj",
+              "RelativeDocumentMoniker": "BookTracker.csproj",
+              "ToolTip": "G:\\C#\\Day12\\BookTracker\\BookTracker.csproj",
+              "RelativeToolTip": "BookTracker.csproj",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-07-30T06:01:31.08Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Program.cs",
+              "DocumentMoniker": "G:\\C#\\Day12\\BookTracker\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "G:\\C#\\Day12\\BookTracker\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-30T06:01:08.734Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
