@@ -3,33 +3,33 @@
   "WorkspaceRootPath": "G:\\C#\\Day12\\BookTracker\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{95F37A3A-6333-4FC8-A1AE-A507FD0B1CF4}|..\\BookTracker.Tests\\BookTracker.Tests.csproj|g:\\c#\\day12\\booktracker.tests\\test1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{6E07821B-D775-7AC0-D0AF-C3B2C4D4F78C}|..\\BookTracker.Tests\\BookTracker.Tests.csproj|g:\\c#\\day12\\booktracker.tests\\test1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{95F37A3A-6333-4FC8-A1AE-A507FD0B1CF4}|..\\BookTracker.Tests\\BookTracker.Tests.csproj|g:\\c#\\day12\\booktracker.tests\\mstestsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{6E07821B-D775-7AC0-D0AF-C3B2C4D4F78C}|..\\BookTracker.Tests\\BookTracker.Tests.csproj|g:\\c#\\day12\\booktracker.tests\\mstestsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{53A6821F-E8A2-4FCB-B379-6621DFBA8264}|BookTracker.csproj|g:\\c#\\day12\\booktracker\\models\\book.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{53A6821F-E8A2-4FCB-B379-6621DFBA8264}|BookTracker.csproj|solutionrelative:models\\book.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{6E07821B-D775-7AC0-D0AF-C3B2C4D4F78C}|..\\BookTracker.Tests\\BookTracker.Tests.csproj|g:\\c#\\day12\\booktracker.tests\\booktracker.tests.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{95F37A3A-6333-4FC8-A1AE-A507FD0B1CF4}|..\\BookTracker.Tests\\BookTracker.Tests.csproj|g:\\c#\\day12\\booktracker.tests\\booktracker.tests.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+      "AbsoluteMoniker": "D:0:0:{D5A560EE-2319-CC71-0E07-658C47E44D89}|BookTracker.csproj|g:\\c#\\day12\\booktracker\\data\\bookcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D5A560EE-2319-CC71-0E07-658C47E44D89}|BookTracker.csproj|solutionrelative:data\\bookcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{53A6821F-E8A2-4FCB-B379-6621DFBA8264}|BookTracker.csproj|g:\\c#\\day12\\booktracker\\booktracker.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{53A6821F-E8A2-4FCB-B379-6621DFBA8264}|BookTracker.csproj|solutionrelative:booktracker.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+      "AbsoluteMoniker": "D:0:0:{D5A560EE-2319-CC71-0E07-658C47E44D89}|BookTracker.csproj|g:\\c#\\day12\\booktracker\\models\\book.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D5A560EE-2319-CC71-0E07-658C47E44D89}|BookTracker.csproj|solutionrelative:models\\book.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{53A6821F-E8A2-4FCB-B379-6621DFBA8264}|BookTracker.csproj|g:\\c#\\day12\\booktracker\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{53A6821F-E8A2-4FCB-B379-6621DFBA8264}|BookTracker.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{D5A560EE-2319-CC71-0E07-658C47E44D89}|BookTracker.csproj|g:\\c#\\day12\\booktracker\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{D5A560EE-2319-CC71-0E07-658C47E44D89}|BookTracker.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{53A6821F-E8A2-4FCB-B379-6621DFBA8264}|BookTracker.csproj|g:\\c#\\day12\\booktracker\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{53A6821F-E8A2-4FCB-B379-6621DFBA8264}|BookTracker.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{D5A560EE-2319-CC71-0E07-658C47E44D89}|BookTracker.csproj|g:\\c#\\day12\\booktracker\\booktracker.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{D5A560EE-2319-CC71-0E07-658C47E44D89}|BookTracker.csproj|solutionrelative:booktracker.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{53A6821F-E8A2-4FCB-B379-6621DFBA8264}|BookTracker.csproj|g:\\c#\\day12\\booktracker\\data\\bookcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{53A6821F-E8A2-4FCB-B379-6621DFBA8264}|BookTracker.csproj|solutionrelative:data\\bookcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{D5A560EE-2319-CC71-0E07-658C47E44D89}|BookTracker.csproj|g:\\c#\\day12\\booktracker\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D5A560EE-2319-CC71-0E07-658C47E44D89}|BookTracker.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -55,21 +55,19 @@
               "RelativeToolTip": "..\\BookTracker.Tests\\MSTestSettings.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-30T10:11:29.245Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-07-30T10:11:29.245Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "BookTracker.Tests",
+              "DocumentIndex": 2,
+              "Title": "BookTracker.Tests.csproj",
               "DocumentMoniker": "G:\\C#\\Day12\\BookTracker.Tests\\BookTracker.Tests.csproj",
               "RelativeDocumentMoniker": "..\\BookTracker.Tests\\BookTracker.Tests.csproj",
               "ToolTip": "G:\\C#\\Day12\\BookTracker.Tests\\BookTracker.Tests.csproj",
               "RelativeToolTip": "..\\BookTracker.Tests\\BookTracker.Tests.csproj",
               "ViewState": "AgIAAAYAAAAAAAAAAADwvx8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2026-07-30T10:07:08.314Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-07-30T10:07:08.314Z"
             },
             {
               "$type": "Document",
@@ -79,14 +77,14 @@
               "RelativeDocumentMoniker": "..\\BookTracker.Tests\\Test1.cs",
               "ToolTip": "G:\\C#\\Day12\\BookTracker.Tests\\Test1.cs",
               "RelativeToolTip": "..\\BookTracker.Tests\\Test1.cs",
-              "ViewState": "AgIAAAoAAAAAAAAAAAA2wCEAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-07-30T10:07:00.501Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 3,
               "Title": "BookContext.cs",
               "DocumentMoniker": "G:\\C#\\Day12\\BookTracker\\Data\\BookContext.cs",
               "RelativeDocumentMoniker": "Data\\BookContext.cs",
@@ -94,12 +92,11 @@
               "RelativeToolTip": "Data\\BookContext.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-30T06:22:46.792Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-07-30T06:22:46.792Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "Book.cs",
               "DocumentMoniker": "G:\\C#\\Day12\\BookTracker\\Models\\Book.cs",
               "RelativeDocumentMoniker": "Models\\Book.cs",
@@ -107,12 +104,11 @@
               "RelativeToolTip": "Models\\Book.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-30T06:17:00.67Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-07-30T06:17:00.67Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 5,
               "Title": "appsettings.json",
               "DocumentMoniker": "G:\\C#\\Day12\\BookTracker\\appsettings.json",
               "RelativeDocumentMoniker": "appsettings.json",
@@ -120,25 +116,23 @@
               "RelativeToolTip": "appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAACHAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-07-30T06:02:17.585Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-07-30T06:02:17.585Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "BookTracker",
+              "DocumentIndex": 6,
+              "Title": "BookTracker.csproj",
               "DocumentMoniker": "G:\\C#\\Day12\\BookTracker\\BookTracker.csproj",
               "RelativeDocumentMoniker": "BookTracker.csproj",
               "ToolTip": "G:\\C#\\Day12\\BookTracker\\BookTracker.csproj",
               "RelativeToolTip": "BookTracker.csproj",
               "ViewState": "AgIAAAkAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2026-07-30T06:01:31.08Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-07-30T06:01:31.08Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "Program.cs",
               "DocumentMoniker": "G:\\C#\\Day12\\BookTracker\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
@@ -146,8 +140,7 @@
               "RelativeToolTip": "Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAFEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-30T06:01:08.734Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-07-30T06:01:08.734Z"
             }
           ]
         }
