@@ -72,6 +72,9 @@ I learn about the Logging and made a custom logging and also test the project I 
 ## **Unit 8:** Git & GitHub collaboration workflows
 I learn about the git init, git add . , git commit -m , git remote add (URL),git git git push, git branch like that .
 
+## **Day 13:** React (Frontend Basics)
+Started learning React with TypeScript and Vite. Learned components, props, useState, rendering lists with .map(), controlled inputs, immutable state updates (spread/filter), and useEffect for fetching data from an API with async/await. Built a Todo List app (add/delete todos) and connected it to a public test API to display fetched data, then styled it with custom CSS.
+
 
 ## Coming Up Next
 -We will see
