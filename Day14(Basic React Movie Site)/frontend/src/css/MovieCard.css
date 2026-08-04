@@ -94,10 +94,11 @@
 .movie-info h3 {
   font-size: 1rem;
   margin: 0;
+  color: #ffffff;
 }
 
 .movie-info p {
-  color: #999;
+  color: #aaaaaa;
   font-size: 0.9rem;
 }
 
