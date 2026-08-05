@@ -76,6 +76,10 @@ I learn about the git init, git add . , git commit -m , git remote add (URL),git
 Started learning React with TypeScript and Vite. Learned components, props, useState, rendering lists with .map(), controlled inputs, immutable state updates (spread/filter), and useEffect for fetching data from an API with async/await. Built a Todo List app (add/delete todos) and connected it to a public test API to display fetched data, then styled it with custom CSS.
 
 
+## **Day14,15,16,17:** React and (backend .net)
+- I have done the created a movie frontend witht the react only using the api call to show the movies data and I have add the favourites Icon done for the day 14,15
+- I have created the login form using the react and backed .net which stores the password and manages it .
+
 ## Coming Up Next
 -We will see
 
