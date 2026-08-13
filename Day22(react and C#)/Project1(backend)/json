@@ -1,0 +1,12 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=DESKTOP-66OG8LP\\SQLEXPRESS;Database=SubmissionDB;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True"
+  },
+  "AllowedHosts": "*"
+}
