@@ -1,0 +1,64 @@
+import { Link } from "react-router-dom";
+import { useGetSubmissionsQuery } from "../../infrastructure/api/submissionApi";
+
+const SubmissionsListPage: React.FC = () => {
+  const {
+    data: submissions = [],
+    isLoading,
+    isError,
+  } = useGetSubmissionsQuery();
+
+  return (
+    <div className="max-w-3xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold">All Submissions</h2>
+        <Link to="/" className="text-blue-600 hover:underline text-sm">
+          + New Submission
+        </Link>
+      </div>
+
+      {isLoading && <p className="text-gray-500 text-center">Loading...</p>}
+      {isError && (
+        <p className="text-red-500 text-center">Could not load submissions.</p>
+      )}
+      {!isLoading && submissions.length === 0 && (
+        <p className="text-gray-500 text-center">No submissions yet.</p>
+      )}
+
+      {submissions.length > 0 && (
+        <table className="w-full text-left border-collapse">
+          <thead>
+            <tr className="border-b border-gray-200 text-sm text-gray-500">
+              <th className="py-2 pr-4">Name</th>
+              <th className="py-2 pr-4">Email</th>
+              <th className="py-2"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {submissions.map((s) => (
+              <tr
+                key={s.id}
+                className="border-b border-gray-100 hover:bg-gray-50"
+              >
+                <td className="py-3 pr-4 font-medium text-gray-800">
+                  {s.fullName}
+                </td>
+                <td className="py-3 pr-4 text-gray-600">{s.email}</td>
+                <td className="py-3">
+                  <Link
+                    to={`/submission/${s.id}`}
+                    className="text-blue-600 hover:underline text-sm"
+                  >
+                    View →
+                  </Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </div>
+  );
+};
+
+export default SubmissionsListPage;
