@@ -71,6 +71,16 @@ public class SubmissionsController : ControllerBase
         var result = await _submissionService.GetByIdAsync(id);
         return result is null ? NotFound() : Ok(result);
     }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult>Delete(Guid id)
+    {
+        var deleted = await _submissionService.DeleteAsync(id);
+        // 204 No Content = "it worked, nothing to send back" — the standard
+        // REST response for a successful delete (there's no resource left to return).
+        return deleted ? NoContent() : NotFound();
+    }
+
 }
 
 // Field names here must match exactly what the frontend appends to FormData

@@ -30,7 +30,14 @@ export const submissionApi = createApi({
         method: "POST",
         body: formData,
       }),
+      invalidatesTags: ["Submission"],
+    }),
 
+    deleteSubmission: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `/submissions/${id}`,
+        method: "DELETE",
+      }),
       invalidatesTags: ["Submission"],
     }),
   }),
@@ -42,4 +49,5 @@ export const {
   useGetSubmissionsQuery,
   useGetSubmissionByIdQuery,
   useSubmitFormMutation,
+  useDeleteSubmissionMutation,
 } = submissionApi;

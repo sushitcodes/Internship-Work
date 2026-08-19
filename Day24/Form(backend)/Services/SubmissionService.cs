@@ -57,6 +57,11 @@ public class SubmissionService : ISubmissionService
         return submission is null ? null : MapToDto(submission);
     }
 
+    public async Task<bool> DeleteAsync(Guid id)
+    {
+        return await _repository.DeleteAsync(id);
+    }
+
     private static void ValidateFile(IFormFile file)
     {
         var allowedExtensions = new[] { ".pdf", ".jpg", ".jpeg", ".png" };

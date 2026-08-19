@@ -1,17 +1,39 @@
 import { Link } from "react-router-dom";
-import { useGetSubmissionsQuery } from "../../infrastructure/api/submissionApi";
-
+import {
+  useGetSubmissionsQuery,
+  useDeleteSubmissionMutation,
+} from "../../infrastructure/api/submissionApi";
+import SubmissionCountBadge from "../components/SubmissionCountBadge";
 const SubmissionsListPage: React.FC = () => {
   const {
     data: submissions = [],
     isLoading,
     isError,
   } = useGetSubmissionsQuery();
+  const [deleteSubmission, { isLoading: isDeleting }] =
+    useDeleteSubmissionMutation();
+  const handleDelete = async (id: string, name: string) => {
+    const confirmed = window.confirm(
+      `Delete submission from ${name}? This cannot be undone.`,
+    );
+    if (!confirmed) return;
+
+    try {
+      await deleteSubmission(id).unwrap();
+      // No manual state update needed — invalidatesTags in submissionApi.ts
+      // already told RTK Query to refetch the list automatically.
+    } catch (err) {
+      console.error("Failed to delete submission:", err);
+      alert("Could not delete this submission. Please try again.");
+    }
+  };
 
   return (
     <div className="max-w-3xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">All Submissions</h2>
+        <SubmissionCountBadge />
+
         <Link to="/" className="text-blue-600 hover:underline text-sm">
           + New Submission
         </Link>
@@ -51,6 +73,15 @@ const SubmissionsListPage: React.FC = () => {
                   >
                     View →
                   </Link>
+                </td>
+                <td className="py-3">
+                  <button
+                    onClick={() => handleDelete(s.id, s.fullName)}
+                    disabled={isDeleting}
+                    className="text-red-500 hover:text-red-700 text-sm font-medium disabled:opacity-50"
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}

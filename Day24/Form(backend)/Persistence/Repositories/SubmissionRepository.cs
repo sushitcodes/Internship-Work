@@ -34,4 +34,17 @@ public class SubmissionRepository : ISubmissionRepository
             .Include(s => s.Education)
             .FirstOrDefaultAsync(s => s.Id == id);
     }
+
+    public async Task<bool> DeleteAsync(Guid id)
+    {
+        var submission = await _context.Submissions
+               .Include(s => s.Education)
+               .FirstOrDefaultAsync(s => s.Id == id);
+
+        if (submission is null) return false; // nothing to delete
+
+        _context.Submissions.Remove(submission);
+        await _context.SaveChangesAsync();
+        return true;
+    }
 }
