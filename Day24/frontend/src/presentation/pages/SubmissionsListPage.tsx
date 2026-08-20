@@ -31,7 +31,7 @@ const SubmissionsListPage: React.FC = () => {
   return (
     <div className="max-w-3xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold">All Submissions</h2>
+        <h2 className="text-2xl font-bold">Student</h2>
         <SubmissionCountBadge />
 
         <Link to="/" className="text-blue-600 hover:underline text-sm">

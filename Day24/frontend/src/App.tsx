@@ -7,6 +7,8 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-100 py-8">
       <Routes>
+        <Route path="/submissions" element={<SubmissionsListPage />} />
+
         <Route path="/" element={<FormPage />} />
         <Route path="/submissions" element={<SubmissionsListPage />} />
         <Route path="/submission/:id" element={<SubmissionPage />} />
