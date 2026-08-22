@@ -66,6 +66,11 @@ public class SubmissionsController : ControllerBase
         return Ok(await _submissionService.GetPagedAsync(page, pageSize, search));
     }
 
+    [HttpGet("count")]
+    public async Task<ActionResult<int>> GetCount()
+    {
+        return Ok(await _submissionService.GetCountAsync());
+    }
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<SubmissionDto>> GetById(Guid id)
     {

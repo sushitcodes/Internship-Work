@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useForm, useFieldArray, SubmitHandler } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import FormInput from "../components/FormInput";
 import {
   nameValidation,
@@ -9,11 +9,9 @@ import {
   institutionValidation,
   degreeValidation,
   yearValidation,
-  fileValidation,
 } from "../../application/validators/formValidators";
 import {
   useGetSubmissionByIdQuery,
-  useSubmitFormMutation,
   useUpdateSubmissionMutation,
 } from "../../infrastructure/api/submissionApi";
 import { EducationEntry } from "../../domain/entities/Submission";
@@ -23,25 +21,21 @@ interface FormValues {
   email: string;
   phone: string;
   education: EducationEntry[];
-  file?: FileList; // optional at the TYPE level — Create still enforces
-  // "must pick a file" via fileValidation below, but Edit
-  // needs this to genuinely be skippable
+  file?: FileList; // optional — unlike FormPage, a new file isn't required here
 }
 
-const FormPage: React.FC = () => {
-  const { id } = useParams<{ id?: string }>();
-  const isEditMode = Boolean(id); // ← the single flag everything else branches on
+const EditSubmissionPage: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
-  // Only fetches when editing — skip: !isEditMode means this request never
-  // fires at all when creating a new submission, since there's nothing to load.
-  const { data: existingSubmission, isLoading: isLoadingExisting } =
-    useGetSubmissionByIdQuery(id!, { skip: !isEditMode });
+  // Fetches the EXISTING submission — this is what makes this an "edit"
+  // page rather than a blank form. skip: !id prevents firing a request
+  // with an undefined id if this page somehow renders without one.
+  const { data: submission, isLoading: isLoadingSubmission } =
+    useGetSubmissionByIdQuery(id!, { skip: !id });
 
-  const [submitForm, { isLoading: isCreating }] = useSubmitFormMutation();
-  const [updateSubmission, { isLoading: isUpdating }] =
+  const [updateSubmission, { isLoading: isSaving }] =
     useUpdateSubmissionMutation();
-  const isSaving = isCreating || isUpdating;
 
   const {
     register,
@@ -49,35 +43,27 @@ const FormPage: React.FC = () => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<FormValues>({
-    defaultValues: {
-      fullName: "",
-      email: "",
-      phone: "",
-      education: [
-        { institution: "", degree: "", year: undefined as unknown as number },
-      ],
-    },
-  });
+  } = useForm<FormValues>();
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: "education",
   });
 
-  // Pre-fills the form the MOMENT the existing submission arrives — only
-  // relevant in edit mode, since existingSubmission stays undefined
-  // entirely when creating (the query above never even fired).
+  // reset() pre-fills the form the MOMENT the fetched data arrives. This
+  // can't be done via useForm's defaultValues directly, because on the
+  // very first render, `submission` is still undefined — the data hasn't
+  // come back from the network yet. This effect re-runs once it does.
   useEffect(() => {
-    if (isEditMode && existingSubmission) {
+    if (submission) {
       reset({
-        fullName: existingSubmission.fullName,
-        email: existingSubmission.email,
-        phone: existingSubmission.phone,
-        education: existingSubmission.education,
+        fullName: submission.fullName,
+        email: submission.email,
+        phone: submission.phone,
+        education: submission.education,
       });
     }
-  }, [isEditMode, existingSubmission, reset]);
+  }, [submission, reset]);
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const formData = new FormData();
@@ -85,28 +71,23 @@ const FormPage: React.FC = () => {
     formData.append("email", data.email);
     formData.append("phone", data.phone);
     formData.append("education", JSON.stringify(data.education));
+
+    // Only attach a file if the user actually picked a new one — this
+    // mirrors the backend's UpdateSubmissionRequest.File being nullable.
     if (data.file && data.file.length > 0) {
       formData.append("file", data.file[0]);
     }
 
     try {
-      if (isEditMode) {
-        // Edit path: call update, navigate back to the detail page.
-        await updateSubmission({ id: id!, formData }).unwrap();
-        navigate(`/submission/${id}`);
-      } else {
-        // Create path: call submit, navigate to the NEW submission's own detail page.
-        const result = await submitForm(formData).unwrap();
-        reset();
-        navigate(`/submission/${result.id}`);
-      }
+      await updateSubmission({ id: id!, formData }).unwrap();
+      navigate(`/submission/${id}`);
     } catch (err) {
-      console.error("Failed to save submission:", err);
-      alert("Could not save. Please try again.");
+      console.error("Failed to update submission:", err);
+      alert("Could not save changes. Please try again.");
     }
   };
 
-  if (isEditMode && isLoadingExisting) {
+  if (isLoadingSubmission) {
     return (
       <div className="max-w-2xl mx-auto mt-10 p-6 text-center text-gray-500">
         Loading...
@@ -114,13 +95,17 @@ const FormPage: React.FC = () => {
     );
   }
 
+  if (!submission) {
+    return (
+      <div className="max-w-2xl mx-auto mt-10 p-6 text-center text-red-500">
+        Submission not found.
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-2xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
-      {/* Title changes based on mode — the one visible sign to the user
-          of which "version" of this shared form they're looking at */}
-      <h2 className="text-2xl font-bold mb-6">
-        {isEditMode ? "Edit Submission" : "Submit Form"}
-      </h2>
+      <h2 className="text-2xl font-bold mb-6">Edit Submission</h2>
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <FormInput
@@ -176,6 +161,7 @@ const FormPage: React.FC = () => {
                   </button>
                 )}
               </div>
+
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <FormInput
                   label="Institution"
@@ -209,23 +195,13 @@ const FormPage: React.FC = () => {
 
         <div className="mb-6">
           <label className="block text-gray-700 font-medium mb-2">
-            {/* Label text and validation rules both branch on mode — Create
-                still requires a file (fileValidation), Edit doesn't (register
-                with no rules at all, since a new file is optional there) */}
-            {isEditMode
-              ? "Replace file (optional — leave empty to keep current)"
-              : "Attachment (Certificate)"}
+            Replace file (optional — leave empty to keep current file)
           </label>
           <input
             type="file"
-            {...register("file", isEditMode ? {} : fileValidation)}
+            {...register("file")}
             className="w-full px-4 py-2 border border-gray-300 rounded-md text-sm"
           />
-          {errors.file && (
-            <span className="text-red-500 text-sm mt-1 block">
-              {errors.file.message}
-            </span>
-          )}
         </div>
 
         <button
@@ -237,11 +213,20 @@ const FormPage: React.FC = () => {
               : "bg-blue-600 hover:bg-blue-700"
           }`}
         >
-          {isSaving ? "Saving..." : isEditMode ? "Save Changes" : "Submit"}
+          {isSaving ? "Saving..." : "Save Changes"}
         </button>
       </form>
+
+      <div className="mt-4">
+        <Link
+          to={`/submission/${id}`}
+          className="text-blue-600 hover:underline text-sm"
+        >
+          ← Cancel and go back
+        </Link>
+      </div>
     </div>
   );
 };
 
-export default FormPage;
+export default EditSubmissionPage;

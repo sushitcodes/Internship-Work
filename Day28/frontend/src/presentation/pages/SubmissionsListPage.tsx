@@ -5,6 +5,42 @@ import {
   useDeleteSubmissionMutation,
 } from "../../infrastructure/api/submissionApi";
 import SubmissionCountBadge from "../components/SubmissionCountBadge";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableHead,
+  TableRow,
+  TableCell,
+} from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
+// import { Button } from "@/components/ui/button";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Plus } from "lucide-react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { getInitials } from "../../application/utils/getInitials";
+
 const SubmissionsListPage: React.FC = () => {
   const [searchInput, setSearchInput] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -12,6 +48,8 @@ const SubmissionsListPage: React.FC = () => {
     const timer = setTimeout(() => setDebouncedSearch(searchInput), 400);
     return () => clearTimeout(timer);
   }, [searchInput]);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [deleteName, setDeleteName] = useState<string>("");
   const [pageIndex, setPageIndex] = useState(0);
 
   useEffect(() => {
@@ -48,16 +86,12 @@ const SubmissionsListPage: React.FC = () => {
     pageIndex < pages.length - 1 || Boolean(currentPage?.hasNextPage);
   const canGoPrev = pageIndex > 0;
 
-  const handleDelete = async (id: string, name: string) => {
-    const confirmed = window.confirm(
-      `Delete submission from ${name}? This cannot be undone.`,
-    );
-    if (!confirmed) return;
-
+  const handleDelete = async () => {
+    if (!deleteId) return;
     try {
-      await deleteSubmission(id).unwrap();
-      // No manual state update needed — invalidatesTags in submissionApi.ts
-      // already told RTK Query to refetch the list automatically.
+      await deleteSubmission(deleteId).unwrap();
+      setDeleteId(null);
+      setDeleteName("");
     } catch (err) {
       console.error("Failed to delete submission:", err);
       alert("Could not delete this submission. Please try again.");
@@ -65,92 +99,184 @@ const SubmissionsListPage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold">Student</h2>
-        <SubmissionCountBadge />
+    <Card className="max-w-3xl mx-auto mt-10">
+      <CardHeader className="border-b">
+        <div className="flex justify-between items-center">
+          <CardTitle className="text-2xl font-bold">Student</CardTitle>
+          <div className="flex items-center gap-4">
+            <SubmissionCountBadge />
 
-        <Link to="/" className="text-blue-600 hover:underline text-sm">
-          + New Submission
-        </Link>
-      </div>
+            <Link to="/formpage">
+              <Button className="gap-2">
+                <Plus className="h-4 w-4" />
+                New Submission
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent className="pt-6">
+        <Input
+          type="text"
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+          placeholder="Search by name or email..."
+          className="mb-6 placeholder:text-gray-350 placeholder:opacity-40"
+        />
 
-      <input
-        type="text"
-        value={searchInput}
-        onChange={(e) => setSearchInput(e.target.value)}
-        placeholder="Search by name or email..."
-        className="w-full px-4 py-2 border border-gray-300 rounded-md mb-6 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
+        {isLoading && <p className="text-gray-500 text-center">Loading...</p>}
+        {isError && (
+          <p className="text-red-500 text-center">
+            Could not load submissions.
+          </p>
+        )}
+        {isLoading && (
+          <div className="space-y-3">
+            <div className="flex items-center space-x-4">
+              <Skeleton className="h-12 w-full" />
+            </div>
+            <div className="flex items-center space-x-4">
+              <Skeleton className="h-12 w-full" />
+            </div>
+            <div className="flex items-center space-x-4">
+              <Skeleton className="h-12 w-full" />
+            </div>
+            <div className="flex items-center space-x-4">
+              <Skeleton className="h-12 w-full" />
+            </div>
+            <div className="flex items-center space-x-4">
+              <Skeleton className="h-12 w-full" />
+            </div>
+          </div>
+        )}
 
-      {isLoading && <p className="text-gray-500 text-center">Loading...</p>}
-      {isError && (
-        <p className="text-red-500 text-center">Could not load submissions.</p>
-      )}
-      {!isLoading && submissions.length === 0 && (
-        <p className="text-gray-500 text-center">No submissions yet.</p>
-      )}
+        {submissions.length > 0 && (
+          <div className="rounded-md border">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="py-2 pr-4">Name</TableHead>
+                  <TableHead className="py-2 pr-4">Email</TableHead>
+                  <TableHead className="py-2"></TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {submissions.map((s) => (
+                  <TableRow key={s.id}>
+                    <TableCell className="py-3 pr-4">
+                      <div className="flex items-center gap-3">
+                        <Avatar className="h-8 w-8">
+                          <AvatarFallback className="bg-blue-100 text-blue-800 text-xs">
+                            {getInitials(s.fullName)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <span className="font-medium">{s.fullName}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell className="py-3 pr-4 text-gray-600">
+                      {s.email}
+                    </TableCell>
+                    <TableCell className="py-3">
+                      <div className="flex items-center gap-2">
+                        <Link to={`/submission/${s.id}`}>
+                          <Button variant="outline" size="sm">
+                            View
+                          </Button>
+                        </Link>
+                        <Link to={`/submission/${s.id}/edit`}>
+                          <Button variant="outline" size="sm">
+                            Edit
+                          </Button>
+                        </Link>
+                        <AlertDialog>
+                          <AlertDialogTrigger>
+                            <Button
+                              variant="destructive"
+                              size="sm"
+                              onClick={() => {
+                                setDeleteId(s.id);
+                                setDeleteName(s.fullName);
+                              }}
+                            >
+                              Delete
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                This will permanently delete the submission from{" "}
+                                <span className="font-semibold">
+                                  {deleteName}
+                                </span>
+                                . This action cannot be undone.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel
+                                onClick={() => {
+                                  setDeleteId(null);
+                                  setDeleteName("");
+                                }}
+                              >
+                                Cancel
+                              </AlertDialogCancel>
+                              <AlertDialogAction
+                                onClick={handleDelete}
+                                disabled={isDeleting}
+                                className="bg-red-500 hover:bg-red-600"
+                              >
+                                {isDeleting ? "Deleting..." : "Delete"}
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        )}
+        <Pagination className="mt-4">
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                onClick={handlePrev}
+                className={
+                  !canGoPrev
+                    ? "pointer-events-none opacity-50"
+                    : "cursor-pointer"
+                }
+              />
+            </PaginationItem>
 
-      {submissions.length > 0 && (
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="border-b border-gray-200 text-sm text-gray-500">
-              <th className="py-2 pr-4">Name</th>
-              <th className="py-2 pr-4">Email</th>
-              <th className="py-2"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {submissions.map((s) => (
-              <tr
-                key={s.id}
-                className="border-b border-gray-100 hover:bg-gray-50"
-              >
-                <td className="py-3 pr-4 font-medium text-gray-800">
-                  {s.fullName}
-                </td>
-                <td className="py-3 pr-4 text-gray-600">{s.email}</td>
-                <td className="py-3">
-                  <Link
-                    to={`/submission/${s.id}`}
-                    className="text-blue-600 hover:underline text-sm"
-                  >
-                    View →
-                  </Link>
-                </td>
-                <td className="py-3">
-                  <button
-                    onClick={() => handleDelete(s.id, s.fullName)}
-                    disabled={isDeleting}
-                    className="text-red-500 hover:text-red-700 text-sm font-medium disabled:opacity-50"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
+            {Array.from({ length: pages.length }, (_, i) => (
+              <PaginationItem key={i}>
+                <PaginationLink
+                  isActive={i === pageIndex}
+                  onClick={() => setPageIndex(i)}
+                >
+                  {i + 1}
+                </PaginationLink>
+              </PaginationItem>
             ))}
-          </tbody>
-        </table>
-      )}
 
-      <div className="flex justify-between items-center">
-        <button
-          onClick={handlePrev}
-          disabled={!canGoPrev}
-          className="px-4 py-2 text-sm border rounded-md disabled:opacity-40"
-        >
-          ← Previous
-        </button>
-        <span className="text-sm text-gray-500">Page {pageIndex + 1}</span>
-        <button
-          onClick={handleNext}
-          disabled={!canGoNext || isFetchingNextPage}
-          className="px-4 py-2 text-sm border rounded-md disabled:opacity-40"
-        >
-          {isFetchingNextPage ? "Loading..." : "Next →"}
-        </button>
-      </div>
-    </div>
+            <PaginationItem>
+              <PaginationNext
+                onClick={handleNext}
+                className={
+                  !canGoNext || isFetchingNextPage
+                    ? "pointer-events-none opacity-50"
+                    : "cursor-pointer"
+                }
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      </CardContent>
+    </Card>
   );
 };
 

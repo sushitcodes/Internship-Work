@@ -49,6 +49,7 @@ public class SubmissionService : ISubmissionService
         var submission = await _repository.GetByIdAsync(id);
         return submission is null ? null : MapToDto(submission);
     }
+    public async Task<int> GetCountAsync() => await _repository.GetCountAsync();
 
     public async Task<bool> DeleteAsync(Guid id) => await _repository.DeleteAsync(id);
     public async Task<PagedResult<SubmissionDto>> GetPagedAsync(int page, int pageSize, string? search)

@@ -24,6 +24,7 @@ public class SubmissionRepository : ISubmissionRepository
             .Include(s => s.Education)
             .FirstOrDefaultAsync(s => s.Id == id);
     }
+    public async Task<int> GetCountAsync() => await _context.Submissions.CountAsync();
 
     public async Task<bool> DeleteAsync(Guid id)
     {
@@ -69,12 +70,19 @@ public class SubmissionRepository : ISubmissionRepository
 
         if (!string.IsNullOrEmpty(updated.FileUrl))
             existing.FileUrl = updated.FileUrl;
-
         _context.EducationEntries.RemoveRange(existing.Education);
+
         existing.Education = updated.Education;
+
+        foreach (var edu in updated.Education)
+        {
+            edu.SubmissionId = existing.Id;
+            _context.EducationEntries.Add(edu);
+        }
 
         await _context.SaveChangesAsync();
         return existing;
-
     }
+
 }
+

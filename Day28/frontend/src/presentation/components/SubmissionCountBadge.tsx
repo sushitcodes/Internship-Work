@@ -1,4 +1,5 @@
 import { useGetSubmissionsCountQuery } from "../../infrastructure/api/submissionApi";
+import { Badge } from "@/components/ui/badge";
 
 const SubmissionCountBadge: React.FC = () => {
   // data is a plain number here (defaults to 0 while loading/undefined),
@@ -7,10 +8,9 @@ const SubmissionCountBadge: React.FC = () => {
   const { data: count = 0 } = useGetSubmissionsCountQuery();
 
   return (
-    <span className="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">
+    <Badge variant="secondary" className="text-xs font-semibold">
       {count} Submission{count !== 1 ? "s" : ""}
-    </span>
+    </Badge>
   );
 };
-
 export default SubmissionCountBadge;
