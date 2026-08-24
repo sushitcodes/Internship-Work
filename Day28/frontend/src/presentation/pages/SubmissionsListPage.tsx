@@ -14,7 +14,6 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
-// import { Button } from "@/components/ui/button";
 import {
   Pagination,
   PaginationContent,
@@ -38,7 +37,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Plus } from "lucide-react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getInitials } from "../../application/utils/getInitials";
 
 const SubmissionsListPage: React.FC = () => {
@@ -56,14 +55,14 @@ const SubmissionsListPage: React.FC = () => {
     setPageIndex(0);
   }, [debouncedSearch]);
   const { data, fetchNextPage, isLoading, isError, isFetchingNextPage } =
-    useGetSubmissionsInfiniteQuery(debouncedSearch || undefined);
+    useGetSubmissionsInfiniteQuery({ search: debouncedSearch, pageSize: 10 });
   const [deleteSubmission, { isLoading: isDeleting }] =
     useDeleteSubmissionMutation();
 
   const pages = data?.pages ?? [];
   const currentPage = pages[pageIndex];
-  // const submissions = currentPage?.items ?? [];
-  const submissions = pages.flatMap((page) => page.items);
+  const submissions = currentPage?.items ?? [];
+  // const submissions = pages.flatMap((page) => page.items);
 
   const handleNext = async () => {
     if (pageIndex < pages.length - 1) {
@@ -123,13 +122,6 @@ const SubmissionsListPage: React.FC = () => {
           placeholder="Search by name or email..."
           className="mb-6 placeholder:text-gray-350 placeholder:opacity-40"
         />
-
-        {isLoading && <p className="text-gray-500 text-center">Loading...</p>}
-        {isError && (
-          <p className="text-red-500 text-center">
-            Could not load submissions.
-          </p>
-        )}
         {isLoading && (
           <div className="space-y-3">
             <div className="flex items-center space-x-4">
@@ -149,6 +141,11 @@ const SubmissionsListPage: React.FC = () => {
             </div>
           </div>
         )}
+        {!isLoading && isError && (
+          <p className="text-red-500 text-center">
+            Could not load submissions.
+          </p>
+        )}
 
         {submissions.length > 0 && (
           <div className="rounded-md border">
@@ -166,6 +163,11 @@ const SubmissionsListPage: React.FC = () => {
                     <TableCell className="py-3 pr-4">
                       <div className="flex items-center gap-3">
                         <Avatar className="h-8 w-8">
+                          <AvatarImage
+                            src="https://github.com/shadcn.png"
+                            alt={s.fullName}
+                            className="grayscale"
+                          />
                           <AvatarFallback className="bg-blue-100 text-blue-800 text-xs">
                             {getInitials(s.fullName)}
                           </AvatarFallback>
@@ -190,16 +192,15 @@ const SubmissionsListPage: React.FC = () => {
                         </Link>
                         <AlertDialog>
                           <AlertDialogTrigger>
-                            <Button
-                              variant="destructive"
-                              size="sm"
+                            <span
+                              className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-red-500 hover:text-red-700 hover:bg-red-50 h-9 px-3"
                               onClick={() => {
                                 setDeleteId(s.id);
                                 setDeleteName(s.fullName);
                               }}
                             >
                               Delete
-                            </Button>
+                            </span>
                           </AlertDialogTrigger>
                           <AlertDialogContent>
                             <AlertDialogHeader>

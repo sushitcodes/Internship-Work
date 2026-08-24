@@ -1,4 +1,3 @@
-// infrastructure/api/submissionApi.ts
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { Submission, PagedResult } from "../../domain/entities/Submission";
 
@@ -19,7 +18,7 @@ export const submissionApi = createApi({
     //   3. number                  -> the pageParam RTK Query tracks internally
     getSubmissions: builder.infiniteQuery<
       PagedResult<Submission>,
-      string | undefined,
+      { search?: string; pageSize: number },
       number
     >({
       infiniteQueryOptions: {
@@ -36,9 +35,9 @@ export const submissionApi = createApi({
       query: ({ queryArg, pageParam }) => {
         const params = new URLSearchParams({
           page: String(pageParam),
-          pageSize: "10",
+          pageSize: String(queryArg.pageSize),
         });
-        if (queryArg) params.set("search", queryArg);
+        if (queryArg.search) params.set("search", queryArg.search);
         return `/submissions?${params.toString()}`;
       },
       providesTags: ["Submission"],

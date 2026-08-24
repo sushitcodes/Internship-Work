@@ -1,7 +1,11 @@
 import { useEffect } from "react";
-import { useForm, useFieldArray, SubmitHandler } from "react-hook-form";
+import {
+  useForm,
+  useFieldArray,
+  SubmitHandler,
+  Controller,
+} from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
-import FormInput from "../components/FormInput";
 import {
   nameValidation,
   emailValidation,
@@ -17,24 +21,25 @@ import {
   useUpdateSubmissionMutation,
 } from "../../infrastructure/api/submissionApi";
 import { EducationEntry } from "../../domain/entities/Submission";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Label } from "@/components/ui/label";
 
 interface FormValues {
   fullName: string;
   email: string;
   phone: string;
   education: EducationEntry[];
-  file?: FileList; // optional at the TYPE level — Create still enforces
-  // "must pick a file" via fileValidation below, but Edit
-  // needs this to genuinely be skippable
+  file?: FileList;
 }
 
 const FormPage: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
-  const isEditMode = Boolean(id); // ← the single flag everything else branches on
+  const isEditMode = Boolean(id);
   const navigate = useNavigate();
 
-  // Only fetches when editing — skip: !isEditMode means this request never
-  // fires at all when creating a new submission, since there's nothing to load.
   const { data: existingSubmission, isLoading: isLoadingExisting } =
     useGetSubmissionByIdQuery(id!, { skip: !isEditMode });
 
@@ -44,7 +49,6 @@ const FormPage: React.FC = () => {
   const isSaving = isCreating || isUpdating;
 
   const {
-    register,
     control,
     handleSubmit,
     reset,
@@ -65,9 +69,6 @@ const FormPage: React.FC = () => {
     name: "education",
   });
 
-  // Pre-fills the form the MOMENT the existing submission arrives — only
-  // relevant in edit mode, since existingSubmission stays undefined
-  // entirely when creating (the query above never even fired).
   useEffect(() => {
     if (isEditMode && existingSubmission) {
       reset({
@@ -91,11 +92,9 @@ const FormPage: React.FC = () => {
 
     try {
       if (isEditMode) {
-        // Edit path: call update, navigate back to the detail page.
         await updateSubmission({ id: id!, formData }).unwrap();
         navigate(`/submission/${id}`);
       } else {
-        // Create path: call submit, navigate to the NEW submission's own detail page.
         const result = await submitForm(formData).unwrap();
         reset();
         navigate(`/submission/${result.id}`);
@@ -108,139 +107,310 @@ const FormPage: React.FC = () => {
 
   if (isEditMode && isLoadingExisting) {
     return (
-      <div className="max-w-2xl mx-auto mt-10 p-6 text-center text-gray-500">
-        Loading...
-      </div>
+      <Card className="max-w-2xl mx-auto mt-10">
+        <CardHeader>
+          <CardTitle>
+            {isEditMode ? "Edit Submission" : "Submit Form"}
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-32 w-full" />
+          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-12 w-full" />
+        </CardContent>
+      </Card>
     );
   }
 
+  const getFileUrl = () => {
+    if (!existingSubmission?.fileUrl) return null;
+
+    const apiOrigin = (import.meta.env.VITE_API_URL ?? "").replace(
+      /\/api\/?$/,
+      "",
+    );
+
+    // If fileUrl already starts with http, use it as is
+    if (existingSubmission.fileUrl.startsWith("http")) {
+      return existingSubmission.fileUrl;
+    }
+
+    // If fileUrl starts with /, just append to apiOrigin
+    if (existingSubmission.fileUrl.startsWith("/")) {
+      return `${apiOrigin}${existingSubmission.fileUrl}`;
+    }
+
+    // Otherwise, add a slash between
+    return `${apiOrigin}/${existingSubmission.fileUrl}`;
+  };
+
+  const fileUrl = getFileUrl();
+
   return (
-    <div className="max-w-2xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
-      {/* Title changes based on mode — the one visible sign to the user
-          of which "version" of this shared form they're looking at */}
-      <h2 className="text-2xl font-bold mb-6">
-        {isEditMode ? "Edit Submission" : "Submit Form"}
-      </h2>
-
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <FormInput
-          label="Full Name"
-          registration={register("fullName", nameValidation)}
-          error={errors.fullName}
-        />
-        <FormInput
-          label="Email"
-          registration={register("email", emailValidation)}
-          error={errors.email}
-        />
-        <FormInput
-          label="Phone"
-          registration={register("phone", phoneValidation)}
-          error={errors.phone}
-        />
-
-        <div className="mb-6">
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="text-xl font-semibold text-gray-800">Education</h3>
-            <button
-              type="button"
-              onClick={() =>
-                append({
-                  institution: "",
-                  degree: "",
-                  year: undefined as unknown as number,
-                })
-              }
-              className="px-4 py-2 bg-black hover:bg-gray-800 text-white rounded-md text-sm"
-            >
-              + Add Education
-            </button>
+    <Card className="max-w-2xl mx-auto mt-10">
+      <CardHeader>
+        <CardTitle className="text-center text-xl">
+          {isEditMode ? "Edit Submission" : "Submit Form"}
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          noValidate
+          className="space-y-6"
+        >
+          {/* Full Name */}
+          <div className="space-y-2">
+            <Label htmlFor="fullName">Full Name</Label>
+            <Controller
+              name="fullName"
+              control={control}
+              rules={nameValidation}
+              render={({ field }) => (
+                <Input
+                  id="fullName"
+                  placeholder="Enter your full name"
+                  value={field.value || ""}
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                  ref={field.ref}
+                />
+              )}
+            />
+            {errors.fullName && (
+              <p className="text-sm text-red-500">{errors.fullName.message}</p>
+            )}
           </div>
 
-          {fields.map((field, index) => (
-            <div
-              key={field.id}
-              className="border border-gray-200 rounded-lg p-4 mb-4 bg-gray-50"
-            >
-              <div className="flex justify-between items-start mb-3">
-                <h4 className="text-sm font-medium text-gray-600">
-                  Education {index + 1}
-                </h4>
-                {fields.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => remove(index)}
-                    className="text-red-500 hover:text-red-700 text-sm font-medium"
-                  >
-                    Remove
-                  </button>
-                )}
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                <FormInput
-                  label="Institution"
-                  registration={register(
-                    `education.${index}.institution`,
-                    institutionValidation,
-                  )}
-                  error={errors.education?.[index]?.institution}
+          {/* Email */}
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <Controller
+              name="email"
+              control={control}
+              rules={emailValidation}
+              render={({ field }) => (
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="Enter your email"
+                  value={field.value || ""}
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                  ref={field.ref}
                 />
-                <FormInput
-                  label="Degree"
-                  registration={register(
-                    `education.${index}.degree`,
-                    degreeValidation,
-                  )}
-                  error={errors.education?.[index]?.degree}
+              )}
+            />
+            {errors.email && (
+              <p className="text-sm text-red-500">{errors.email.message}</p>
+            )}
+          </div>
+
+          {/* Phone */}
+          <div className="space-y-2">
+            <Label htmlFor="phone">Phone</Label>
+            <Controller
+              name="phone"
+              control={control}
+              rules={phoneValidation}
+              render={({ field }) => (
+                <Input
+                  id="phone"
+                  placeholder="Enter your phone number"
+                  value={field.value || ""}
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                  ref={field.ref}
                 />
-                <FormInput
-                  label="Year"
-                  type="number"
-                  registration={register(`education.${index}.year`, {
-                    ...yearValidation,
-                    valueAsNumber: true,
-                  })}
-                  error={errors.education?.[index]?.year}
-                />
-              </div>
+              )}
+            />
+            {errors.phone && (
+              <p className="text-sm text-red-500">{errors.phone.message}</p>
+            )}
+          </div>
+
+          {/* Education Section */}
+          <div className="space-y-4">
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-semibold">Education</h3>
+              <Button
+                type="button"
+                variant="default"
+                onClick={() =>
+                  append({
+                    institution: "",
+                    degree: "",
+                    year: undefined as unknown as number,
+                  })
+                }
+              >
+                + Add Education
+              </Button>
             </div>
-          ))}
-        </div>
 
-        <div className="mb-6">
-          <label className="block text-gray-700 font-medium mb-2">
-            {/* Label text and validation rules both branch on mode — Create
-                still requires a file (fileValidation), Edit doesn't (register
-                with no rules at all, since a new file is optional there) */}
-            {isEditMode
-              ? "Replace file (optional — leave empty to keep current)"
-              : "Attachment (Certificate)"}
-          </label>
-          <input
-            type="file"
-            {...register("file", isEditMode ? {} : fileValidation)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md text-sm"
-          />
-          {errors.file && (
-            <span className="text-red-500 text-sm mt-1 block">
-              {errors.file.message}
-            </span>
-          )}
-        </div>
+            {fields.map((field, index) => (
+              <div key={field.id} className="border rounded-lg p-4 space-y-4">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-medium text-muted-foreground">
+                    Education {index + 1}
+                  </span>
+                  {fields.length > 1 && (
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => remove(index)}
+                    >
+                      Remove
+                    </Button>
+                  )}
+                </div>
 
-        <button
-          type="submit"
-          disabled={isSaving}
-          className={`w-full text-white font-semibold py-2 px-4 rounded-md ${
-            isSaving
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-blue-600 hover:bg-blue-700"
-          }`}
-        >
-          {isSaving ? "Saving..." : isEditMode ? "Save Changes" : "Submit"}
-        </button>
-      </form>
-    </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {/* Institution */}
+                  <div className="space-y-2">
+                    <Label htmlFor={`education.${index}.institution`}>
+                      Institution
+                    </Label>
+                    <Controller
+                      name={`education.${index}.institution`}
+                      control={control}
+                      rules={institutionValidation}
+                      render={({ field }) => (
+                        <Input
+                          id={`education.${index}.institution`}
+                          placeholder="Institution name"
+                          value={field.value || ""}
+                          onChange={field.onChange}
+                          onBlur={field.onBlur}
+                          ref={field.ref}
+                        />
+                      )}
+                    />
+                    {errors.education?.[index]?.institution && (
+                      <p className="text-sm text-red-500">
+                        {errors.education[index].institution?.message}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Degree */}
+                  <div className="space-y-2">
+                    <Label htmlFor={`education.${index}.degree`}>Degree</Label>
+                    <Controller
+                      name={`education.${index}.degree`}
+                      control={control}
+                      rules={degreeValidation}
+                      render={({ field }) => (
+                        <Input
+                          id={`education.${index}.degree`}
+                          placeholder="Degree"
+                          value={field.value || ""}
+                          onChange={field.onChange}
+                          onBlur={field.onBlur}
+                          ref={field.ref}
+                        />
+                      )}
+                    />
+                    {errors.education?.[index]?.degree && (
+                      <p className="text-sm text-red-500">
+                        {errors.education[index].degree?.message}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Year */}
+                  <div className="space-y-2">
+                    <Label htmlFor={`education.${index}.year`}>Year</Label>
+                    <Controller
+                      name={`education.${index}.year`}
+                      control={control}
+                      rules={yearValidation}
+                      render={({ field }) => (
+                        <Input
+                          id={`education.${index}.year`}
+                          type="number"
+                          placeholder="Year"
+                          value={field.value || ""}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            field.onChange(value ? parseInt(value) : undefined);
+                          }}
+                          onBlur={field.onBlur}
+                          ref={field.ref}
+                        />
+                      )}
+                    />
+                    {errors.education?.[index]?.year && (
+                      <p className="text-sm text-red-500">
+                        {errors.education[index].year?.message}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* File Upload */}
+          <div className="space-y-2">
+            <Label htmlFor="file">
+              {isEditMode
+                ? "Replace file (optional — leave empty to keep current)"
+                : "Attachment (Certificate)"}
+            </Label>
+
+            {isEditMode && fileUrl && (
+              <div className="text-sm">
+                <span className="text-muted-foreground">Current file: </span>
+                <a
+                  href={fileUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-shadow-black hover:underline font-medium"
+                >
+                  📎 View current file
+                </a>
+              </div>
+            )}
+
+            <Controller
+              name="file"
+              control={control}
+              rules={isEditMode ? {} : fileValidation}
+              render={({ field: { onChange, value, ...field } }) => (
+                <Input
+                  id="file"
+                  type="file"
+                  onChange={(e) => {
+                    const files = e.target.files;
+                    onChange(files);
+                  }}
+                  {...field}
+                />
+              )}
+            />
+            {errors.file && (
+              <p className="text-sm text-red-500">{errors.file.message}</p>
+            )}
+
+            {isEditMode && (
+              <p className="text-xs text-muted-foreground">
+                Leave empty to keep the current file
+              </p>
+            )}
+          </div>
+
+          {/* Submit Button */}
+          <Button type="submit" disabled={isSaving} className="w-full">
+            {isSaving ? "Saving..." : isEditMode ? "Save Changes" : "Submit"}
+          </Button>
+        </form>
+      </CardContent>
+    </Card>
   );
 };
 

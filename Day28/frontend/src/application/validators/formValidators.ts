@@ -35,7 +35,7 @@ export const degreeValidation = {
 export const yearValidation = {
   required: "Year is required",
   min: { value: 1950, message: "Enter a valid year" },
-  max: { value: new Date().getFullYear(), message: "Year cannot be in the future" },
+  max: { value: 3000, message: "Year cannot be in the future" },
 };
 
 // Frontend file check is a UX nicety only — the REAL validation

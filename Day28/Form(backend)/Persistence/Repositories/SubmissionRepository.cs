@@ -52,6 +52,7 @@ public class SubmissionRepository : ISubmissionRepository
             .Include(s => s.Education)
             .OrderByDescending(s =>s. CreatedAt)
             .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
         return(items,totalCount);
     }

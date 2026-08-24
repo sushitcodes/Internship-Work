@@ -62,8 +62,7 @@
               "RelativeToolTip": "DTOs\\UpdateSubmissionRequest.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-21T06:48:55.567Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-08-21T06:48:55.567Z"
             },
             {
               "$type": "Document",
@@ -75,8 +74,7 @@
               "RelativeToolTip": "DTOs\\PageResult.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-21T05:49:23.415Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-08-21T05:49:23.415Z"
             },
             {
               "$type": "Document",
@@ -88,8 +86,7 @@
               "RelativeToolTip": "Services\\SubmissionService.cs",
               "ViewState": "AgIAAE0AAAAAAAAAAAAkwFkAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-21T05:46:28.239Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-08-21T05:46:28.239Z"
             },
             {
               "$type": "Document",
@@ -101,8 +98,7 @@
               "RelativeToolTip": "Interface\\ISubmissionService.cs",
               "ViewState": "AgIAAAUAAAAAAAAAAAAowAsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-21T05:41:16.949Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-08-21T05:41:16.949Z"
             },
             {
               "$type": "Document",
@@ -114,8 +110,7 @@
               "RelativeToolTip": "Interface\\ISubmissionRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-21T05:41:13.555Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-08-21T05:41:13.555Z"
             },
             {
               "$type": "Document",
@@ -127,8 +122,7 @@
               "RelativeToolTip": "appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-08-20T10:31:04.397Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-08-20T10:31:04.397Z"
             },
             {
               "$type": "Document",
@@ -153,8 +147,7 @@
               "RelativeToolTip": "Controllers\\SubmissionController.cs",
               "ViewState": "AgIAADkAAAAAAAAAAAAAAEcAAAA4AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-20T07:46:11.725Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-08-20T07:46:11.725Z"
             }
           ]
         }

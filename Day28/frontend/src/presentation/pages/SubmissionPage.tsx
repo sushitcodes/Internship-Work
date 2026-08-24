@@ -20,7 +20,9 @@ const SubmissionPage: React.FC = () => {
     return (
       <Card className="max-w-2xl mx-auto mt-10">
         <CardHeader>
-          <CardTitle>Submission Details</CardTitle>
+          <CardTitle className="text-center text-xl">
+            Submission Details
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <Skeleton className="h-6 w-48" />
@@ -54,7 +56,7 @@ const SubmissionPage: React.FC = () => {
   return (
     <Card className="max-w-2xl mx-auto mt-10">
       <CardHeader>
-        <CardTitle>Submission Details</CardTitle>
+        <CardTitle className="text-center">Submission Details</CardTitle>
       </CardHeader>
 
       <CardContent className="space-y-6">
