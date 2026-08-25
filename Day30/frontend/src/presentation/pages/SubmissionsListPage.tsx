@@ -1,0 +1,288 @@
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import {
+  useGetSubmissionsInfiniteQuery,
+  useDeleteSubmissionMutation,
+} from "../../infrastructure/api/submissionApi";
+import SubmissionCountBadge from "../components/SubmissionCountBadge";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableHead,
+  TableRow,
+  TableCell,
+} from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Plus } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { getInitials } from "../../application/utils/getInitials";
+
+const SubmissionsListPage: React.FC = () => {
+  const [searchInput, setSearchInput] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(searchInput), 400);
+    return () => clearTimeout(timer);
+  }, [searchInput]);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [deleteName, setDeleteName] = useState<string>("");
+  const [pageIndex, setPageIndex] = useState(0);
+
+  useEffect(() => {
+    setPageIndex(0);
+  }, [debouncedSearch]);
+  const { data, fetchNextPage, isLoading, isError, isFetchingNextPage } =
+    useGetSubmissionsInfiniteQuery({ search: debouncedSearch, pageSize: 10 });
+  const [deleteSubmission, { isLoading: isDeleting }] =
+    useDeleteSubmissionMutation();
+
+  const pages = data?.pages ?? [];
+  const currentPage = pages[pageIndex];
+  const submissions = currentPage?.items ?? [];
+  // const submissions = pages.flatMap((page) => page.items);
+
+  const handleNext = async () => {
+    if (pageIndex < pages.length - 1) {
+      setPageIndex((i) => i + 1);
+      return;
+    }
+    if (currentPage?.hasNextPage) {
+      await fetchNextPage();
+      setPageIndex((i) => i + 1);
+    }
+  };
+
+  const handlePrev = () => {
+    // Always safe with zero network cost: reaching pageIndex N always
+    // means pages 0..N-1 were already fetched to get here.
+    if (pageIndex > 0) setPageIndex((i) => i - 1);
+  };
+
+  const canGoNext =
+    pageIndex < pages.length - 1 || Boolean(currentPage?.hasNextPage);
+  const canGoPrev = pageIndex > 0;
+
+  const handleDelete = async () => {
+    if (!deleteId) return;
+    try {
+      await deleteSubmission(deleteId).unwrap();
+      setDeleteId(null);
+      setDeleteName("");
+    } catch (err) {
+      console.error("Failed to delete submission:", err);
+      alert("Could not delete this submission. Please try again.");
+    }
+  };
+
+  return (
+    <Card className="max-w-3xl mx-auto mt-10">
+      <CardHeader className="border-b">
+        <div className="flex justify-between items-center">
+          <CardTitle className="text-2xl font-bold">Student</CardTitle>
+          <div className="flex items-center gap-4">
+            <SubmissionCountBadge />
+
+            <Link to="/formpage">
+              <Button className="gap-2">
+                <Plus className="h-4 w-4" />
+                New Submission
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent className="pt-6">
+        <Input
+          type="text"
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+          placeholder="Search by name or email..."
+          className="mb-6 placeholder:text-gray-350 placeholder:opacity-40"
+        />
+        {isLoading && (
+          <div className="space-y-3">
+            <div className="flex items-center space-x-4">
+              <Skeleton className="h-12 w-full" />
+            </div>
+            <div className="flex items-center space-x-4">
+              <Skeleton className="h-12 w-full" />
+            </div>
+            <div className="flex items-center space-x-4">
+              <Skeleton className="h-12 w-full" />
+            </div>
+            <div className="flex items-center space-x-4">
+              <Skeleton className="h-12 w-full" />
+            </div>
+            <div className="flex items-center space-x-4">
+              <Skeleton className="h-12 w-full" />
+            </div>
+          </div>
+        )}
+        {!isLoading && isError && (
+          <p className="text-red-500 text-center">
+            Could not load submissions.
+          </p>
+        )}
+
+        {submissions.length > 0 && (
+          <div className="rounded-md border">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="py-2 pr-4">Name</TableHead>
+                  <TableHead className="py-2 pr-4">Email</TableHead>
+                  <TableHead className="py-2"></TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {submissions.map((s) => (
+                  <TableRow key={s.id}>
+                    <TableCell className="py-3 pr-4">
+                      <div className="flex items-center gap-3">
+                        <Avatar className="h-8 w-8">
+                          <AvatarImage
+                            src="https://github.com/shadcn.png"
+                            alt={s.fullName}
+                            className="grayscale"
+                          />
+                          <AvatarFallback className="bg-blue-100 text-blue-800 text-xs">
+                            {getInitials(s.fullName)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <span className="font-medium">{s.fullName}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell className="py-3 pr-4 text-gray-600">
+                      {s.email}
+                    </TableCell>
+                    <TableCell className="py-3">
+                      <div className="flex items-center gap-2">
+                        <Link to={`/submission/${s.id}`}>
+                          <Button variant="outline" size="sm">
+                            View
+                          </Button>
+                        </Link>
+                        <Link to={`/submission/${s.id}/edit`}>
+                          <Button variant="outline" size="sm">
+                            Edit
+                          </Button>
+                        </Link>
+                        <AlertDialog>
+                          <AlertDialogTrigger
+                            render={
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                                onClick={() => {
+                                  setDeleteId(s.id);
+                                  setDeleteName(s.fullName);
+                                }}
+                              >
+                                Delete
+                              </Button>
+                            }
+                          />
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                This will permanently delete the submission from{" "}
+                                <span className="font-semibold">
+                                  {deleteName}
+                                </span>
+                                . This action cannot be undone.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel
+                                onClick={() => {
+                                  setDeleteId(null);
+                                  setDeleteName("");
+                                }}
+                              >
+                                Cancel
+                              </AlertDialogCancel>
+                              <AlertDialogAction
+                                onClick={handleDelete}
+                                disabled={isDeleting}
+                                className="bg-red-500 hover:bg-red-600"
+                              >
+                                {isDeleting ? "Deleting..." : "Delete"}
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        )}
+        <Pagination className="mt-4">
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                onClick={handlePrev}
+                className={
+                  !canGoPrev
+                    ? "pointer-events-none opacity-50"
+                    : "cursor-pointer"
+                }
+              />
+            </PaginationItem>
+
+            {Array.from({ length: pages.length }, (_, i) => (
+              <PaginationItem key={i}>
+                <PaginationLink
+                  isActive={i === pageIndex}
+                  onClick={() => setPageIndex(i)}
+                >
+                  {i + 1}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+
+            <PaginationItem>
+              <PaginationNext
+                onClick={handleNext}
+                className={
+                  !canGoNext || isFetchingNextPage
+                    ? "pointer-events-none opacity-50"
+                    : "cursor-pointer"
+                }
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      </CardContent>
+    </Card>
+  );
+};
+
+export default SubmissionsListPage;

@@ -3,7 +3,6 @@ import "./App.css";
 import Home from "./pages/Home";
 import Auth from "./pages/Auth";
 import Checkout from "./pages//Checkout";
-import Navbar from "./components/Navbar";
 
 function App() {
   return (
