@@ -2,7 +2,6 @@
 using Form.Interfaces;
 using Form.Persistence;
 using Microsoft.EntityFrameworkCore;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Form.Repositories;
 

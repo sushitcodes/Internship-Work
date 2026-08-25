@@ -1,4 +1,4 @@
-﻿namespace Form.Dtos
+﻿namespace Form.DTOs
 
 {
     public class Class

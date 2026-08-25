@@ -1,5 +1,5 @@
 ﻿using Form.DTOs;
-using static Form.Dtos.Class;
+using static Form.DTOs.Class;
 
 namespace Form.Interfaces;
 

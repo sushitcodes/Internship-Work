@@ -2,12 +2,16 @@ using Form.DTOs;
 using Form.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
-using static Form.Dtos.Class;
+using static Form.DTOs.Class;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace Form.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
+
 public class SubmissionsController : ControllerBase
 {
     private readonly ISubmissionService _submissionService;
@@ -49,6 +53,7 @@ public class SubmissionsController : ControllerBase
         }
     }
 
+    [AllowAnonymous]
 
     [HttpGet]
     public async Task<ActionResult<PagedResult<SubmissionDto>>> GetAll(
@@ -63,12 +68,14 @@ public class SubmissionsController : ControllerBase
 
         return Ok(await _submissionService.GetPagedAsync(page, pageSize, search));
     }
+    [AllowAnonymous]
 
     [HttpGet("count")]
     public async Task<ActionResult<int>> GetCount()
     {
         return Ok(await _submissionService.GetCountAsync());
     }
+
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<SubmissionDto>> GetById(Guid id)
     {

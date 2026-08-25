@@ -1,14 +1,24 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { Submission, PagedResult } from "../../domain/entities/Submission";
+import type { RootState } from "../store";
 
 // The argument type for the infinite query. It's an OBJECT-shaped queryArg
 // (just the search string here) — RTK Query treats each distinct search
 // term as its OWN separate accumulating page sequence. Search for "john",
 // then clear it, then search "john" again -> the earlier pages are still
 // cached, no new network request needed.
+
 export const submissionApi = createApi({
   reducerPath: "submissionApi",
-  baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API_URL }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: import.meta.env.VITE_API_URL,
+    prepareHeaders: (headers, { getState }) => {
+      const token = (getState() as RootState).auth.token;
+      if (token) headers.set("Authorization", `Bearer ${token}`);
+      return headers;
+    },
+  }),
+
   tagTypes: ["Submission"],
 
   endpoints: (builder) => ({
