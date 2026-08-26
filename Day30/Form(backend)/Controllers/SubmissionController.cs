@@ -75,6 +75,7 @@ public class SubmissionsController : ControllerBase
     {
         return Ok(await _submissionService.GetCountAsync());
     }
+    [AllowAnonymous]
 
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<SubmissionDto>> GetById(Guid id)
@@ -110,7 +111,7 @@ public class SubmissionsController : ControllerBase
         return deleted ? NoContent() : NotFound();
     }
 
-    
+
     private static List<CreateEducationEntryRequest>? ParseEducation(string json, out string? error)
     {
         try

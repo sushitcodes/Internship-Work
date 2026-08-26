@@ -43,3 +43,12 @@ export const yearValidation = {
 export const fileValidation = {
   required: "Please attach a file",
 };
+
+export const passwordValidation = {
+  required: "Password is required",
+  minLength: { value: 6, message: "Password must be at least 6 characters" },
+};
+
+export const loginPasswordValidation = {
+  required: "Password is required",
+};

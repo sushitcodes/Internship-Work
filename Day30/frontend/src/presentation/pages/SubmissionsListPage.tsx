@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   useGetSubmissionsInfiniteQuery,
   useDeleteSubmissionMutation,
@@ -39,6 +39,8 @@ import {
 import { Plus } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getInitials } from "../../application/utils/getInitials";
+import { useAppSelector } from "../../infrastructure/store/hooks";
+import { HIDE_ACTIONS_WHEN_LOGGED_OUT } from "../config/authUiConfig";
 
 const SubmissionsListPage: React.FC = () => {
   const [searchInput, setSearchInput] = useState("");
@@ -58,7 +60,8 @@ const SubmissionsListPage: React.FC = () => {
     useGetSubmissionsInfiniteQuery({ search: debouncedSearch, pageSize: 10 });
   const [deleteSubmission, { isLoading: isDeleting }] =
     useDeleteSubmissionMutation();
-
+  const isLoggedIn = Boolean(useAppSelector((state) => state.auth.token));
+  const navigate = useNavigate();
   const pages = data?.pages ?? [];
   const currentPage = pages[pageIndex];
   const submissions = currentPage?.items ?? [];
@@ -105,12 +108,20 @@ const SubmissionsListPage: React.FC = () => {
           <div className="flex items-center gap-4">
             <SubmissionCountBadge />
 
-            <Link to="/formpage">
-              <Button className="gap-2">
-                <Plus className="h-4 w-4" />
-                New Submission
-              </Button>
-            </Link>
+            {(isLoggedIn || !HIDE_ACTIONS_WHEN_LOGGED_OUT) &&
+              (isLoggedIn ? (
+                <Link to="/formpage">
+                  <Button className="gap-2">
+                    <Plus className="h-4 w-4" />
+                    New Submission
+                  </Button>
+                </Link>
+              ) : (
+                <Button className="gap-2" onClick={() => navigate("/login")}>
+                  <Plus className="h-4 w-4" />
+                  New Submission
+                </Button>
+              ))}
           </div>
         </div>
       </CardHeader>
@@ -185,57 +196,84 @@ const SubmissionsListPage: React.FC = () => {
                             View
                           </Button>
                         </Link>
-                        <Link to={`/submission/${s.id}/edit`}>
-                          <Button variant="outline" size="sm">
-                            Edit
-                          </Button>
-                        </Link>
-                        <AlertDialog>
-                          <AlertDialogTrigger
-                            render={
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                                onClick={() => {
-                                  setDeleteId(s.id);
-                                  setDeleteName(s.fullName);
-                                }}
-                              >
-                                Delete
+                        {(isLoggedIn || !HIDE_ACTIONS_WHEN_LOGGED_OUT) &&
+                          (isLoggedIn ? (
+                            <Link to={`/submission/${s.id}/edit`}>
+                              <Button variant="outline" size="sm">
+                                Edit
                               </Button>
-                            }
-                          />
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                              <AlertDialogDescription>
-                                This will permanently delete the submission from{" "}
-                                <span className="font-semibold">
-                                  {deleteName}
-                                </span>
-                                . This action cannot be undone.
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel
-                                onClick={() => {
-                                  setDeleteId(null);
-                                  setDeleteName("");
-                                }}
-                              >
-                                Cancel
-                              </AlertDialogCancel>
-                              <AlertDialogAction
-                                onClick={handleDelete}
-                                disabled={isDeleting}
-                                className="bg-red-500 hover:bg-red-600"
-                              >
-                                {isDeleting ? "Deleting..." : "Delete"}
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
+                            </Link>
+                          ) : (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => navigate("/login")}
+                            >
+                              Edit
+                            </Button>
+                          ))}
+
+                        {(isLoggedIn || !HIDE_ACTIONS_WHEN_LOGGED_OUT) &&
+                          (isLoggedIn ? (
+                            <AlertDialog>
+                              <AlertDialogTrigger
+                                render={
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                                    onClick={() => {
+                                      setDeleteId(s.id);
+                                      setDeleteName(s.fullName);
+                                    }}
+                                  >
+                                    Delete
+                                  </Button>
+                                }
+                              />
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>
+                                    Are you sure?
+                                  </AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    This will permanently delete the submission
+                                    from{" "}
+                                    <span className="font-semibold">
+                                      {deleteName}
+                                    </span>
+                                    . This action cannot be undone.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel
+                                    onClick={() => {
+                                      setDeleteId(null);
+                                      setDeleteName("");
+                                    }}
+                                  >
+                                    Cancel
+                                  </AlertDialogCancel>
+                                  <AlertDialogAction
+                                    onClick={handleDelete}
+                                    disabled={isDeleting}
+                                    className="bg-red-500 hover:bg-red-600"
+                                  >
+                                    {isDeleting ? "Deleting..." : "Delete"}
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          ) : (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="text-red-500 hover:text-red-700 hover:bg-red-50 border-red-200 hover:border-red-300"
+                              onClick={() => navigate("/login")}
+                            >
+                              Delete
+                            </Button>
+                          ))}
                       </div>
                     </TableCell>
                   </TableRow>
