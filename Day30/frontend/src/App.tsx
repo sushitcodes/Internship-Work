@@ -6,8 +6,9 @@ import LoginPage from "./presentation/pages/LoginPage";
 import RegisterPage from "./presentation/pages/RegisterPage";
 import ProtectedRoute from "./presentation/components/ProtectedRoute";
 import Navbar from "./presentation/components/Navbar";
-
+import { useGetMeQuery } from "./infrastructure/api/authApi";
 function App() {
+  useGetMeQuery();
   return (
     <div className="min-h-screen bg-gray-100">
       <Navbar />

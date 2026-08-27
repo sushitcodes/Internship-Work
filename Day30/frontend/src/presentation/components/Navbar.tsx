@@ -1,17 +1,15 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import {
-  useAppSelector,
-  useAppDispatch,
-} from "../../infrastructure/store/hooks";
-import { logout } from "../../infrastructure/store/authSlice";
+import { useAppSelector } from "../../infrastructure/store/hooks";
+import { useLogoutUserMutation } from "../../infrastructure/api/authApi";
+
 const Navbar: React.FC = () => {
   const email = useAppSelector((state) => state.auth.email);
-  const dispatch = useAppDispatch();
+  const [logoutUser] = useLogoutUserMutation();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    dispatch(logout());
+  const handleLogout = async () => {
+    await logoutUser();
     navigate("/login");
   };
   return (
@@ -19,7 +17,7 @@ const Navbar: React.FC = () => {
       {" "}
       <div className="max-w-3xl mx-auto flex items-center justify-between py-3 px-4">
         <Link to="/" className="font-semibold text-lg">
-          Submissions
+          Student Submission
         </Link>
         <div className="flex items-center gap-3">
           {email ? (

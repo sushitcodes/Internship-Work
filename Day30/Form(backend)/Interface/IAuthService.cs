@@ -6,6 +6,7 @@ namespace Form.Interface
     {
         Task<AuthResponseDto> RegisterAsync(RegisterRequest request);
         Task<AuthResponseDto?> LoginAsync(LoginRequest request);
+        Task<AuthResponseDto?> RefreshAsync(string rawRefreshToken);
 
 
     }

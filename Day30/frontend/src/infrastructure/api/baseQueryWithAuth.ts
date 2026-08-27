@@ -4,16 +4,11 @@ import type {
   FetchArgs,
   FetchBaseQueryError,
 } from "@reduxjs/toolkit/query/react";
-import type { RootState } from "../store";
 import { logout } from "../store/authSlice";
 
 const rawBaseQuery = fetchBaseQuery({
   baseUrl: import.meta.env.VITE_API_URL,
-  prepareHeaders: (headers, { getState }) => {
-    const token = (getState() as RootState).auth.token;
-    if (token) headers.set("Authorization", `Bearer ${token}`);
-    return headers;
-  },
+  credentials: "include",
 });
 
 // Same signature as fetchBaseQuery, so any API slice can drop this in

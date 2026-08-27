@@ -60,7 +60,7 @@ const SubmissionsListPage: React.FC = () => {
     useGetSubmissionsInfiniteQuery({ search: debouncedSearch, pageSize: 10 });
   const [deleteSubmission, { isLoading: isDeleting }] =
     useDeleteSubmissionMutation();
-  const isLoggedIn = Boolean(useAppSelector((state) => state.auth.token));
+  const isLoggedIn = Boolean(useAppSelector((state) => state.auth.email));
   const navigate = useNavigate();
   const pages = data?.pages ?? [];
   const currentPage = pages[pageIndex];
