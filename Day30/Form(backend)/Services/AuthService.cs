@@ -1,6 +1,7 @@
 ﻿using Form.DTOs;
 using Form.Entities;
 using Form.Interface;
+using Form.Interfaces;
 
 namespace Form.Services;
 
@@ -10,19 +11,39 @@ public class AuthService : IAuthService
     private readonly IPasswordHasher _passwordHasher;
     private readonly ITokenService _tokenService;
     private readonly IRefreshTokenService _refreshTokenService;
+    private readonly IPasswordResetService _passwordResetService;
+    private readonly IEmailService _emailService;
 
     public AuthService(
         IUserRepository userRepository,
         IPasswordHasher passwordHasher,
         ITokenService tokenService,
-        IRefreshTokenService refreshTokenService)
+        IRefreshTokenService refreshTokenService,
+         IPasswordResetService passwordResetService,   
+    IEmailService emailService)
+
     {
         _userRepository = userRepository;
         _passwordHasher = passwordHasher;
         _tokenService = tokenService;
         _refreshTokenService = refreshTokenService;
+        _passwordResetService = passwordResetService; 
+        _emailService = emailService;
     }
 
+    public async Task ForgotPasswordAsync(string email, string frontendBaseUrl)
+    {
+        var user = await _userRepository.GetByEmailAsync(email);
+
+        // Deliberately do nothing detectable if the user doesn't exist —
+        // same "don't leak which emails are registered" principle as Login.
+        if (user is null) return;
+
+        var (rawToken, expiryMinutes) = await _passwordResetService.GenerateAsync(user.Id);
+        var resetLink = $"{frontendBaseUrl}/reset-password?token={rawToken}";
+
+        await _emailService.SendPasswordResetEmailAsync(user.Email, resetLink, expiryMinutes);
+    }
     public async Task<AuthResponseDto> RegisterAsync(RegisterRequest request)
     {
         var existing = await _userRepository.GetByEmailAsync(request.Email);
@@ -43,7 +64,8 @@ public class AuthService : IAuthService
             Email = saved.Email, 
             ExpiresAt = expiresAt,
             RefreshToken = refreshToken,
-            RefreshTokenExpiresAt = refreshExpiresAt,   
+            RefreshTokenExpiresAt = refreshExpiresAt,
+            Role = saved.Role.ToString(),
 
         };
     }
@@ -62,6 +84,7 @@ public class AuthService : IAuthService
             ExpiresAt = expiresAt ,
             RefreshToken = refreshToken,             
             RefreshTokenExpiresAt = refreshExpiresAt,
+            Role = user.Role.ToString(),
         };
     }
     // Form.Services/AuthService.cs
@@ -80,6 +103,12 @@ public class AuthService : IAuthService
             ExpiresAt = accessExpiresAt,
             RefreshToken = result.NewRawToken!,
             RefreshTokenExpiresAt = result.NewExpiresAt!.Value,
+            Role = result.User.Role.ToString(),
         };
     }
+    public async Task LogoutAsync(string rawRefreshToken)
+    {
+        await _refreshTokenService.RevokeAsync(rawRefreshToken);
+    }
+
 }

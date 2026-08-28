@@ -61,8 +61,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 
 
-builder.Services.AddAuthorization();
-// --- CORS: lets the Vite dev server (different port) call this API ---
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("CanEdit", policy =>
+        policy.RequireRole("Staff", "Admin"));
+
+    options.AddPolicy("CanDelete", policy =>
+        policy.RequireRole("Admin"));
+});// --- CORS: lets the Vite dev server (different port) call this API ---
 builder.Services.AddCors(options =>
 {
 options.AddPolicy("AllowFrontend", policy =>

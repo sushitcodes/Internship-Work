@@ -19,9 +19,13 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
 
-          {/* Everything nested here requires a valid token */}
+          {/* Create: any logged-in role */}
           <Route element={<ProtectedRoute />}>
             <Route path="/formpage" element={<FormPage />} />
+          </Route>
+
+          {/* Edit: Staff/Admin only */}
+          <Route element={<ProtectedRoute allowedRoles={["Staff", "Admin"]} />}>
             <Route path="/submission/:id/edit" element={<FormPage />} />
           </Route>
         </Routes>

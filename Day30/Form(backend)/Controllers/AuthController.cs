@@ -22,7 +22,7 @@ public class AuthController : ControllerBase
         SetAuthCookie(result.Token, result.ExpiresAt);
         SetRefreshCookie(result.RefreshToken, result.RefreshTokenExpiresAt);
         // No longer send the raw token in the body — only non-sensitive info
-        return Ok(new { email = result.Email, expiresAt = result.ExpiresAt });
+        return Ok(new { email = result.Email, expiresAt = result.ExpiresAt, role = result.Role }); 
     }
 
     [HttpPost("register")]
@@ -34,7 +34,7 @@ public class AuthController : ControllerBase
             SetAuthCookie(result.Token, result.ExpiresAt);
             SetRefreshCookie(result.RefreshToken, result.RefreshTokenExpiresAt);
 
-            return Ok(new { email = result.Email, expiresAt = result.ExpiresAt });
+            return Ok(new { email = result.Email, expiresAt = result.ExpiresAt , role = result.Role });
         }
         catch (InvalidOperationException ex)
         {
@@ -45,9 +45,16 @@ public class AuthController : ControllerBase
     // logout
     // now genuinely needs the server, since JS can't clear an HttpOnly cookie.
     [HttpPost("logout")]
-    public IActionResult Logout()
+    public async Task<IActionResult> Logout()   // CHANGE — now async, since we're doing DB work
     {
+        if (Request.Cookies.TryGetValue("refreshToken", out var rawRefreshToken)
+            && !string.IsNullOrEmpty(rawRefreshToken))
+        {
+            await _authService.LogoutAsync(rawRefreshToken);   // ADD — actually revoke in the DB
+        }
+
         Response.Cookies.Delete("jwt");
+        Response.Cookies.Delete("refreshToken", new CookieOptions { Path = "/api/auth" });
         return Ok();
     }
 
@@ -58,7 +65,9 @@ public class AuthController : ControllerBase
     {
         var email = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value
                  ?? User.FindFirst("email")?.Value;
-        return Ok(new { email });
+        var role = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value; 
+
+        return Ok(new { email ,role });
     }
 
     private void SetAuthCookie(string token, DateTime expiresAt)
@@ -105,6 +114,6 @@ public class AuthController : ControllerBase
         SetAuthCookie(result.Token, result.ExpiresAt);
         SetRefreshCookie(result.RefreshToken, result.RefreshTokenExpiresAt);
 
-        return Ok(new { email = result.Email, expiresAt = result.ExpiresAt });
+        return Ok(new { email = result.Email, expiresAt = result.ExpiresAt , role = result.Role });
     }
 }

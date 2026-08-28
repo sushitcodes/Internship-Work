@@ -32,6 +32,7 @@ public class SubmissionService : ISubmissionService
             Email = request.Email,
             Phone = request.Phone,
             FileUrl = fileUrl,
+            CreatedByUserId = request.CreatedByUserId,
             Education = request.Education.Select(e => new EducationEntry
             {
                 Institution = e.Institution,

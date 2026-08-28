@@ -40,7 +40,11 @@ import { Plus } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getInitials } from "../../application/utils/getInitials";
 import { useAppSelector } from "../../infrastructure/store/hooks";
-import { HIDE_ACTIONS_WHEN_LOGGED_OUT } from "../config/authUiConfig";
+import {
+  HIDE_ACTIONS_WHEN_LOGGED_OUT,
+  canEdit,
+  canDelete,
+} from "../config/authUiConfig";
 
 const SubmissionsListPage: React.FC = () => {
   const [searchInput, setSearchInput] = useState("");
@@ -60,6 +64,7 @@ const SubmissionsListPage: React.FC = () => {
     useGetSubmissionsInfiniteQuery({ search: debouncedSearch, pageSize: 10 });
   const [deleteSubmission, { isLoading: isDeleting }] =
     useDeleteSubmissionMutation();
+  const role = useAppSelector((state) => state.auth.role);
   const isLoggedIn = Boolean(useAppSelector((state) => state.auth.email));
   const navigate = useNavigate();
   const pages = data?.pages ?? [];
@@ -196,8 +201,8 @@ const SubmissionsListPage: React.FC = () => {
                             View
                           </Button>
                         </Link>
-                        {(isLoggedIn || !HIDE_ACTIONS_WHEN_LOGGED_OUT) &&
-                          (isLoggedIn ? (
+                        {(canEdit(role) || !HIDE_ACTIONS_WHEN_LOGGED_OUT) &&
+                          (canEdit(role) ? (
                             <Link to={`/submission/${s.id}/edit`}>
                               <Button variant="outline" size="sm">
                                 Edit
@@ -213,8 +218,8 @@ const SubmissionsListPage: React.FC = () => {
                             </Button>
                           ))}
 
-                        {(isLoggedIn || !HIDE_ACTIONS_WHEN_LOGGED_OUT) &&
-                          (isLoggedIn ? (
+                        {(canDelete(role) || !HIDE_ACTIONS_WHEN_LOGGED_OUT) &&
+                          (canDelete(role) ? (
                             <AlertDialog>
                               <AlertDialogTrigger
                                 render={

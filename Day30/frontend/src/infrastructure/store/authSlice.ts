@@ -1,13 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface AuthState {
-  token: string | null;
   email: string | null;
+  role: string | null;
 }
 
 const initialState: AuthState = {
-  token: localStorage.getItem("token"),
-  email: localStorage.getItem("email"),
+  email: null,
+  role: null,
+  // DELETE — no longer read from localStorage; see /me flow below
 };
 
 const authSlice = createSlice({
@@ -16,18 +17,15 @@ const authSlice = createSlice({
   reducers: {
     setCredentials: (
       state,
-      action: PayloadAction<{ token: string; email: string }>,
+      action: PayloadAction<{ email: string; role: string }>,
     ) => {
-      state.token = action.payload.token;
       state.email = action.payload.email;
-      localStorage.setItem("token", action.payload.token);
-      localStorage.setItem("email", action.payload.email);
+      state.role = action.payload.role;
+      // DELETE — no more localStorage.setItem("token", ...); nothing to store
     },
     logout: (state) => {
-      state.token = null;
       state.email = null;
-      localStorage.removeItem("token");
-      localStorage.removeItem("email");
+      state.role = null;
     },
   },
 });

@@ -8,4 +8,5 @@ public class CreateSubmissionRequest
     public string Phone { get; set; } = string.Empty;
     public List<CreateEducationEntryRequest> Education { get; set; } = new();
     public IFormFile File { get; set; } = default!;
+    public Guid? CreatedByUserId { get; set; }
 }

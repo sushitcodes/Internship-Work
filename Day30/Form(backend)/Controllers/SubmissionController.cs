@@ -31,6 +31,8 @@ public class SubmissionsController : ControllerBase
 
         var education = ParseEducation(form.Education, out var parseError);
         if (parseError is not null) return BadRequest(parseError);
+        var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        Guid? createdByUserId = Guid.TryParse(userIdClaim, out var parsedId) ? parsedId : null;
 
         var request = new CreateSubmissionRequest
         {
@@ -38,7 +40,8 @@ public class SubmissionsController : ControllerBase
             Email = form.Email,
             Phone = form.Phone,
             Education = education!,
-            File = form.File
+            File = form.File,
+            CreatedByUserId = createdByUserId,
         };
 
         try
@@ -85,6 +88,7 @@ public class SubmissionsController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
+    [Authorize(Policy = "CanEdit")]
     public async Task<ActionResult<SubmissionDto>> Update(Guid id, [FromForm] SubmissionFormRequest form)
     {
         
@@ -105,6 +109,7 @@ public class SubmissionsController : ControllerBase
     }
 
     [HttpDelete("{id:guid}")]
+    [Authorize(Policy = "CanDelete")]
     public async Task<IActionResult> Delete(Guid id)
     {
         var deleted = await _submissionService.DeleteAsync(id);

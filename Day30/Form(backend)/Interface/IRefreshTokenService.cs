@@ -11,7 +11,8 @@ namespace Form.Interface
     public interface IRefreshTokenService
     {
         Task<(string rawToken, DateTime expiresAt)> GenerateAsync(Guid userid);
-        Task<RefreshRotationResult> ValidateAndRotateAsync(string rawToken); 
+        Task<RefreshRotationResult> ValidateAndRotateAsync(string rawToken);
+        Task RevokeAsync(string rawToken);
 
     }
 }

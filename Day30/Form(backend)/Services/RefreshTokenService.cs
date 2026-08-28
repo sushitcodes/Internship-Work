@@ -86,4 +86,17 @@ public class RefreshTokenService : IRefreshTokenService
         var bytes = SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(rawToken));
         return Convert.ToBase64String(bytes);
     }
+    public async Task RevokeAsync(string rawToken)
+    {
+        var hash = Hash(rawToken);
+        var existing = await _repository.GetByHashAsync(hash);
+
+        // Already gone, already revoked, or was never real — nothing to do.
+        // Logout should never fail just because the token was already invalid.
+        if (existing is null || existing.IsRevoked)
+            return;
+
+        existing.IsRevoked = true;
+        await _repository.SaveChangesAsync();
+    }
 }
