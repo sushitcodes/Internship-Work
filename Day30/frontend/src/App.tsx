@@ -7,6 +7,8 @@ import RegisterPage from "./presentation/pages/RegisterPage";
 import ProtectedRoute from "./presentation/components/ProtectedRoute";
 import Navbar from "./presentation/components/Navbar";
 import { useGetMeQuery } from "./infrastructure/api/authApi";
+import ForgotPasswordPage from "./presentation/pages/ForgotPasswordPage";
+import ResetPasswordPage from "./presentation/pages/ResetPasswordPage";
 function App() {
   useGetMeQuery();
   return (
@@ -18,6 +20,8 @@ function App() {
           <Route path="/submission/:id" element={<SubmissionPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
 
           {/* Create: any logged-in role */}
           <Route element={<ProtectedRoute />}>

@@ -5,12 +5,21 @@ import { setCredentials, logout } from "../store/authSlice";
 export interface AuthResponse {
   email: string;
   expiresAt: string;
-  role: string;
+  roles: string[];
 }
 
 export interface AuthRequest {
   email: string;
   password: string;
+}
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface ResetPasswordRequest {
+  email: string;
+  code: string;
+  newPassword: string;
 }
 
 export const authApi = createApi({
@@ -22,15 +31,24 @@ export const authApi = createApi({
       query: (body) => ({ url: "/auth/register", method: "POST", body }),
       onQueryStarted: async (_arg, { dispatch, queryFulfilled }) => {
         const { data } = await queryFulfilled;
-        dispatch(setCredentials({ email: data.email, role: data.role }));
+        dispatch(setCredentials({ email: data.email, roles: data.roles }));
       },
     }),
     login: builder.mutation<AuthResponse, AuthRequest>({
       query: (body) => ({ url: "/auth/login", method: "POST", body }),
       onQueryStarted: async (_arg, { dispatch, queryFulfilled }) => {
         const { data } = await queryFulfilled;
-        dispatch(setCredentials({ email: data.email, role: data.role }));
+        dispatch(setCredentials({ email: data.email, roles: data.roles }));
       },
+    }),
+    forgotPassword: builder.mutation<
+      { message: string },
+      ForgotPasswordRequest
+    >({
+      query: (body) => ({ url: "/auth/forgot-password", method: "POST", body }),
+    }),
+    resetPassword: builder.mutation<{ message: string }, ResetPasswordRequest>({
+      query: (body) => ({ url: "/auth/reset-password", method: "POST", body }),
     }),
     // ADD — a real server round-trip; logout is no longer purely local
     logoutUser: builder.mutation<void, void>({
@@ -41,12 +59,12 @@ export const authApi = createApi({
       },
     }),
     // ADD — called once on app load to check "is the cookie still valid"
-    getMe: builder.query<{ email: string; role: string }, void>({
+    getMe: builder.query<{ email: string; roles: string[] }, void>({
       query: () => "/auth/me",
       onQueryStarted: async (_arg, { dispatch, queryFulfilled }) => {
         try {
           const { data } = await queryFulfilled;
-          dispatch(setCredentials({ email: data.email, role: data.role }));
+          dispatch(setCredentials({ email: data.email, roles: data.roles }));
         } catch {
           dispatch(logout()); // no valid cookie — stay logged out, no error shown
         }
@@ -60,4 +78,6 @@ export const {
   useLoginMutation,
   useLogoutUserMutation,
   useGetMeQuery,
+  useForgotPasswordMutation,
+  useResetPasswordMutation,
 } = authApi;

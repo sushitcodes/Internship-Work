@@ -23,4 +23,11 @@ public class PasswordResetRepository : IPasswordResetRepository
             .FirstOrDefaultAsync(t => t.TokenHash == tokenHash);
 
     public async Task SaveChangesAsync() => await _context.SaveChangesAsync();
+    public async Task<PasswordResetToken?> GetLatestForUserAsync(Guid userId) =>
+    await _context.PasswordResetTokens
+        .Where(t => t.UserId == userId && !t.IsUsed)
+        .OrderByDescending(t => t.CreatedAt)
+        .FirstOrDefaultAsync();
+
+
 }

@@ -2,7 +2,6 @@
 using Form.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Runtime.InteropServices;
 
 namespace Form.Controllers;
 
@@ -11,7 +10,12 @@ namespace Form.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
-    public AuthController(IAuthService authService) => _authService = authService;
+    private readonly IConfiguration _config;
+    public AuthController(IAuthService authService, IConfiguration config)
+    {
+        _authService = authService;
+        _config = config;
+    }
 
     [HttpPost("login")]
     public async Task<ActionResult<AuthResponseDto>> Login(LoginRequest request)
@@ -22,7 +26,7 @@ public class AuthController : ControllerBase
         SetAuthCookie(result.Token, result.ExpiresAt);
         SetRefreshCookie(result.RefreshToken, result.RefreshTokenExpiresAt);
         // No longer send the raw token in the body — only non-sensitive info
-        return Ok(new { email = result.Email, expiresAt = result.ExpiresAt, role = result.Role }); 
+        return Ok(new { email = result.Email, expiresAt = result.ExpiresAt, roles = result.Roles });
     }
 
     [HttpPost("register")]
@@ -34,7 +38,7 @@ public class AuthController : ControllerBase
             SetAuthCookie(result.Token, result.ExpiresAt);
             SetRefreshCookie(result.RefreshToken, result.RefreshTokenExpiresAt);
 
-            return Ok(new { email = result.Email, expiresAt = result.ExpiresAt , role = result.Role });
+            return Ok(new { email = result.Email, expiresAt = result.ExpiresAt , role = result.Roles });
         }
         catch (InvalidOperationException ex)
         {
@@ -65,9 +69,10 @@ public class AuthController : ControllerBase
     {
         var email = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value
                  ?? User.FindFirst("email")?.Value;
-        var role = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value; 
-
-        return Ok(new { email ,role });
+        var roles = User.FindAll(System.Security.Claims.ClaimTypes.Role)
+                .Select(c => c.Value)
+                .ToList();
+        return Ok(new { email ,roles });
     }
 
     private void SetAuthCookie(string token, DateTime expiresAt)
@@ -114,6 +119,38 @@ public class AuthController : ControllerBase
         SetAuthCookie(result.Token, result.ExpiresAt);
         SetRefreshCookie(result.RefreshToken, result.RefreshTokenExpiresAt);
 
-        return Ok(new { email = result.Email, expiresAt = result.ExpiresAt , role = result.Role });
+        return Ok(new { email = result.Email, expiresAt = result.ExpiresAt , role = result.Roles});
+    }
+
+    public class ForgotPasswordRequest
+    {
+        public string Email { get; set; } = string.Empty;
+    }
+
+    [AllowAnonymous]
+    [HttpPost("forgot-password")]
+    public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest request)
+    {
+        var frontendBaseUrl = _config["Frontend:BaseUrl"]!;
+        await _authService.ForgotPasswordAsync(request.Email);
+
+        // ALWAYS the same generic response — see the reasoning above.
+        return Ok(new { message = "If an account with that email exists, a reset link has been sent." });
+    }
+    public class ResetPasswordRequest
+    {
+        public string Email { get; set; } = string.Empty;
+        public string Code { get; set; } = string.Empty;
+        public string NewPassword { get; set; } = string.Empty;
+    }
+
+    [AllowAnonymous]
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword(ResetPasswordRequest request)
+    {
+        var success = await _authService.ResetPasswordAsync(request.Email, request.Code, request.NewPassword);
+        if (!success) return BadRequest("Invalid or expired code.");
+
+        return Ok(new { message = "Password reset successfully." });
     }
 }

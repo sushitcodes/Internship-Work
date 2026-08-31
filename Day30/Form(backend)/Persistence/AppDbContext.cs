@@ -11,25 +11,14 @@ public class AppDbContext : DbContext
     public DbSet<Submission> Submissions => Set<Submission>();
     public DbSet<EducationEntry> EducationEntries => Set<EducationEntry>();
     public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
-
-
+    public DbSet<UserRoleAssignment> UserRoleAssignments { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<Submission>()
-            .HasMany(s => s.Education)
-            .WithOne(e => e.Submission)
-            .HasForeignKey(e => e.SubmissionId)
-            .OnDelete(DeleteBehavior.Cascade);
+{
+    modelBuilder.Entity<UserRoleAssignment>()
+        .Property(ra => ra.Role)
+        .HasConversion<string>();   // same string-storage reasoning as before
+}
 
-        modelBuilder.Entity<User>()
-       .Property(u => u.Role)
-       .HasConversion<string>();
-
-        modelBuilder.Entity<Submission>().Property(s => s.FullName).HasMaxLength(50).IsRequired();
-        modelBuilder.Entity<Submission>().Property(s => s.Email).HasMaxLength(100).IsRequired();
-        modelBuilder.Entity<Submission>().Property(s => s.Phone).HasMaxLength(20).IsRequired();
-        modelBuilder.Entity<EducationEntry>().Property(e => e.Institution).HasMaxLength(100).IsRequired();
-        modelBuilder.Entity<EducationEntry>().Property(e => e.Degree).HasMaxLength(100).IsRequired();
-    }
+    
 
 }

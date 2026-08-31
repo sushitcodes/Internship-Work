@@ -13,6 +13,7 @@ namespace Form.Interface
         Task<(string rawToken, DateTime expiresAt)> GenerateAsync(Guid userid);
         Task<RefreshRotationResult> ValidateAndRotateAsync(string rawToken);
         Task RevokeAsync(string rawToken);
+        Task RevokeAllForUserAsync(Guid userId);
 
     }
 }

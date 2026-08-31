@@ -94,23 +94,41 @@ export function AuthForm({ mode }: AuthFormProps) {
                 : "Register"}
           </Button>
         </form>
-        <p className="text-sm text-center mt-4 text-muted-foreground">
-          {isLogin ? (
-            <>
-              Don&apos;t have an account?{" "}
-              <Link to="/register" className="underline">
-                Register
+        <div className="mt-4 space-y-2 text-center">
+          {isLogin && (
+            <p className="text-sm">
+              <Link
+                to="/forgot-password"
+                className="underline text-muted-foreground, text-red-500 hover:text-red-700"
+              >
+                Forgot password?
               </Link>
-            </>
-          ) : (
-            <>
-              Already have an account?{" "}
-              <Link to="/login" className="underline">
-                Log In
-              </Link>
-            </>
+            </p>
           )}
-        </p>
+          <p className="text-sm text-muted-foreground">
+            {isLogin ? (
+              <>
+                Don't have an ?{" "}
+                <Link
+                  to="/register"
+                  className="underline text-red-500 hover:text-red-700"
+                >
+                  Register
+                </Link>
+              </>
+            ) : (
+              <>
+                Already have an account?{" "}
+                <Link
+                  to="/login"
+                  className="underline text-red-500 hover:text-red-700"
+                >
+                  Log In
+                </Link>
+              </>
+            )}
+          </p>
+        </div>
       </CardContent>
     </Card>
   );

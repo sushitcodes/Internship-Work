@@ -99,4 +99,8 @@ public class RefreshTokenService : IRefreshTokenService
         existing.IsRevoked = true;
         await _repository.SaveChangesAsync();
     }
+    public async Task RevokeAllForUserAsync(Guid userId)
+    {
+        await _repository.RevokeAllForUserAsync(userId);
+    }
 }

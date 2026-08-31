@@ -18,12 +18,18 @@ public class TokenService : ITokenService
 
     public (string token, DateTime expiresAt) CreateToken(User user)
     {
-        var claims = new[]
+        var claims = new List<Claim>
+    {
+        new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+        new Claim(JwtRegisteredClaimNames.Email, user.Email),
+    };
+
+        // ADD — one Role claim per assignment, instead of a single value
+        foreach (var assignment in user.RoleAssignments)
         {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-            new Claim(JwtRegisteredClaimNames.Email, user.Email),
-            new Claim(ClaimTypes.Role, user.Role.ToString()),
-        };
+            claims.Add(new Claim(ClaimTypes.Role, assignment.Role.ToString()));
+        }
+
 
         var key = new SymmetricSecurityKey(
             Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));

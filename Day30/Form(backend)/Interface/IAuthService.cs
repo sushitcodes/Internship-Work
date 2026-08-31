@@ -8,7 +8,8 @@ namespace Form.Interface
         Task<AuthResponseDto?> LoginAsync(LoginRequest request);
         Task<AuthResponseDto?> RefreshAsync(string rawRefreshToken);
         Task LogoutAsync(string rawRefreshToken);
-        Task ForgotPasswordAsync(string email, string frontendBaseUrl);
+        Task ForgotPasswordAsync(string email);
+        Task<bool> ResetPasswordAsync(string email, string code, string newPassword);
 
 
     }

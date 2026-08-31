@@ -1,7 +1,8 @@
 ﻿using Form.DTOs;
-using Form.Entities;
 using Form.Interface;
 using Form.Interfaces;
+using Form.Entities;
+
 
 namespace Form.Services;
 
@@ -30,20 +31,28 @@ public class AuthService : IAuthService
         _passwordResetService = passwordResetService; 
         _emailService = emailService;
     }
-
-    public async Task ForgotPasswordAsync(string email, string frontendBaseUrl)
+    public async Task ForgotPasswordAsync(string email)
     {
         var user = await _userRepository.GetByEmailAsync(email);
-
-        // Deliberately do nothing detectable if the user doesn't exist —
-        // same "don't leak which emails are registered" principle as Login.
         if (user is null) return;
 
-        var (rawToken, expiryMinutes) = await _passwordResetService.GenerateAsync(user.Id);
-        var resetLink = $"{frontendBaseUrl}/reset-password?token={rawToken}";
-
-        await _emailService.SendPasswordResetEmailAsync(user.Email, resetLink, expiryMinutes);
+        var (code, expiryMinutes) = await _passwordResetService.GenerateAsync(user.Id);
+        await _emailService.SendPasswordResetCodeAsync(user.Email, code, expiryMinutes);
     }
+
+    //public async Task ForgotPasswordAsync(string email, string frontendBaseUrl)
+    //{
+    //    var user = await _userRepository.GetByEmailAsync(email);
+
+    //    // Deliberately do nothing detectable if the user doesn't exist —
+    //    // same "don't leak which emails are registered" principle as Login.
+    //    if (user is null) return;
+
+    //    var (rawToken, expiryMinutes) = await _passwordResetService.GenerateAsync(user.Id);
+    //    var resetLink = $"{frontendBaseUrl}/reset-password?token={rawToken}";
+
+    //    await _emailService.SendPasswordResetEmailAsync(user.Email, resetLink, expiryMinutes);
+    //}
     public async Task<AuthResponseDto> RegisterAsync(RegisterRequest request)
     {
         var existing = await _userRepository.GetByEmailAsync(request.Email);
@@ -55,6 +64,8 @@ public class AuthService : IAuthService
             Email = request.Email,
             PasswordHash = _passwordHasher.Hash(request.Password),
         };
+        user.RoleAssignments.Add(new UserRoleAssignment { Id = Guid.NewGuid(), Role = UserRole.Student });
+
         var saved = await _userRepository.AddAsync(user);
 
         var (token, expiresAt) = _tokenService.CreateToken(saved);
@@ -65,9 +76,12 @@ public class AuthService : IAuthService
             ExpiresAt = expiresAt,
             RefreshToken = refreshToken,
             RefreshTokenExpiresAt = refreshExpiresAt,
-            Role = saved.Role.ToString(),
+            Roles = saved.RoleAssignments.Select(ra => ra.Role.ToString()).ToList(),
 
         };
+
+      
+
     }
 
     public async Task<AuthResponseDto?> LoginAsync(LoginRequest request)
@@ -84,7 +98,7 @@ public class AuthService : IAuthService
             ExpiresAt = expiresAt ,
             RefreshToken = refreshToken,             
             RefreshTokenExpiresAt = refreshExpiresAt,
-            Role = user.Role.ToString(),
+            Roles = user.RoleAssignments.Select(ra => ra.Role.ToString()).ToList(),
         };
     }
     // Form.Services/AuthService.cs
@@ -103,12 +117,30 @@ public class AuthService : IAuthService
             ExpiresAt = accessExpiresAt,
             RefreshToken = result.NewRawToken!,
             RefreshTokenExpiresAt = result.NewExpiresAt!.Value,
-            Role = result.User.Role.ToString(),
+            Roles = result.User.RoleAssignments.Select(ra => ra.Role.ToString()).ToList(),
         };
     }
     public async Task LogoutAsync(string rawRefreshToken)
     {
         await _refreshTokenService.RevokeAsync(rawRefreshToken);
     }
+    // AuthService.cs
+    public async Task<bool> ResetPasswordAsync(string email, string code, string newPassword)
+    {
+        var user = await _userRepository.GetByEmailAsync(email);
+        if (user is null) return false;
 
+        var isValid = await _passwordResetService.ValidateAsync(user.Id, code);
+        if (!isValid) return false;
+
+        user.PasswordHash = _passwordHasher.Hash(newPassword);
+        await _userRepository.UpdateAsync(user);   // see note below
+
+        // A password change should invalidate every existing session —
+        // if someone's account was compromised, this locks the attacker
+        // out of any device they were already logged into.
+        await _refreshTokenService.RevokeAllForUserAsync(user.Id);
+
+        return true;
+    }
 }

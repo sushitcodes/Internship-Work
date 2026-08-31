@@ -64,7 +64,7 @@ const SubmissionsListPage: React.FC = () => {
     useGetSubmissionsInfiniteQuery({ search: debouncedSearch, pageSize: 10 });
   const [deleteSubmission, { isLoading: isDeleting }] =
     useDeleteSubmissionMutation();
-  const role = useAppSelector((state) => state.auth.role);
+  const roles = useAppSelector((state) => state.auth.roles);
   const isLoggedIn = Boolean(useAppSelector((state) => state.auth.email));
   const navigate = useNavigate();
   const pages = data?.pages ?? [];
@@ -201,8 +201,8 @@ const SubmissionsListPage: React.FC = () => {
                             View
                           </Button>
                         </Link>
-                        {(canEdit(role) || !HIDE_ACTIONS_WHEN_LOGGED_OUT) &&
-                          (canEdit(role) ? (
+                        {(canEdit(roles) || !HIDE_ACTIONS_WHEN_LOGGED_OUT) &&
+                          (canEdit(roles) ? (
                             <Link to={`/submission/${s.id}/edit`}>
                               <Button variant="outline" size="sm">
                                 Edit
@@ -218,8 +218,8 @@ const SubmissionsListPage: React.FC = () => {
                             </Button>
                           ))}
 
-                        {(canDelete(role) || !HIDE_ACTIONS_WHEN_LOGGED_OUT) &&
-                          (canDelete(role) ? (
+                        {(canDelete(roles) || !HIDE_ACTIONS_WHEN_LOGGED_OUT) &&
+                          (canDelete(roles) ? (
                             <AlertDialog>
                               <AlertDialogTrigger
                                 render={
