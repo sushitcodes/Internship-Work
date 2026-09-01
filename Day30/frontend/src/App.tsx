@@ -9,6 +9,9 @@ import Navbar from "./presentation/components/Navbar";
 import { useGetMeQuery } from "./infrastructure/api/authApi";
 import ForgotPasswordPage from "./presentation/pages/ForgotPasswordPage";
 import ResetPasswordPage from "./presentation/pages/ResetPasswordPage";
+import ClassRoomsPage from "./presentation/pages/ClassRoomsPage";
+import EnrollmentPage from "./presentation/pages/EnrollmentPage";
+
 function App() {
   useGetMeQuery();
   return (
@@ -31,6 +34,12 @@ function App() {
           {/* Edit: Staff/Admin only */}
           <Route element={<ProtectedRoute allowedRoles={["Staff", "Admin"]} />}>
             <Route path="/submission/:id/edit" element={<FormPage />} />
+          </Route>
+
+          {/* Classrooms: Staff/Admin only */}
+          <Route element={<ProtectedRoute allowedRoles={["Admin"]} />}>
+            <Route path="/classes" element={<ClassRoomsPage />} />
+            <Route path="/classes/:id/enroll" element={<EnrollmentPage />} />
           </Route>
         </Routes>
       </div>

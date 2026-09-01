@@ -1,6 +1,6 @@
 ﻿using Form.DTOs;
 
-namespace Form.Interface
+namespace Form.Interfaces
 {
     public interface IAuthService
     {

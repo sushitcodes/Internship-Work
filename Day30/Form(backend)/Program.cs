@@ -1,7 +1,7 @@
 using Form.FileStorage;
-using Form.Interface;
 using Form.Interfaces;
 using Form.Persistence;
+using Form.Persistence.Repositories;
 using Form.Repositories;
 using Form.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -35,7 +35,15 @@ builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 builder.Services.AddScoped<IPasswordResetRepository, PasswordResetRepository>();
 builder.Services.AddScoped<IPasswordResetService, PasswordResetService>();
 builder.Services.AddScoped<IEmailService, GmailSmtpEmailService>();
+builder.Services.AddScoped<IClassRoomRepository, ClassRoomRepository>();
+builder.Services.AddScoped<IClassRoomService, ClassRoomService>();
+builder.Services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
+builder.Services.AddScoped<IEnrollmentService, EnrollmentService>();
+builder.Services.AddScoped<IAttendanceRepository, AttendanceRepository>();
+builder.Services.AddScoped<IAttendanceService, AttendanceService>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
@@ -71,6 +79,8 @@ builder.Services.AddAuthorization(options =>
 
     options.AddPolicy("CanDelete", policy =>
         policy.RequireRole("Admin"));
+    options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("StaffOrAdmin", policy => policy.RequireRole("Staff", "Admin"));
 });// --- CORS: lets the Vite dev server (different port) call this API ---
 builder.Services.AddCors(options =>
 {

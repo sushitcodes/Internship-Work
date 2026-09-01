@@ -1,6 +1,6 @@
 ﻿using Form.Entities;
 
-namespace Form.Interface
+namespace Form.Interfaces
 {
     public interface ITokenService
     {

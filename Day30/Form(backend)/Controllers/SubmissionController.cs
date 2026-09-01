@@ -1,8 +1,9 @@
+
 using Form.DTOs;
 using Form.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
-using static Form.DTOs.Class;
+using static Form.DTOs.ClassRoomDtos;
 using Microsoft.AspNetCore.Authorization;
 
 

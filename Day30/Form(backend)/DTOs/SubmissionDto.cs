@@ -1,7 +1,7 @@
 ﻿namespace Form.DTOs
 
 {
-    public class Class
+    public class ClassRoomDtos
     {
     public class EducationEntryDto
     {

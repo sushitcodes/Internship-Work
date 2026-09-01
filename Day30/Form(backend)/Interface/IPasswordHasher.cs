@@ -1,4 +1,5 @@
-﻿namespace Form.Interface
+﻿
+namespace Form.Interfaces
 {
     public interface IPasswordHasher
     {

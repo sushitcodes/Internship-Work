@@ -1,5 +1,5 @@
 ﻿using Form.Entities;
-using Form.Interface;
+using Form.Interfaces;
 using Form.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,4 +25,10 @@ public class UserRepository : IUserRepository
         _context.Users.Update(user);
         await _context.SaveChangesAsync();
     }
+    public async Task<User?> GetByIdAsync(Guid id) =>
+    await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+    public async Task<List<User>> GetByRoleAsync(UserRole role) =>
+    await _context.Users
+        .Where(u => u.RoleAssignments.Any(ra => ra.Role == role))
+        .ToListAsync();
 }

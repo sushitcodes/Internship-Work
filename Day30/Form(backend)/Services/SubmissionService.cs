@@ -1,7 +1,7 @@
 ﻿using Form.DTOs;
 using Form.Interfaces;
 using Form.Entities;
-using static Form.DTOs.Class;
+using static Form.DTOs.ClassRoomDtos;
 
 namespace Form.Services;
 

@@ -1,5 +1,5 @@
 ﻿using Form.DTOs;
-using Form.Interface;
+using Form.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

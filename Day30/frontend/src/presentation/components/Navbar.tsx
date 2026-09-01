@@ -5,6 +5,7 @@ import { useLogoutUserMutation } from "../../infrastructure/api/authApi";
 
 const Navbar: React.FC = () => {
   const email = useAppSelector((state) => state.auth.email);
+  const roles = useAppSelector((state) => state.auth.roles);
   const [logoutUser] = useLogoutUserMutation();
   const navigate = useNavigate();
 
@@ -19,6 +20,13 @@ const Navbar: React.FC = () => {
         <Link to="/" className="font-semibold text-lg">
           Student Submission
         </Link>
+        {roles.includes("Admin") && (
+          <Link to="/classes">
+            <Button variant="ghost" size="sm">
+              Classes
+            </Button>
+          </Link>
+        )}
         <div className="flex items-center gap-3">
           {email ? (
             <>
