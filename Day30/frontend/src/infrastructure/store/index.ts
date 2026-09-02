@@ -5,6 +5,7 @@ import authReducer from "./authSlice";
 import { classRoomApi } from "../api/classRoomApi";
 import { enrollmentApi } from "../api/enrollmentApi";
 import { userApi } from "../api/userApi";
+import { attendanceApi } from "../api/attendanceApi";
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     [classRoomApi.reducerPath]: classRoomApi.reducer,
     [enrollmentApi.reducerPath]: enrollmentApi.reducer,
     [userApi.reducerPath]: userApi.reducer,
+    [attendanceApi.reducerPath]: attendanceApi.reducer,
     auth: authReducer,
   },
 
@@ -24,6 +26,7 @@ export const store = configureStore({
       classRoomApi.middleware,
       enrollmentApi.middleware,
       userApi.middleware,
+      attendanceApi.middleware,
     ),
 });
 

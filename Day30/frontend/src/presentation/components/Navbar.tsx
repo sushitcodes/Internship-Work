@@ -27,6 +27,13 @@ const Navbar: React.FC = () => {
             </Button>
           </Link>
         )}
+        {(roles.includes("Staff") || roles.includes("Admin")) && (
+          <Link to="/attendance/mark">
+            <Button variant="ghost" size="sm">
+              Attendance
+            </Button>
+          </Link>
+        )}
         <div className="flex items-center gap-3">
           {email ? (
             <>

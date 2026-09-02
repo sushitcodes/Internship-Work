@@ -11,6 +11,7 @@ import ForgotPasswordPage from "./presentation/pages/ForgotPasswordPage";
 import ResetPasswordPage from "./presentation/pages/ResetPasswordPage";
 import ClassRoomsPage from "./presentation/pages/ClassRoomsPage";
 import EnrollmentPage from "./presentation/pages/EnrollmentPage";
+import MarkAttendancePage from "./presentation/pages/MarkAttendancePage";
 
 function App() {
   useGetMeQuery();
@@ -40,6 +41,12 @@ function App() {
           <Route element={<ProtectedRoute allowedRoles={["Admin"]} />}>
             <Route path="/classes" element={<ClassRoomsPage />} />
             <Route path="/classes/:id/enroll" element={<EnrollmentPage />} />
+
+            <Route
+              element={<ProtectedRoute allowedRoles={["Staff", "Admin"]} />}
+            >
+              <Route path="/attendance/mark" element={<MarkAttendancePage />} />
+            </Route>
           </Route>
         </Routes>
       </div>
