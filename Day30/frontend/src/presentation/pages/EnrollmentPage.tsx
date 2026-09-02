@@ -39,8 +39,9 @@ const EnrollmentPage: React.FC = () => {
   const [enrollStudent, { isLoading: isEnrolling }] =
     useEnrollStudentMutation();
   const [error, setError] = useState<string | null>(null);
-  const { control, handleSubmit, reset } = useForm<EnrollFormValues>();
-
+  const { control, handleSubmit, reset } = useForm<EnrollFormValues>({
+    defaultValues: { studentUserId: "" },
+  });
   const onSubmit = async (data: EnrollFormValues) => {
     setError(null);
     try {
