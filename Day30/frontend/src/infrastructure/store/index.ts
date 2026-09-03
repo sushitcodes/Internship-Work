@@ -6,7 +6,6 @@ import { classRoomApi } from "../api/classRoomApi";
 import { enrollmentApi } from "../api/enrollmentApi";
 import { userApi } from "../api/userApi";
 import { attendanceApi } from "../api/attendanceApi";
-
 export const store = configureStore({
   reducer: {
     [submissionApi.reducerPath]: submissionApi.reducer,
@@ -16,6 +15,7 @@ export const store = configureStore({
     [enrollmentApi.reducerPath]: enrollmentApi.reducer,
     [userApi.reducerPath]: userApi.reducer,
     [attendanceApi.reducerPath]: attendanceApi.reducer,
+
     auth: authReducer,
   },
 

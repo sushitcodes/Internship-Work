@@ -28,6 +28,8 @@ import {
   LogOut,
   ChevronDown,
   ChevronRight,
+  UserCircle,
+  Users,
 } from "lucide-react";
 import { useAppSelector } from "../../infrastructure/store/hooks";
 import { useLogoutUserMutation } from "../../infrastructure/api/authApi";
@@ -97,6 +99,13 @@ export function AppSidebar() {
       to: "/attendance/mark",
       label: "Attendance",
       icon: ClipboardCheck,
+      show: roles.includes("Staff") || roles.includes("Admin"),
+    },
+    { to: "/profile", label: "My Profile", icon: UserCircle, show: !!email },
+    {
+      to: "/users",
+      label: "Users",
+      icon: Users,
       show: roles.includes("Staff") || roles.includes("Admin"),
     },
   ];

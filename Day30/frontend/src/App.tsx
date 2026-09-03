@@ -1,4 +1,3 @@
-// App.tsx
 import { Routes, Route } from "react-router-dom";
 import FormPage from "./presentation/pages/FormPage";
 import SubmissionPage from "./presentation/pages/SubmissionPage";
@@ -13,6 +12,10 @@ import ResetPasswordPage from "./presentation/pages/ResetPasswordPage";
 import ClassRoomsPage from "./presentation/pages/ClassRoomsPage";
 import EnrollmentPage from "./presentation/pages/EnrollmentPage";
 import MarkAttendancePage from "./presentation/pages/MarkAttendancePage";
+import UsersListPage from "./presentation/pages/UserListPage";
+import MyProfilePage from "./presentation/pages/MyProfilePage";
+import { Toaster } from "@/components/ui/sonner"; // shadcn's sonner wrapper, not the raw "sonner" package
+
 // Import any missing pages for the navigation
 // import CoursesPage from "./presentation/pages/CoursesPage";
 // import AttendanceReportsPage from "./presentation/pages/AttendanceReportsPage";
@@ -24,31 +27,42 @@ function App() {
   useGetMeQuery();
 
   return (
-    <Routes>
-      {/* Public routes - no sidebar */}
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
-      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-      <Route path="/reset-password" element={<ResetPasswordPage />} />
+    <>
+      <Toaster richColors position="top-right" />
+      <Routes>
+        {/* Public routes - no sidebar */}
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
 
-      {/* Protected routes with sidebar layout */}
-      <Route element={<AppLayout />}>
-        {/* Dashboard / Home */}
-        <Route path="/" element={<SubmissionsListPage />} />
-        <Route path="/submission/:id" element={<SubmissionPage />} />
+        {/* Protected routes with sidebar layout */}
+        <Route element={<AppLayout />}>
+          {/* Dashboard / Home */}
+          <Route path="/" element={<SubmissionsListPage />} />
+          <Route path="/submission/:id" element={<SubmissionPage />} />
 
-        {/* Protected routes - require authentication */}
-        <Route element={<ProtectedRoute />}>
-          <Route path="/formpage" element={<FormPage />} />
-        </Route>
+          {/* Protected routes - require authentication */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/formpage" element={<FormPage />} />
+          </Route>
 
-        {/* Staff and Admin routes */}
-        <Route element={<ProtectedRoute allowedRoles={["Staff", "Admin"]} />}>
-          <Route path="/submission/:id/edit" element={<FormPage />} />
+          {/* Staff and Admin routes */}
+          <Route element={<ProtectedRoute allowedRoles={["Staff", "Admin"]} />}>
+            <Route path="/submission/:id/edit" element={<FormPage />} />
 
-          {/* Attendance section */}
-          <Route path="/attendance/mark" element={<MarkAttendancePage />} />
-          {/* <Route
+            {/* Attendance section */}
+            <Route path="/attendance/mark" element={<MarkAttendancePage />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="/profile" element={<MyProfilePage />} />
+            </Route>
+
+            <Route
+              element={<ProtectedRoute allowedRoles={["Staff", "Admin"]} />}
+            >
+              <Route path="/users" element={<UsersListPage />} />
+            </Route>
+            {/* <Route
             path="/attendance/reports"
             element={<AttendanceReportsPage />}
           />
@@ -56,22 +70,23 @@ function App() {
             path="/attendance/analytics"
             element={<AttendanceAnalyticsPage />}
           /> */}
-        </Route>
+          </Route>
 
-        {/* Admin only routes */}
-        <Route element={<ProtectedRoute allowedRoles={["Admin"]} />}>
-          {/* Academics section */}
-          <Route path="/classes" element={<ClassRoomsPage />} />
-          <Route path="/classes/:id/enroll" element={<EnrollmentPage />} />
-          <Route path="/enrollments" element={<EnrollmentPage />} />
-          {/* <Route path="/courses" element={<CoursesPage />} /> */}
+          {/* Admin only routes */}
+          <Route element={<ProtectedRoute allowedRoles={["Admin"]} />}>
+            {/* Academics section */}
+            <Route path="/classes" element={<ClassRoomsPage />} />
+            <Route path="/classes/:id/enroll" element={<EnrollmentPage />} />
+            <Route path="/enrollments" element={<EnrollmentPage />} />
+            {/* <Route path="/courses" element={<CoursesPage />} /> */}
 
-          {/* Administration section */}
-          {/* <Route path="/users" element={<UsersPage />} />
+            {/* Administration section */}
+            {/* <Route path="/users" element={<UsersPage />} />
           <Route path="/settings" element={<SettingsPage />} /> */}
+          </Route>
         </Route>
-      </Route>
-    </Routes>
+      </Routes>
+    </>
   );
 }
 

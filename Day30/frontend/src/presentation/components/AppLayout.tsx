@@ -5,6 +5,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { AppSidebar } from "./AppSidebar";
+import { UserMenu } from "./UserMenu";
 
 // No manual localStorage/cookie handling here — SidebarProvider already
 // persists open/collapsed state on its own (via a cookie) as soon as you
@@ -15,8 +16,9 @@ export default function AppLayout() {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <header className="flex h-12 items-center gap-2 border-b px-3">
+        <header className="flex h-12 items-center justify-between gap-2 border-b px-3">
           <SidebarTrigger />
+          <UserMenu />
         </header>
         <div className="p-4">
           <Outlet />
