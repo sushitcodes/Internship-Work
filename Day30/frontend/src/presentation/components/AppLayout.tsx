@@ -6,9 +6,10 @@ import {
 } from "@/components/ui/sidebar";
 import { AppSidebar } from "./AppSidebar";
 
-// Why this exists: a layout ROUTE (rendered via <Outlet/>) instead of wrapping
-// every page manually. React Router renders this once, and swaps only the
-// <Outlet/> content when you navigate — the sidebar never remounts or flickers.
+// No manual localStorage/cookie handling here — SidebarProvider already
+// persists open/collapsed state on its own (via a cookie) as soon as you
+// use SidebarTrigger. Adding a second localStorage key on top of that was
+// the duplicate-source-of-truth bug from the last version.
 export default function AppLayout() {
   return (
     <SidebarProvider>
