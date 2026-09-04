@@ -3,6 +3,26 @@
   "WorkspaceRootPath": "G:\\C sharp\\Day30\\Form(backend)\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\services\\userprofileservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:services\\userprofileservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\persistence\\repositories\\userprofilerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:persistence\\repositories\\userprofilerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\interface\\iuserprofileservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:interface\\iuserprofileservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\interface\\iuserprofilerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:interface\\iuserprofilerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\services\\dashboardservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:services\\dashboardservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -31,14 +51,6 @@
       "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:controllers\\submissioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\interface\\iuserprofilerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:interface\\iuserprofilerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\persistence\\repositories\\userprofilerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:persistence\\repositories\\userprofilerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\interface\\ienrollmentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:interface\\ienrollmentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
@@ -50,7 +62,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -63,6 +75,45 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "UsersController.cs",
+              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Controllers\\UsersController.cs",
+              "RelativeDocumentMoniker": "Controllers\\UsersController.cs",
+              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Controllers\\UsersController.cs",
+              "RelativeToolTip": "Controllers\\UsersController.cs",
+              "ViewState": "AgIAADwAAAAAAAAAAAAkwEkAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-04T10:51:07.691Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "UserProfileService.cs",
+              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\UserProfileService.cs",
+              "RelativeDocumentMoniker": "Services\\UserProfileService.cs",
+              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Services\\UserProfileService.cs",
+              "RelativeToolTip": "Services\\UserProfileService.cs",
+              "ViewState": "AgIAADUAAAAAAAAAAAA9wDoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-04T10:49:57.579Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "IUserProfileService.cs",
+              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Interface\\IUserProfileService.cs",
+              "RelativeDocumentMoniker": "Interface\\IUserProfileService.cs",
+              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Interface\\IUserProfileService.cs",
+              "RelativeToolTip": "Interface\\IUserProfileService.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAYAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-04T10:49:09.602Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "DashBoardService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\DashBoardService.cs",
               "RelativeDocumentMoniker": "Services\\DashBoardService.cs",
@@ -75,7 +126,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 7,
               "Title": "DashboardDtos.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\DTOs\\DashboardDtos.cs",
               "RelativeDocumentMoniker": "DTOs\\DashboardDtos.cs",
@@ -88,7 +139,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 8,
               "Title": "AttendanceRepository.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Persistence\\Repositories\\AttendanceRepository.cs",
               "RelativeDocumentMoniker": "Persistence\\Repositories\\AttendanceRepository.cs",
@@ -101,7 +152,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 9,
               "Title": "IAttendancyRepository.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Interface\\IAttendancyRepository.cs",
               "RelativeDocumentMoniker": "Interface\\IAttendancyRepository.cs",
@@ -114,7 +165,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 10,
               "Title": "SubmissionService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\SubmissionService.cs",
               "RelativeDocumentMoniker": "Services\\SubmissionService.cs",
@@ -127,7 +178,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 11,
               "Title": "SubmissionController.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Controllers\\SubmissionController.cs",
               "RelativeDocumentMoniker": "Controllers\\SubmissionController.cs",
@@ -140,33 +191,33 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 4,
               "Title": "IUserProfileRepository.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Interface\\IUserProfileRepository.cs",
               "RelativeDocumentMoniker": "Interface\\IUserProfileRepository.cs",
               "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Interface\\IUserProfileRepository.cs",
               "RelativeToolTip": "Interface\\IUserProfileRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAABAAAAAAAAAAA==",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAzwAsAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-09-04T09:46:18.352Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 2,
               "Title": "UserProfileRepository.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Persistence\\Repositories\\UserProfileRepository.cs",
               "RelativeDocumentMoniker": "Persistence\\Repositories\\UserProfileRepository.cs",
               "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Persistence\\Repositories\\UserProfileRepository.cs",
               "RelativeToolTip": "Persistence\\Repositories\\UserProfileRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAADcAAABZAAAAAAAAAA==",
+              "ViewState": "AgIAAG0AAAAAAAAAAAAAAAkAAAArAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-09-04T09:45:42.927Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 6,
               "Title": "EnrollmentService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\EnrollmentService.cs",
               "RelativeDocumentMoniker": "Services\\EnrollmentService.cs",
@@ -179,7 +230,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 12,
               "Title": "IEnrollmentService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Interface\\IEnrollmentService.cs",
               "RelativeDocumentMoniker": "Interface\\IEnrollmentService.cs",

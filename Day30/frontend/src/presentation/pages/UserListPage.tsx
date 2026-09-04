@@ -25,24 +25,57 @@ import { getInitials } from "../../application/utils/getInitials";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { useAppSelector } from "@/infrastructure/store/hooks";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
+import { displayRoleName } from "../../lib/roleDisplay";
 
-// Same pageIndex/debounced-search/infinite-query wiring as SubmissionsListPage —
-// deliberately kept identical rather than inventing a new pagination approach.
+const ROLE_OPTIONS = ["Student", "Staff", "Admin"] as const;
+
 const UsersListPage: React.FC = () => {
-  const roles = useAppSelector((state) => state.auth.roles); // add this line
+  const roles = useAppSelector((state) => state.auth.roles);
 
+  // --- Filter inputs (raw, as typed) ---
   const [searchInput, setSearchInput] = useState("");
+  const [rollNoInput, setRollNoInput] = useState("");
+  const [roleFilter, setRoleFilter] = useState<string | undefined>();
+
+  // --- Debounced versions (what actually gets sent to the API) ---
   const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [debouncedRollNo, setDebouncedRollNo] = useState<number | undefined>();
+
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedSearch(searchInput), 400);
     return () => clearTimeout(timer);
   }, [searchInput]);
 
-  const [pageIndex, setPageIndex] = useState(0);
-  useEffect(() => setPageIndex(0), [debouncedSearch]);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const parsed = parseInt(rollNoInput);
+      setDebouncedRollNo(isNaN(parsed) ? undefined : parsed);
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [rollNoInput]);
 
+  const [pageIndex, setPageIndex] = useState(0);
+  // Reset to page 0 whenever ANY filter changes — now safe, since all
+  // three debounced values are declared above this point.
+  useEffect(() => {
+    setPageIndex(0);
+  }, [debouncedSearch, debouncedRollNo, roleFilter]);
+
+  // ONE call, not two — this was duplicated before.
   const { data, fetchNextPage, isLoading, isError, isFetchingNextPage } =
-    useSearchUsersInfiniteQuery({ search: debouncedSearch, pageSize: 10 });
+    useSearchUsersInfiniteQuery({
+      search: debouncedSearch,
+      rollNo: debouncedRollNo,
+      role: roleFilter,
+      pageSize: 10,
+    });
 
   const pages = data?.pages ?? [];
   const currentPage = pages[pageIndex];
@@ -68,7 +101,7 @@ const UsersListPage: React.FC = () => {
   return (
     <Card className="max-w-3xl mx-auto mt-10">
       <CardHeader className="border-b">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center mb-4">
           <CardTitle className="text-2xl font-bold">Users</CardTitle>
           {roles.includes("Admin") && (
             <Link to="/users/create">
@@ -79,15 +112,44 @@ const UsersListPage: React.FC = () => {
             </Link>
           )}
         </div>
-      </CardHeader>
-      <CardContent className="pt-6">
-        <Input
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
-          placeholder="Search by name or email..."
-          className="mb-6"
-        />
 
+        {/* ONE filter row — the duplicate search box from CardContent is gone. */}
+        <div className="flex gap-3">
+          <Input
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            placeholder="Search by name or email..."
+            className="flex-1"
+          />
+          <Input
+            type="number"
+            value={rollNoInput}
+            onChange={(e) => setRollNoInput(e.target.value)}
+            placeholder="Roll No"
+            className="w-28"
+          />
+          <Select
+            value={roleFilter ?? "all"}
+            onValueChange={(v) =>
+              setRoleFilter(v === "all" || v == null ? undefined : v)
+            }
+          >
+            <SelectTrigger className="w-36">
+              <SelectValue placeholder="All Roles" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Roles</SelectItem>
+              {ROLE_OPTIONS.map((r) => (
+                <SelectItem key={r} value={r}>
+                  {displayRoleName(r)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </CardHeader>
+
+      <CardContent className="pt-6">
         {isLoading && (
           <div className="space-y-3">
             {[...Array(5)].map((_, i) => (

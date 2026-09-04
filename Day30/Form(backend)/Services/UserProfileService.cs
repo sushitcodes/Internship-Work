@@ -57,9 +57,19 @@ public class UserProfileService : IUserProfileService
         return profile is null ? null : MapToDto(profile);
     }
 
-    public async Task<PagedResult<UserProfileDto>> SearchAsync(int page, int pageSize, string? search)
+    public async Task<PagedResult<UserProfileDto>> SearchAsync(int page, int pageSize, string? search, int? rollNo, string? role)
     {
-        var (items, totalCount) = await _repository.SearchAsync(page, pageSize, search);
+        // Same parse-or-fail pattern as CreateUserAsync — a malformed role
+        // string should error clearly, not silently match nothing.
+        UserRole? parsedRole = null;
+        if (!string.IsNullOrWhiteSpace(role))
+        {
+            if (!Enum.TryParse<UserRole>(role, ignoreCase: true, out var r))
+                throw new InvalidOperationException($"Unknown role: {role}");
+            parsedRole = r;
+        }
+
+        var (items, totalCount) = await _repository.SearchAsync(page, pageSize, search, rollNo, parsedRole);
         return new PagedResult<UserProfileDto>
         {
             Items = items.Select(MapToDto).ToList(),

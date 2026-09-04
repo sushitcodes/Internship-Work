@@ -7,6 +7,6 @@ public interface IUserProfileRepository
     Task<UserProfile?> GetByUserIdAsync(Guid userId);
     Task<UserProfile> AddAsync(UserProfile profile);
     Task<UserProfile?> UpdateAsync(Guid userId, UserProfile updated);
-    Task<(List<UserProfile> Items, int TotalCount)> SearchAsync(int page, int pageSize, string? search);
+    Task<(List<UserProfile> Items, int TotalCount)> SearchAsync(int page, int pageSize, string? search, int? rollNo, UserRole? role);
     Task<UserProfile?> GetByMemberNumberAsync(int memberNumber);
 }

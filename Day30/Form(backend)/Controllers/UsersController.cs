@@ -54,14 +54,23 @@ public class UsersController : ControllerBase
     [HttpGet]
     [Authorize(Policy = "StaffOrAdmin")]
     public async Task<ActionResult<PagedResult<UserProfileDto>>> Search(
-        [FromQuery] int page = 1,
-        [FromQuery] int pageSize = 10,
-        [FromQuery] string? search = null)
+    [FromQuery] int page = 1,
+    [FromQuery] int pageSize = 10,
+    [FromQuery] string? search = null,
+    [FromQuery] int? rollNo = null,
+    [FromQuery] string? role = null)
     {
         if (page < 1) page = 1;
         if (pageSize < 1 || pageSize > 50) pageSize = 10;
 
-        return Ok(await _profileService.SearchAsync(page, pageSize, search));
+        try
+        {
+            return Ok(await _profileService.SearchAsync(page, pageSize, search, rollNo, role));
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpGet("{id:guid}/profile")]

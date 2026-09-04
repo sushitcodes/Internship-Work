@@ -50,7 +50,7 @@ export const userApi = createApi({
 
     searchUsers: builder.infiniteQuery<
       PagedResult<UserProfile>,
-      { search?: string; pageSize: number },
+      { search?: string; rollNo?: number; role?: string; pageSize: number },
       number
     >({
       infiniteQueryOptions: {
@@ -64,11 +64,12 @@ export const userApi = createApi({
           pageSize: String(queryArg.pageSize),
         });
         if (queryArg.search) params.set("search", queryArg.search);
+        if (queryArg.rollNo) params.set("rollNo", String(queryArg.rollNo));
+        if (queryArg.role) params.set("role", queryArg.role);
         return `/users?${params.toString()}`;
       },
       providesTags: ["UserProfile"],
     }),
-
     getUserProfileById: builder.query<UserProfile, string>({
       query: (id) => `/users/${id}/profile`,
       providesTags: ["UserProfile"],

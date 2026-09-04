@@ -54,7 +54,8 @@ public class UserProfileRepository : IUserProfileRepository
     }
     public async Task<UserProfile?> GetByMemberNumberAsync(int memberNumber) =>
     await _context.UserProfiles.FirstOrDefaultAsync(p => p.MemberNumber == memberNumber);
-    public async Task<(List<UserProfile> Items, int TotalCount)> SearchAsync(int page, int pageSize, string? search)
+    public async Task<(List<UserProfile> Items, int TotalCount)> SearchAsync(int page, int pageSize, string? search, int? rollNo, UserRole? role)
+
     {
         // Query FROM Users, not UserProfiles. A user who registered (or was
         // Admin-created) but never opened their own profile page has no
@@ -73,7 +74,13 @@ public class UserProfileRepository : IUserProfileRepository
                 x.User.Email.Contains(search) ||
                 (x.Profile != null && x.Profile.FullName.Contains(search)));
         }
+        if (rollNo.HasValue)
+            query = query.Where(x => x.Profile != null && x.Profile.MemberNumber == rollNo.Value);
 
+        // Role lives on User.RoleAssignments, not UserProfile — same join
+        // pattern as everywhere else a role check happens (CreateUserAsync, etc).
+        if (role.HasValue)
+            query = query.Where(x => x.User.RoleAssignments.Any(ra => ra.Role == role.Value));
         var totalCount = await query.CountAsync();
 
         var raw = await query
@@ -99,4 +106,5 @@ public class UserProfileRepository : IUserProfileRepository
 
         return (items, totalCount);
     }
+
 }
