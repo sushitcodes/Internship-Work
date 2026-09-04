@@ -6,26 +6,20 @@ namespace Form.Services;
 public class AttendanceService : IAttendanceService
 {
     private readonly IAttendanceRepository _repository;
+    public AttendanceService(IAttendanceRepository repository) => _repository = repository;
 
-    public AttendanceService(IAttendanceRepository repository)
-    {
-        _repository = repository;
-    }
+    public async Task<List<AttendanceRosterEntryDto>> GetRosterAsync(Guid classRoomId, DateOnly date) =>
+        await _repository.GetRosterAsync(classRoomId, date);
 
     public async Task MarkAsync(MarkAttendanceRequest request, Guid markedByUserId)
     {
-        if (await _repository.ExistsForDateAsync(request.ClassRoomId, request.Date))
-            throw new InvalidOperationException("Attendance for this class and date has already been recorded.");
+        // No more ExistsForDateAsync guard — marking today never blocks
+        // marking (or re-marking) today again. That guard was the whole bug.
+        var entries = request.Entries
+            .Select(e => (e.EnrollmentId, Enum.Parse<AttendanceStatus>(e.Status)))
+            .ToList();
 
-        var records = request.Entries.Select(entry => new AttendanceRecord
-        {
-            EnrollmentId = entry.EnrollmentId,
-            Date = request.Date,
-            Status = Enum.Parse<AttendanceStatus>(entry.Status),
-            MarkedByUserId = markedByUserId,
-        }).ToList();
-
-        await _repository.AddRangeAsync(records);
+        await _repository.UpsertRangeAsync(request.ClassRoomId, request.Date, entries, markedByUserId);
     }
 
     public async Task<List<AttendanceRecordDto>> GetForClassAsync(Guid classRoomId, DateOnly date) =>

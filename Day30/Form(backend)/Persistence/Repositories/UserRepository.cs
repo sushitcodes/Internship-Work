@@ -31,4 +31,9 @@ public class UserRepository : IUserRepository
     await _context.Users
         .Where(u => u.RoleAssignments.Any(ra => ra.Role == role))
         .ToListAsync();
+    // COUNT, not GetByRoleAsync().Count — the difference matters: this becomes
+    // a single SQL COUNT(*) query, never pulling full User rows (with their
+    // RoleAssignments collections) into memory just to count them.
+    public async Task<int> CountByRoleAsync(UserRole role) =>
+        await _context.Users.CountAsync(u => u.RoleAssignments.Any(ra => ra.Role == role));
 }

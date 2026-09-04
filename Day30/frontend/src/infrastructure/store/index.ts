@@ -6,6 +6,7 @@ import { classRoomApi } from "../api/classRoomApi";
 import { enrollmentApi } from "../api/enrollmentApi";
 import { userApi } from "../api/userApi";
 import { attendanceApi } from "../api/attendanceApi";
+import { dashboardApi } from "../api/dashboardApi";
 export const store = configureStore({
   reducer: {
     [submissionApi.reducerPath]: submissionApi.reducer,
@@ -15,7 +16,7 @@ export const store = configureStore({
     [enrollmentApi.reducerPath]: enrollmentApi.reducer,
     [userApi.reducerPath]: userApi.reducer,
     [attendanceApi.reducerPath]: attendanceApi.reducer,
-
+    [dashboardApi.reducerPath]: dashboardApi.reducer,
     auth: authReducer,
   },
 
@@ -27,6 +28,7 @@ export const store = configureStore({
       enrollmentApi.middleware,
       userApi.middleware,
       attendanceApi.middleware,
+      dashboardApi.middleware,
     ),
 });
 

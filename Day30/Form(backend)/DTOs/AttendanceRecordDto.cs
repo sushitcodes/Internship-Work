@@ -22,3 +22,11 @@ public class MarkAttendanceRequest
     public DateOnly Date { get; set; }
     public List<MarkAttendanceEntry> Entries { get; set; } = new();
 }
+public class AttendanceRosterEntryDto
+{
+    public Guid EnrollmentId { get; set; }
+    public Guid StudentUserId { get; set; }
+    public string StudentEmail { get; set; } = string.Empty;
+    public Guid? AttendanceRecordId { get; set; }
+    public string Status { get; set; } = "Unmarked";
+}

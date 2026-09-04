@@ -30,21 +30,6 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register")]
-    public async Task<ActionResult<AuthResponseDto>> Register(RegisterRequest request)
-    {
-        try
-        {
-            var result = await _authService.RegisterAsync(request);
-            SetAuthCookie(result.Token, result.ExpiresAt);
-            SetRefreshCookie(result.RefreshToken, result.RefreshTokenExpiresAt);
-
-            return Ok(new { email = result.Email, expiresAt = result.ExpiresAt , role = result.Roles });
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
 
     // logout
     // now genuinely needs the server, since JS can't clear an HttpOnly cookie.

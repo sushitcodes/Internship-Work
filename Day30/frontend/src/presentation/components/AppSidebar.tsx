@@ -22,18 +22,18 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import {
-  Home,
-  GraduationCap,
   ClipboardCheck,
   LogOut,
   ChevronDown,
   ChevronRight,
   UserCircle,
   Users,
+  GraduationCap,
 } from "lucide-react";
 import { useAppSelector } from "../../infrastructure/store/hooks";
 import { useLogoutUserMutation } from "../../infrastructure/api/authApi";
 import { useState } from "react";
+import { LayoutDashboard, FileText } from "lucide-react";
 
 // Kept for when a section genuinely has multiple real children (Phase 1+).
 // Today nothing does yet, so no item below actually uses this — but the
@@ -88,7 +88,8 @@ export function AppSidebar() {
   // Only routes that exist in App.tsx today. Add more here the same day
   // the real page + route lands — never point a nav link at a dead route.
   const navItems: NavItem[] = [
-    { to: "/", label: "Submissions", icon: Home, show: true },
+    { to: "/", label: "Dashboard", icon: LayoutDashboard, show: true },
+    { to: "/submissions", label: "Submissions", icon: FileText, show: true },
     {
       to: "/classes",
       label: "Classes",
@@ -254,11 +255,6 @@ export function AppSidebar() {
                 className="w-full"
               >
                 {isIconMode ? "🔑" : "Log In"}
-              </Button>
-            </Link>
-            <Link to="/register">
-              <Button size={isIconMode ? "icon" : "sm"} className="w-full">
-                {isIconMode ? "📝" : "Register"}
               </Button>
             </Link>
           </div>

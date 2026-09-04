@@ -1,15 +1,11 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, Link } from "react-router-dom";
-import {
-  useLoginMutation,
-  useRegisterMutation,
-} from "../../infrastructure/api/authApi";
+import { useLoginMutation } from "../../infrastructure/api/authApi";
 import { FormInput } from "./FormInput";
 import { PasswordInput } from "./PasswordInput";
 import {
   emailValidation,
-  passwordValidation,
   loginPasswordValidation,
 } from "../../application/validators/formValidators";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -20,16 +16,10 @@ interface AuthFormValues {
   password: string;
 }
 
-interface AuthFormProps {
-  mode: "login" | "register";
-}
-
-export function AuthForm({ mode }: AuthFormProps) {
-  const isLogin = mode === "login";
+// (passwordValidation, used only by the register branch, is no longer imported.)
+export function AuthForm() {
   const navigate = useNavigate();
-  const [login, { isLoading: isLoggingIn }] = useLoginMutation();
-  const [registerUser, { isLoading: isRegistering }] = useRegisterMutation();
-  const isLoading = isLogin ? isLoggingIn : isRegistering;
+  const [login, { isLoading }] = useLoginMutation();
   const [serverError, setServerError] = useState<string | null>(null);
 
   const {
@@ -41,34 +31,20 @@ export function AuthForm({ mode }: AuthFormProps) {
   const onSubmit = async (data: AuthFormValues) => {
     setServerError(null);
     try {
-      if (isLogin) {
-        await login(data).unwrap();
-      } else {
-        await registerUser(data).unwrap();
-      }
+      await login(data).unwrap();
       navigate("/");
-    } catch (err: any) {
-      setServerError(
-        isLogin
-          ? "Invalid email or password."
-          : (err?.data ?? "Could not create account."),
-      );
+    } catch {
+      setServerError("Invalid email or password.");
     }
   };
 
   return (
     <Card className="max-w-sm mx-auto mt-10">
       <CardHeader>
-        <CardTitle className="text-center text-xl">
-          {isLogin ? "Log In" : "Create Account"}
-        </CardTitle>
+        <CardTitle className="text-center text-xl">Log In</CardTitle>
       </CardHeader>
       <CardContent>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="space-y-4"
-          noValidate
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
           <FormInput
             label="Email"
             type="email"
@@ -77,57 +53,23 @@ export function AuthForm({ mode }: AuthFormProps) {
           />
           <PasswordInput
             label="Password"
-            registration={register(
-              "password",
-              isLogin ? loginPasswordValidation : passwordValidation,
-            )}
+            registration={register("password", loginPasswordValidation)}
             error={errors.password}
           />
           {serverError && <p className="text-sm text-red-500">{serverError}</p>}
+
           <Button type="submit" disabled={isLoading} className="w-full">
-            {isLoading
-              ? isLogin
-                ? "Logging in..."
-                : "Creating account..."
-              : isLogin
-                ? "Log In"
-                : "Register"}
+            {isLoading ? "Logging in..." : "Log In"}
           </Button>
         </form>
-        <div className="mt-4 space-y-2 text-center">
-          {isLogin && (
-            <p className="text-sm">
-              <Link
-                to="/forgot-password"
-                className="underline text-muted-foreground, text-red-500 hover:text-red-700"
-              >
-                Forgot password?
-              </Link>
-            </p>
-          )}
-          <p className="text-sm text-muted-foreground">
-            {isLogin ? (
-              <>
-                Don't have an ?{" "}
-                <Link
-                  to="/register"
-                  className="underline text-red-500 hover:text-red-700"
-                >
-                  Register
-                </Link>
-              </>
-            ) : (
-              <>
-                Already have an account?{" "}
-                <Link
-                  to="/login"
-                  className="underline text-red-500 hover:text-red-700"
-                >
-                  Log In
-                </Link>
-              </>
-            )}
-          </p>
+
+        <div className="mt-4 text-center">
+          <Link
+            to="/forgot-password"
+            className="text-sm underline text-red-500 hover:text-red-700"
+          >
+            Forgot password?
+          </Link>
         </div>
       </CardContent>
     </Card>

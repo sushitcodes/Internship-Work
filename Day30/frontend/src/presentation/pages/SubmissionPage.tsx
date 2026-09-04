@@ -116,7 +116,7 @@ const SubmissionPage: React.FC = () => {
         {/* Back Link */}
         <div className="pt-4 border-t">
           <Link
-            to="/"
+            to="/submissions"
             className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />

@@ -22,10 +22,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getInitials } from "../../application/utils/getInitials";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import { useAppSelector } from "@/infrastructure/store/hooks";
 
 // Same pageIndex/debounced-search/infinite-query wiring as SubmissionsListPage —
 // deliberately kept identical rather than inventing a new pagination approach.
 const UsersListPage: React.FC = () => {
+  const roles = useAppSelector((state) => state.auth.roles); // add this line
+
   const [searchInput, setSearchInput] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   useEffect(() => {
@@ -63,7 +68,17 @@ const UsersListPage: React.FC = () => {
   return (
     <Card className="max-w-3xl mx-auto mt-10">
       <CardHeader className="border-b">
-        <CardTitle className="text-2xl font-bold">Users</CardTitle>
+        <div className="flex justify-between items-center">
+          <CardTitle className="text-2xl font-bold">Users</CardTitle>
+          {roles.includes("Admin") && (
+            <Link to="/users/create">
+              <Button className="gap-2">
+                <Plus className="h-4 w-4" />
+                Add User
+              </Button>
+            </Link>
+          )}
+        </div>
       </CardHeader>
       <CardContent className="pt-6">
         <Input
@@ -99,7 +114,7 @@ const UsersListPage: React.FC = () => {
                 {users.map((u) => (
                   <TableRow key={u.userId}>
                     <TableCell className="text-muted-foreground">
-                      #{u.memberNumber}
+                      {u.memberNumber > 0 ? `#${u.memberNumber}` : "—"}
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-3">

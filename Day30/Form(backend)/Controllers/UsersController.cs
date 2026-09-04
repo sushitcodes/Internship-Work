@@ -71,4 +71,18 @@ public class UsersController : ControllerBase
         var profile = await _profileService.GetByUserIdAsync(id);
         return profile is null ? NotFound() : Ok(profile);
     }
+    [HttpPost]
+    [Authorize(Policy = "AdminOnly")]
+    public async Task<ActionResult<CreatedUserDto>> CreateUser(CreateUserRequest request)
+    {
+        try
+        {
+            var result = await _userService.CreateUserAsync(request);
+            return Ok(result);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 }

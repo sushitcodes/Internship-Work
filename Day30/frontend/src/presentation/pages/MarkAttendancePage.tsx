@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { useGetClassRoomsQuery } from "../../infrastructure/api/classRoomApi";
-import { useGetEnrollmentsByClassQuery } from "../../infrastructure/api/enrollmentApi";
-import { useMarkAttendanceMutation } from "../../infrastructure/api/attendanceApi";
+import {
+  useGetRosterQuery,
+  useMarkAttendanceMutation,
+} from "../../infrastructure/api/attendanceApi";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -27,50 +29,62 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { CalendarIcon } from "lucide-react";
+import { toast } from "sonner";
 
 const STATUS_OPTIONS = ["Present", "Absent", "Late", "Excused"];
 
 const MarkAttendancePage: React.FC = () => {
   const { data: classRooms } = useGetClassRoomsQuery();
   const [classRoomId, setClassRoomId] = useState<string>("");
-  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [date, setDate] = useState<Date>(new Date());
+  const dateStr = format(date, "yyyy-MM-dd");
 
-  const { data: enrollments } = useGetEnrollmentsByClassQuery(classRoomId, {
-    skip: !classRoomId,
-  });
+  // Roster IS the source of truth now — includes "Unmarked" for anyone
+  // not yet touched today, and the REAL saved status for anyone who is.
+  const { data: roster, isLoading: isLoadingRoster } = useGetRosterQuery(
+    { classRoomId, date: dateStr },
+    { skip: !classRoomId },
+  );
 
-  // enrollmentId -> status, defaulted to "Present" whenever the class changes
+  // enrollmentId -> status the STAFF has changed in this session.
+  // Populated FROM the roster's real data, never a blind "Present" default.
   const [statuses, setStatuses] = useState<Record<string, string>>({});
   useEffect(() => {
-    if (enrollments) {
-      const defaults: Record<string, string> = {};
-      enrollments.forEach((e) => {
-        defaults[e.id] = "Present";
+    if (roster) {
+      const fromServer: Record<string, string> = {};
+      roster.forEach((r) => {
+        fromServer[r.enrollmentId] = r.status;
       });
-      setStatuses(defaults);
+      setStatuses(fromServer);
     }
-  }, [enrollments]);
+  }, [roster]);
 
-  const [markAttendance, { isLoading }] = useMarkAttendanceMutation();
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
+  const [markAttendance, { isLoading: isSaving }] = useMarkAttendanceMutation();
 
   const handleSubmit = async () => {
-    if (!classRoomId || !date || !enrollments) return;
-    setError(null);
-    setSuccess(false);
+    if (!classRoomId || !roster) return;
+
+    // Only send entries that are a REAL status — "Unmarked" rows the staff
+    // never touched are excluded entirely, so they can't be accidentally
+    // overwritten just by loading the page and hitting Save.
+    const entries = roster
+      .map((r) => ({
+        enrollmentId: r.enrollmentId,
+        status: statuses[r.enrollmentId],
+      }))
+      .filter((e) => e.status && e.status !== "Unmarked");
+
+    if (entries.length === 0) {
+      toast.error("Mark at least one student before saving.");
+      return;
+    }
+
     try {
-      await markAttendance({
-        classRoomId,
-        date: format(date, "yyyy-MM-dd"),
-        entries: enrollments.map((e) => ({
-          enrollmentId: e.id,
-          status: statuses[e.id] ?? "Present",
-        })),
-      }).unwrap();
-      setSuccess(true);
-    } catch (err: any) {
-      setError(err?.data ?? "Could not mark attendance.");
+      await markAttendance({ classRoomId, date: dateStr, entries }).unwrap();
+      toast.success("Attendance saved.");
+    } catch (err) {
+      console.error("Failed to save attendance:", err);
+      toast.error("Could not save attendance. Please try again.");
     }
   };
 
@@ -84,7 +98,7 @@ const MarkAttendancePage: React.FC = () => {
           <div>
             <label className="text-sm font-medium mb-2 block">Class</label>
             <Select
-              onValueChange={(value) => setClassRoomId(value ?? "")}
+              onValueChange={(v) => setClassRoomId(v ?? "")}
               value={classRoomId}
             >
               <SelectTrigger className="w-48">
@@ -99,7 +113,6 @@ const MarkAttendancePage: React.FC = () => {
               </SelectContent>
             </Select>
           </div>
-
           <div>
             <label className="text-sm font-medium mb-2 block">Date</label>
             <Popover>
@@ -107,19 +120,27 @@ const MarkAttendancePage: React.FC = () => {
                 render={
                   <Button variant="outline" className="w-40 justify-start">
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {date ? format(date, "PP") : "Pick a date"}
+                    {format(date, "PP")}
                   </Button>
                 }
               />
               <PopoverContent className="p-0" align="start">
-                <Calendar mode="single" selected={date} onSelect={setDate} />
+                <Calendar
+                  mode="single"
+                  selected={date}
+                  onSelect={(d) => d && setDate(d)}
+                />
               </PopoverContent>
             </Popover>
           </div>
         </CardContent>
       </Card>
 
-      {classRoomId && enrollments && enrollments.length > 0 && (
+      {classRoomId && isLoadingRoster && (
+        <p className="text-sm text-muted-foreground">Loading roster...</p>
+      )}
+
+      {classRoomId && roster && roster.length > 0 && (
         <Card>
           <CardHeader>
             <CardTitle>Students</CardTitle>
@@ -133,23 +154,28 @@ const MarkAttendancePage: React.FC = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {enrollments.map((e) => (
-                  <TableRow key={e.id}>
-                    <TableCell>{e.studentEmail}</TableCell>
+                {roster.map((r) => (
+                  <TableRow key={r.enrollmentId}>
+                    <TableCell>{r.studentEmail}</TableCell>
                     <TableCell>
                       <Select
-                        value={statuses[e.id] ?? "Present"}
+                        value={statuses[r.enrollmentId] ?? "Unmarked"}
                         onValueChange={(val) =>
                           setStatuses((prev) => ({
                             ...prev,
-                            [e.id]: val ?? "Present",
+                            [r.enrollmentId]: val ?? "Unmarked",
                           }))
                         }
                       >
-                        <SelectTrigger className="w-32">
+                        <SelectTrigger className="w-36">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
+                          {/* "Unmarked" shown only as the CURRENT state, not
+                              something staff picks deliberately to revert to */}
+                          <SelectItem value="Unmarked" disabled>
+                            Unmarked
+                          </SelectItem>
                           {STATUS_OPTIONS.map((s) => (
                             <SelectItem key={s} value={s}>
                               {s}
@@ -163,17 +189,12 @@ const MarkAttendancePage: React.FC = () => {
               </TableBody>
             </Table>
 
-            {error && <p className="text-sm text-red-500 mt-3">{error}</p>}
-            {success && (
-              <p className="text-sm text-green-600 mt-3">Attendance saved.</p>
-            )}
-
             <Button
               onClick={handleSubmit}
-              disabled={isLoading}
+              disabled={isSaving}
               className="mt-4 w-full"
             >
-              {isLoading ? "Saving..." : "Save Attendance"}
+              {isSaving ? "Saving..." : "Save Attendance"}
             </Button>
           </CardContent>
         </Card>

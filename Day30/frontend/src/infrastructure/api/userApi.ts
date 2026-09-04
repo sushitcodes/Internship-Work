@@ -7,7 +7,17 @@ export interface UserSummaryDto {
   id: string;
   email: string;
 }
+export interface CreateUserRequest {
+  email: string;
+  temporaryPassword: string;
+  roles: string[];
+}
 
+export interface CreatedUser {
+  id: string;
+  email: string;
+  roles: string[];
+}
 export const userApi = createApi({
   reducerPath: "userApi",
   baseQuery: baseQueryWithAuth,
@@ -16,7 +26,14 @@ export const userApi = createApi({
     getStudents: builder.query<UserSummaryDto[], void>({
       query: () => "/users/students",
     }),
-
+    createUser: builder.mutation<CreatedUser, CreateUserRequest>({
+      query: (body) => ({
+        url: "/users",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["UserProfile"], // so UsersListPage refetches and shows the new person
+    }),
     getOwnProfile: builder.query<UserProfile, void>({
       query: () => "/users/me/profile",
       providesTags: ["UserProfile"],
@@ -65,4 +82,5 @@ export const {
   useUpdateOwnProfileMutation,
   useSearchUsersInfiniteQuery,
   useGetUserProfileByIdQuery,
+  useCreateUserMutation,
 } = userApi;

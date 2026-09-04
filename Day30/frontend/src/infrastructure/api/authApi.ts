@@ -1,7 +1,8 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithAuth } from "./baseQueryWithAuth";
 import { setCredentials, logout } from "../store/authSlice";
-
+import { submissionApi } from "./submissionApi";
+import { userApi } from "./userApi";
 export interface AuthResponse {
   email: string;
   expiresAt: string;
@@ -27,13 +28,6 @@ export const authApi = createApi({
   baseQuery: baseQueryWithAuth, // CHANGE — was a plain fetchBaseQuery; now shares
   // the same credentials:"include" logic
   endpoints: (builder) => ({
-    register: builder.mutation<AuthResponse, AuthRequest>({
-      query: (body) => ({ url: "/auth/register", method: "POST", body }),
-      onQueryStarted: async (_arg, { dispatch, queryFulfilled }) => {
-        const { data } = await queryFulfilled;
-        dispatch(setCredentials({ email: data.email, roles: data.roles }));
-      },
-    }),
     login: builder.mutation<AuthResponse, AuthRequest>({
       query: (body) => ({ url: "/auth/login", method: "POST", body }),
       onQueryStarted: async (_arg, { dispatch, queryFulfilled }) => {
@@ -56,6 +50,12 @@ export const authApi = createApi({
       onQueryStarted: async (_arg, { dispatch, queryFulfilled }) => {
         await queryFulfilled;
         dispatch(logout());
+        // Wipe every OTHER api slice's cache — otherwise the next person to
+        // log in on this same browser tab would briefly see whatever the
+        // PREVIOUS person's profile/submissions data was, until something
+        // happens to trigger a real refetch.
+        dispatch(submissionApi.util.resetApiState());
+        dispatch(userApi.util.resetApiState());
       },
     }),
     // ADD — called once on app load to check "is the cookie still valid"
@@ -66,7 +66,11 @@ export const authApi = createApi({
           const { data } = await queryFulfilled;
           dispatch(setCredentials({ email: data.email, roles: data.roles }));
         } catch {
-          dispatch(logout()); // no valid cookie — stay logged out, no error shown
+          dispatch(logout());
+          // Same reasoning — a failed refresh (session actually expired) should
+          // also drop cached data, not just the auth slice.
+          dispatch(submissionApi.util.resetApiState());
+          dispatch(userApi.util.resetApiState());
         }
       },
     }),
@@ -74,7 +78,6 @@ export const authApi = createApi({
 });
 
 export const {
-  useRegisterMutation,
   useLoginMutation,
   useLogoutUserMutation,
   useGetMeQuery,

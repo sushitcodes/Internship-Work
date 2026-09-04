@@ -20,6 +20,8 @@ public class RefreshTokenRepository : IRefreshTokenRepository
     public async Task<RefreshToken?> GetByHashAsync(string tokenHash) =>
         await _context.RefreshTokens
             .Include(t => t.User)
+                    .ThenInclude(u => u.RoleAssignments)
+
             .FirstOrDefaultAsync(t => t.TokenHash == tokenHash);
 
     public async Task RevokeAllForUserAsync(Guid userId)

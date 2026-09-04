@@ -83,6 +83,21 @@ public class SubmissionRepository : ISubmissionRepository
         await _context.SaveChangesAsync();
         return existing;
     }
+    public async Task<int> GetCountByUserAsync(Guid userId) =>
+    await _context.Submissions.CountAsync(s => s.CreatedByUserId == userId);
+
+    public async Task<List<Submission>> GetRecentAsync(int count) =>
+        await _context.Submissions
+            .OrderByDescending(s => s.CreatedAt)
+            .Take(count)
+            .ToListAsync();
+
+    public async Task<List<Submission>> GetRecentByUserAsync(Guid userId, int count) =>
+        await _context.Submissions
+            .Where(s => s.CreatedByUserId == userId)
+            .OrderByDescending(s => s.CreatedAt)
+            .Take(count)
+            .ToListAsync();
 
 }
 

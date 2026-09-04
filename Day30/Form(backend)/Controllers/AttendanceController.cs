@@ -50,4 +50,9 @@ public class AttendanceController : ControllerBase
 
         return Ok(await _attendanceService.GetForStudentAsync(studentUserId));
     }
+    [HttpGet("roster/{classRoomId:guid}")]
+    [Authorize(Policy = "StaffOrAdmin")]
+    public async Task<ActionResult<List<AttendanceRosterEntryDto>>> GetRoster(
+    Guid classRoomId, [FromQuery] DateOnly date) =>
+    Ok(await _attendanceService.GetRosterAsync(classRoomId, date));
 }
