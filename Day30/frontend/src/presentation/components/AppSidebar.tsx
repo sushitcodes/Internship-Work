@@ -34,6 +34,7 @@ import { useAppSelector } from "../../infrastructure/store/hooks";
 import { useLogoutUserMutation } from "../../infrastructure/api/authApi";
 import { useState } from "react";
 import { LayoutDashboard, FileText } from "lucide-react";
+import { toast } from "sonner";
 
 // Kept for when a section genuinely has multiple real children (Phase 1+).
 // Today nothing does yet, so no item below actually uses this — but the
@@ -83,6 +84,7 @@ export function AppSidebar() {
   const handleLogout = async () => {
     await logoutUser();
     navigate("/login");
+    toast.success("Logged out.");
   };
 
   // Only routes that exist in App.tsx today. Add more here the same day

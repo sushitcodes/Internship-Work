@@ -7,4 +7,5 @@ public interface IEnrollmentService
     Task<EnrollmentDto> EnrollAsync(CreateEnrollmentRequest request);
  
     Task<List<EnrollmentDto>> GetByClassRoomAsync(Guid classRoomId);
+    Task EnsureEnrolledAsync(Guid studentUserId, Guid classRoomId);
 }

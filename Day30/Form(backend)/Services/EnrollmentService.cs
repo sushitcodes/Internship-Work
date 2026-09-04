@@ -49,4 +49,20 @@ public class EnrollmentService : IEnrollmentService
             ClassRoomId = e.ClassRoomId,
             EnrolledAt = e.EnrolledAt,
         }).ToList();
+    // Idempotent version of EnrollAsync — used by the submission flow, where
+    // "already enrolled" is a normal, expected outcome, not an error. The
+    // explicit "Enroll" button on ClassRoomsPage keeps using EnrollAsync
+    // (which correctly throws), since a Staff member deliberately re-enrolling
+    // someone who's already in the class IS worth flagging as a mistake.
+    public async Task EnsureEnrolledAsync(Guid studentUserId, Guid classRoomId)
+    {
+        if (await _repository.ExistsAsync(studentUserId, classRoomId))
+            return; // already enrolled — nothing to do, not an error
+
+        await _repository.AddAsync(new Enrollment
+        {
+            StudentUserId = studentUserId,
+            ClassRoomId = classRoomId,
+        });
+    }
 }

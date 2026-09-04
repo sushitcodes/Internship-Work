@@ -2,15 +2,20 @@
 
 namespace Form.DTOs;
 
+public class StatusCountDto
+{
+    public string Status { get; set; } = string.Empty;
+    public int Count { get; set; }
+}
+
 public class DashboardSummaryDto
 {
     public int TotalStudents { get; set; }
     public int TotalStaff { get; set; }
     public int TotalSubmissions { get; set; }
-    public double TodayAttendancePercentage { get; set; } // 0 when nothing marked yet today
+    public List<StatusCountDto> TodayAttendanceBreakdown { get; set; } = new(); // replaces TodayAttendancePercentage
     public List<SubmissionDto> RecentSubmissions { get; set; } = new();
 }
-
 public class MyDashboardDto
 {
     public int MySubmissionsCount { get; set; }

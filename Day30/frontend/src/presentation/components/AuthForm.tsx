@@ -10,6 +10,7 @@ import {
 } from "../../application/validators/formValidators";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 interface AuthFormValues {
   email: string;
@@ -33,6 +34,7 @@ export function AuthForm() {
     try {
       await login(data).unwrap();
       navigate("/");
+      toast.success("Logged in successfully.");
     } catch {
       setServerError("Invalid email or password.");
     }
@@ -44,7 +46,11 @@ export function AuthForm() {
         <CardTitle className="text-center text-xl">Log In</CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="space-y-4"
+          noValidate
+        >
           <FormInput
             label="Email"
             type="email"

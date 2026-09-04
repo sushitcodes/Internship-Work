@@ -1,18 +1,14 @@
-
 using Form.DTOs;
 using Form.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
 using static Form.DTOs.ClassRoomDtos;
 using Microsoft.AspNetCore.Authorization;
-
 
 namespace Form.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-
 public class SubmissionsController : ControllerBase
 {
     private readonly ISubmissionService _submissionService;
@@ -23,26 +19,30 @@ public class SubmissionsController : ControllerBase
     }
 
     [HttpPost]
-    [RequestSizeLimit(10 * 1024 * 1024)] // hard cap enforced by the ASP.NET pipeline itself
+    [RequestSizeLimit(10 * 1024 * 1024)]
     public async Task<ActionResult<SubmissionDto>> Create([FromForm] SubmissionFormRequest form)
     {
-     
         if (form.File is null || form.File.Length == 0)
             return BadRequest("A file is required.");
 
-        var education = ParseEducation(form.Education, out var parseError);
-        if (parseError is not null) return BadRequest(parseError);
+        if (form.ClassRoomId == Guid.Empty)
+            return BadRequest("ClassRoomId is required.");
+
+        if (form.RollNo <= 0)
+            return BadRequest("RollNo must be greater than 0.");
+
+        // Get user ID from claims - must exist since [Authorize] is used
         var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-        Guid? createdByUserId = Guid.TryParse(userIdClaim, out var parsedId) ? parsedId : null;
+        if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var createdByUserId))
+            return Unauthorized("User ID not found in token.");
 
         var request = new CreateSubmissionRequest
         {
             FullName = form.FullName,
-            Email = form.Email,
-            Phone = form.Phone,
-            Education = education!,
+            ClassRoomId = form.ClassRoomId,
+            RollNo = form.RollNo,
             File = form.File,
-            CreatedByUserId = createdByUserId,
+            CreatedByUserId = createdByUserId, // Non-nullable Guid
         };
 
         try
@@ -52,35 +52,31 @@ public class SubmissionsController : ControllerBase
         }
         catch (InvalidOperationException ex)
         {
-            
             return BadRequest(ex.Message);
         }
     }
 
     [AllowAnonymous]
-
     [HttpGet]
     public async Task<ActionResult<PagedResult<SubmissionDto>>> GetAll(
         [FromQuery] int page = 1,
         [FromQuery] int pageSize = 10,
         [FromQuery] string? search = null)
     {
-        // Guard rails against a malformed or malicious query string
-        // (e.g. ?pageSize=999999 trying to force-dump the whole table).
         if (page < 1) page = 1;
         if (pageSize < 1 || pageSize > 50) pageSize = 10;
 
         return Ok(await _submissionService.GetPagedAsync(page, pageSize, search));
     }
-    [AllowAnonymous]
 
+    [AllowAnonymous]
     [HttpGet("count")]
     public async Task<ActionResult<int>> GetCount()
     {
         return Ok(await _submissionService.GetCountAsync());
     }
-    [AllowAnonymous]
 
+    [AllowAnonymous]
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<SubmissionDto>> GetById(Guid id)
     {
@@ -92,17 +88,18 @@ public class SubmissionsController : ControllerBase
     [Authorize(Policy = "CanEdit")]
     public async Task<ActionResult<SubmissionDto>> Update(Guid id, [FromForm] SubmissionFormRequest form)
     {
-        
-        var education = ParseEducation(form.Education, out var parseError);
-        if (parseError is not null) return BadRequest(parseError);
+        if (form.ClassRoomId == Guid.Empty)
+            return BadRequest("ClassRoomId is required.");
+
+        if (form.RollNo <= 0)
+            return BadRequest("RollNo must be greater than 0.");
 
         var request = new UpdateSubmissionRequest
         {
             FullName = form.FullName,
-            Email = form.Email,
-            Phone = form.Phone,
-            Education = education!,
-            File = form.File, // may genuinely be null on this action
+            ClassRoomId = form.ClassRoomId,
+            RollNo = form.RollNo,
+            File = form.File,
         };
 
         var result = await _submissionService.UpdateAsync(id, request);
@@ -116,33 +113,12 @@ public class SubmissionsController : ControllerBase
         var deleted = await _submissionService.DeleteAsync(id);
         return deleted ? NoContent() : NotFound();
     }
-
-
-    private static List<CreateEducationEntryRequest>? ParseEducation(string json, out string? error)
-    {
-        try
-        {
-            error = null;
-            return JsonSerializer.Deserialize<List<CreateEducationEntryRequest>>(
-                json,
-                new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
-            ) ?? new();
-        }
-        catch (JsonException)
-        {
-            error = "Invalid education data format.";
-            return null;
-        }
-    }
 }
-
 
 public class SubmissionFormRequest
 {
     public string FullName { get; set; } = string.Empty;
-    public string Email { get; set; } = string.Empty;
-    public string Phone { get; set; } = string.Empty;
-    public string Education { get; set; } = string.Empty;
-
+    public Guid ClassRoomId { get; set; }
+    public int RollNo { get; set; }
     public IFormFile? File { get; set; }
 }

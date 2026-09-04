@@ -73,38 +73,39 @@ const SubmissionPage: React.FC = () => {
               </span>
             </div>
             <div>
-              <span className="block text-sm text-gray-500">Email</span>
+              <span className="block text-sm text-gray-500">Class</span>
               <span className="text-gray-800 font-medium">
-                {submission.email}
+                {submission.classRoomName}
               </span>
             </div>
             <div>
-              <span className="block text-sm text-gray-500">Phone</span>
+              <span className="block text-sm text-gray-500">Roll No</span>
               <span className="text-gray-800 font-medium">
-                {submission.phone}
+                {submission.rollNo}
               </span>
             </div>
           </div>
         </div>
 
-        {/* Education */}
+        {/* REMOVED: Education section */}
+
+        {/* File Information */}
         <div className="space-y-3">
-          <h3 className="text-sm font-medium text-gray-500">Education</h3>
-          <div className="space-y-3">
-            {submission.education.map((edu, index) => (
-              <div key={index} className="border rounded-md p-3 bg-gray-50">
-                <p className="font-medium text-gray-800">{edu.institution}</p>
-                <p className="text-sm text-gray-600">
-                  {edu.degree} — {edu.year}
-                </p>
-              </div>
-            ))}
+          <h3 className="text-sm font-medium text-gray-500">
+            File Information
+          </h3>
+          <div className="grid grid-cols-1 gap-2">
+            <div>
+              <span className="block text-sm text-gray-500">Submitted At</span>
+              <span className="text-gray-800 font-medium">
+                {new Date(submission.createdAt).toLocaleString()}
+              </span>
+            </div>
           </div>
         </div>
 
         {/* Actions */}
         <div className="flex flex-wrap gap-3 pt-2">
-          {/* ✅ Fixed: Using Button with onClick instead of asChild */}
           <Button onClick={() => window.open(fileHref, "_blank")}>
             View / Download File
           </Button>

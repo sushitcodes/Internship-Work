@@ -27,8 +27,10 @@ public class DashboardService : IDashboardService
 
         var totalStudents = await _userRepository.CountByRoleAsync(UserRole.Student);
         var totalStaff = await _userRepository.CountByRoleAsync(UserRole.Staff);
+        
         var totalSubmissions = await _submissionRepository.GetCountAsync();
-        var (present, totalMarked) = await _attendanceRepository.GetTodaySummaryAsync(today);
+        var breakdown = await _attendanceRepository.GetTodayBreakdownAsync(today);
+
         var recent = await _submissionRepository.GetRecentAsync(5);
 
         return new DashboardSummaryDto
@@ -37,7 +39,7 @@ public class DashboardService : IDashboardService
             TotalStaff = totalStaff,
             TotalSubmissions = totalSubmissions,
             // Guard against divide-by-zero when nobody's marked attendance yet today.
-            TodayAttendancePercentage = totalMarked == 0 ? 0 : Math.Round(100.0 * present / totalMarked, 1),
+            TodayAttendanceBreakdown = breakdown.Select(b => new StatusCountDto { Status = b.Status, Count = b.Count }).ToList(),
             RecentSubmissions = recent.Select(MapSubmission).ToList(),
         };
     }
@@ -72,15 +74,10 @@ public class DashboardService : IDashboardService
     {
         Id = s.Id,
         FullName = s.FullName,
-        Email = s.Email,
-        Phone = s.Phone,
+        ClassRoomId = s.ClassRoomId,
+        ClassRoomName = s.ClassRoom?.Name ?? string.Empty,
+        RollNo = s.RollNo,
         FileUrl = s.FileUrl,
         CreatedAt = s.CreatedAt,
-        Education = s.Education.Select(e => new EducationEntryDto
-        {
-            Institution = e.Institution,
-            Degree = e.Degree,
-            Year = e.Year,
-        }).ToList(),
     };
 }

@@ -94,4 +94,12 @@ public class AttendanceRepository : IAttendanceRepository
         var present = await todaysRecords.CountAsync(a => a.Status == AttendanceStatus.Present);
         return (present, total);
     }
+    public async Task<List<(string Status, int Count)>> GetTodayBreakdownAsync(DateOnly date) =>
+    (await _context.AttendanceRecords
+        .Where(a => a.Date == date)
+        .GroupBy(a => a.Status)
+        .Select(g => new { Status = g.Key, Count = g.Count() })
+        .ToListAsync())
+        .Select(x => (x.Status.ToString(), x.Count))
+        .ToList();
 }

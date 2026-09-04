@@ -3,7 +3,7 @@ namespace Form.Interfaces;
 
 public interface IUserService
 {
-    Task<List<UserSummaryDto>> GetStudentsAsync();
+    Task<List<UserSummaryDtos>> GetStudentsAsync();
     Task<CreatedUserDto> CreateUserAsync(CreateUserRequest request);
 
 }

@@ -15,9 +15,9 @@ public class UserService : IUserService
         _passwordHasher = passwordHasher;
     }
 
-    public async Task<List<UserSummaryDto>> GetStudentsAsync() =>
+    public async Task<List<UserSummaryDtos>> GetStudentsAsync() =>
         (await _userRepository.GetByRoleAsync(UserRole.Student))
-            .Select(u => new UserSummaryDto { Id = u.Id, Email = u.Email })
+            .Select(u => new UserSummaryDtos { Id = u.Id, Email = u.Email })
             .ToList();
 
     public async Task<CreatedUserDto> CreateUserAsync(CreateUserRequest request)

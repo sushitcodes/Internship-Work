@@ -52,7 +52,8 @@ public class UserProfileRepository : IUserProfileRepository
         await _context.SaveChangesAsync();
         return existing;
     }
-
+    public async Task<UserProfile?> GetByMemberNumberAsync(int memberNumber) =>
+    await _context.UserProfiles.FirstOrDefaultAsync(p => p.MemberNumber == memberNumber);
     public async Task<(List<UserProfile> Items, int TotalCount)> SearchAsync(int page, int pageSize, string? search)
     {
         // Query FROM Users, not UserProfiles. A user who registered (or was
@@ -94,6 +95,7 @@ public class UserProfileRepository : IUserProfileRepository
             Phone = string.Empty,
             MemberNumber = 0,
         }).ToList();
+
 
         return (items, totalCount);
     }

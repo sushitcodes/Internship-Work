@@ -1,13 +1,8 @@
 import { useEffect } from "react";
-import { useForm, useFieldArray, SubmitHandler } from "react-hook-form"; // ← Removed Controller
+import { useForm, SubmitHandler } from "react-hook-form"; // ← Removed Controller
 import { useNavigate, useParams } from "react-router-dom";
 import {
   nameValidation,
-  emailValidation,
-  phoneValidation,
-  institutionValidation,
-  degreeValidation,
-  yearValidation,
   fileValidation,
 } from "../../application/validators/formValidators";
 import {
@@ -15,19 +10,25 @@ import {
   useSubmitFormMutation,
   useUpdateSubmissionMutation,
 } from "../../infrastructure/api/submissionApi";
-import { EducationEntry } from "../../domain/entities/Submission";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Label } from "@/components/ui/label";
 import { FormInput } from "../components/FormInput"; // ← Import FormInput
+import {
+  SelectValue,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  Select,
+} from "@/components/ui/select";
+import { useGetClassRoomsQuery } from "@/infrastructure/api/classRoomApi";
 
 interface FormValues {
   fullName: string;
-  email: string;
-  phone: string;
-  education: EducationEntry[];
+  classRoomId: string;
+  rollNo: number;
   file?: FileList;
 }
 
@@ -35,6 +36,7 @@ const FormPage: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
   const isEditMode = Boolean(id);
   const navigate = useNavigate();
+  const { data: classRooms } = useGetClassRoomsQuery();
 
   const { data: existingSubmission, isLoading: isLoadingExisting } =
     useGetSubmissionByIdQuery(id!, { skip: !isEditMode });
@@ -45,47 +47,43 @@ const FormPage: React.FC = () => {
   const isSaving = isCreating || isUpdating;
 
   const {
-    register, // ← Added register
-    control, // ← Keep for useFieldArray
+    register,
     handleSubmit,
     reset,
+    setValue, //for select
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: {
       fullName: "",
-      email: "",
-      phone: "",
-      education: [
-        { institution: "", degree: "", year: undefined as unknown as number },
-      ],
+      classRoomId: "",
+      rollNo: 0,
     },
-  });
-
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "education",
   });
 
   useEffect(() => {
     if (isEditMode && existingSubmission) {
       reset({
         fullName: existingSubmission.fullName,
-        email: existingSubmission.email,
-        phone: existingSubmission.phone,
-        education: existingSubmission.education,
+        classRoomId: existingSubmission.classRoomId,
+        rollNo: existingSubmission.rollNo,
       });
     }
   }, [isEditMode, existingSubmission, reset]);
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     // Log the data to debug
-    console.log("Submitting education data:", data.education);
+    console.log(
+      "Submitting education data:",
+      data.classRoomId,
+      data.fullName,
+      data.rollNo,
+      data.file,
+    );
 
     const formData = new FormData();
     formData.append("fullName", data.fullName);
-    formData.append("email", data.email);
-    formData.append("phone", data.phone);
-    formData.append("education", JSON.stringify(data.education));
+    formData.append("classRoomId", data.classRoomId);
+    formData.append("rollNo", data.rollNo.toString());
     if (data.file && data.file.length > 0) {
       formData.append("file", data.file[0]);
     }
@@ -155,113 +153,53 @@ const FormPage: React.FC = () => {
           noValidate
           className="space-y-6"
         >
-          {/* ✅ Using FormInput with register */}
+          {/* Full Name */}
           <FormInput
             id="fullName"
             label="Full Name"
-            placeholder="Enter your full name"
             registration={register("fullName", nameValidation)}
             error={errors.fullName}
           />
 
-          <FormInput
-            id="email"
-            label="Email"
-            type="email"
-            placeholder="Enter your email"
-            registration={register("email", emailValidation)}
-            error={errors.email}
-          />
-
-          <FormInput
-            id="phone"
-            label="Phone"
-            placeholder="Enter your phone number"
-            registration={register("phone", phoneValidation)}
-            error={errors.phone}
-          />
-
-          {/* Education Section */}
-          <div className="space-y-4">
-            <div className="flex justify-between items-center">
-              <h3 className="text-lg font-semibold">Education</h3>
-              <Button
-                type="button"
-                variant="default"
-                onClick={() =>
-                  append({
-                    institution: "",
-                    degree: "",
-                    year: undefined as unknown as number,
-                  })
-                }
-              >
-                + Add Education
-              </Button>
-            </div>
-
-            {fields.map((field, index) => (
-              <div key={field.id} className="border rounded-lg p-4 space-y-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium text-muted-foreground">
-                    Education {index + 1}
-                  </span>
-                  {fields.length > 1 && (
-                    <Button
-                      type="button"
-                      variant="destructive"
-                      size="sm"
-                      onClick={() => remove(index)}
-                    >
-                      Remove
-                    </Button>
-                  )}
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <FormInput
-                    id={`education.${index}.institution`}
-                    label="Institution"
-                    placeholder="Institution name"
-                    registration={register(
-                      `education.${index}.institution`,
-                      institutionValidation,
-                    )}
-                    error={errors.education?.[index]?.institution}
-                  />
-
-                  <FormInput
-                    id={`education.${index}.degree`}
-                    label="Degree"
-                    placeholder="Degree"
-                    registration={register(
-                      `education.${index}.degree`,
-                      degreeValidation,
-                    )}
-                    error={errors.education?.[index]?.degree}
-                  />
-
-                  <FormInput
-                    id={`education.${index}.year`}
-                    label="Year"
-                    type="number"
-                    placeholder="Year"
-                    registration={register(`education.${index}.year`, {
-                      ...yearValidation,
-                      setValueAs: (v) => {
-                        if (!v) return undefined;
-                        const num = parseInt(v);
-                        return isNaN(num) ? undefined : num;
-                      },
-                    })}
-                    error={errors.education?.[index]?.year}
-                  />
-                </div>
-              </div>
-            ))}
+          {/* Class Selection - NEW */}
+          <div className="space-y-2">
+            <Label>Class</Label>
+            <Select
+              onValueChange={(v) => setValue("classRoomId", v ?? "")}
+              defaultValue={existingSubmission?.classRoomId}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select a class" />
+              </SelectTrigger>
+              <SelectContent>
+                {classRooms?.map((c) => (
+                  <SelectItem key={c.id} value={c.id}>
+                    {c.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {errors.classRoomId && (
+              <p className="text-sm text-red-500">
+                {errors.classRoomId.message}
+              </p>
+            )}
           </div>
 
-          {/* File Upload */}
+          {/* Roll No - NEW */}
+          <FormInput
+            id="rollNo"
+            label="Roll No"
+            type="number"
+            registration={register("rollNo", {
+              required: "Roll number is required",
+              valueAsNumber: true,
+              min: { value: 1, message: "Roll number must be at least 1" },
+            })}
+            error={errors.rollNo}
+          />
+
+          {/* File Upload - Keep as is */}
           <div className="space-y-2">
             <Label htmlFor="file">
               {isEditMode

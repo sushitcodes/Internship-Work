@@ -58,7 +58,15 @@ public class AppDbContext : DbContext
             entity.Property(p => p.MemberNumber)
                   .UseIdentityColumn(seed: 1, increment: 1);
         });
+        modelBuilder.Entity<Submission>(entity =>
+        {
+            entity.HasOne(s => s.ClassRoom)
+                  .WithMany()
+                  .HasForeignKey(s => s.ClassRoomId)
+                  .OnDelete(DeleteBehavior.Restrict); // don't let deleting a class silently delete submissions
+        });
     }
+
 
     
 

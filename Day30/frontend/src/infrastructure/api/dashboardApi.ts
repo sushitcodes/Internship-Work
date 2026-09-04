@@ -3,11 +3,15 @@ import { baseQueryWithAuth } from "./baseQueryWithAuth";
 import { Submission } from "../../domain/entities/Submission";
 import { AttendanceRecordDto } from "./attendanceApi";
 
+export interface StatusCount {
+  status: string;
+  count: number;
+}
 export interface DashboardSummary {
   totalStudents: number;
   totalStaff: number;
   totalSubmissions: number;
-  todayAttendancePercentage: number;
+  todayAttendanceBreakdown: StatusCount[];
   recentSubmissions: Submission[];
 }
 

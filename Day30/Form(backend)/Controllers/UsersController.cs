@@ -27,7 +27,7 @@ public class UsersController : ControllerBase
 
     [HttpGet("students")]
     [Authorize(Policy = "AdminOnly")]
-    public async Task<ActionResult<List<UserSummaryDto>>> GetStudents() =>
+    public async Task<ActionResult<List<UserSummaryDtos>>> GetStudents() =>
         Ok(await _userService.GetStudentsAsync());
 
     [HttpGet("me/profile")]
