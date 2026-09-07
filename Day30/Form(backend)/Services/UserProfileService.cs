@@ -20,13 +20,16 @@ public class UserProfileService : IUserProfileService
         var existing = await _repository.GetByUserIdAsync(userId);
         if (existing is not null) return MapToDto(existing);
 
-        // FullName defaults to email until the person actually edits it —
-        // never leave it blank, an empty name looks broken in the UI.
+        // Derived name (before '@') — only for brand-new profiles, per
+        // your earlier decision. Existing profiles never hit this branch.
+        var derivedName = email.Contains('@') ? email[..email.IndexOf('@')] : email;
+
         var created = await _repository.AddAsync(new UserProfile
         {
             UserId = userId,
-            FullName = email,
-            Phone = string.Empty,
+            FullName = derivedName,
+            Address = string.Empty,
+            PhoneNumbers = new List<string>(),
         });
 
         return MapToDto(created);
@@ -41,11 +44,21 @@ public class UserProfileService : IUserProfileService
             avatarUrl = await _fileStorage.SaveFileAsync(request.Avatar);
         }
 
+        Gender? parsedGender = null;
+        if (!string.IsNullOrWhiteSpace(request.Gender))
+        {
+            if (!Enum.TryParse<Gender>(request.Gender, ignoreCase: true, out var g))
+                throw new InvalidOperationException($"Unknown gender: {request.Gender}");
+            parsedGender = g;
+        }
+
         var updated = await _repository.UpdateAsync(userId, new UserProfile
         {
-            FullName = request.FullName,
-            Phone = request.Phone,
-            AvatarUrl = avatarUrl ?? string.Empty, // empty = "no new avatar", same convention as submissions
+            Address = request.Address,
+            Gender = parsedGender,
+            PhoneNumbers = request.PhoneNumbers,
+            AvatarUrl = avatarUrl ?? string.Empty,
+            // FullName intentionally absent — self-edit can never touch it.
         });
 
         return updated is null ? null : MapToDto(updated);
@@ -59,8 +72,6 @@ public class UserProfileService : IUserProfileService
 
     public async Task<PagedResult<UserProfileDto>> SearchAsync(int page, int pageSize, string? search, int? rollNo, string? role)
     {
-        // Same parse-or-fail pattern as CreateUserAsync — a malformed role
-        // string should error clearly, not silently match nothing.
         UserRole? parsedRole = null;
         if (!string.IsNullOrWhiteSpace(role))
         {
@@ -79,11 +90,6 @@ public class UserProfileService : IUserProfileService
         };
     }
 
-    // Separate rules from SubmissionService.ValidateFile on purpose — an avatar
-    // has no legitimate reason to be a PDF, and 5MB is oversized for a profile
-    // picture. Duplicated here rather than shared for now; if a third file-type
-    // shows up later, THAT'S the signal to extract a shared FileValidator class —
-    // not before, since two similar-but-not-identical rule sets isn't real duplication yet.
     private static void ValidateAvatar(IFormFile file)
     {
         var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".webp" };
@@ -92,7 +98,7 @@ public class UserProfileService : IUserProfileService
         if (!allowedExtensions.Contains(extension))
             throw new InvalidOperationException("Avatar must be a JPG, PNG, or WEBP image.");
 
-        const long maxSizeBytes = 2 * 1024 * 1024; // 2 MB — smaller cap than submission attachments
+        const long maxSizeBytes = 2 * 1024 * 1024;
         if (file.Length > maxSizeBytes)
             throw new InvalidOperationException("Avatar too large. Max size is 2MB.");
     }
@@ -102,7 +108,9 @@ public class UserProfileService : IUserProfileService
         UserId = p.UserId,
         Email = p.User.Email,
         FullName = p.FullName,
-        Phone = p.Phone,
+        Address = p.Address,
+        Gender = p.Gender?.ToString(),
+        PhoneNumbers = p.PhoneNumbers,
         AvatarUrl = p.AvatarUrl,
         MemberNumber = p.MemberNumber,
     };

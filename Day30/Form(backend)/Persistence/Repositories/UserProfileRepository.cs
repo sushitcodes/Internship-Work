@@ -13,9 +13,6 @@ public class UserProfileRepository : IUserProfileRepository
 
     public async Task<UserProfile?> GetByUserIdAsync(Guid userId)
     {
-        // .Include(p => p.User) — we need this because UserProfileDto shows
-        // Email, which lives on User, not UserProfile. Without this, p.User
-        // would be null and mapping would throw.
         return await _context.UserProfiles
             .Include(p => p.User)
             .FirstOrDefaultAsync(p => p.UserId == userId);
@@ -25,9 +22,6 @@ public class UserProfileRepository : IUserProfileRepository
     {
         _context.UserProfiles.Add(profile);
         await _context.SaveChangesAsync();
-
-        // Reload with .Include so the returned object has User populated —
-        // straight after Add, EF hasn't fetched the related User row yet.
         return await GetByUserIdAsync(profile.UserId) ?? profile;
     }
 
@@ -39,11 +33,14 @@ public class UserProfileRepository : IUserProfileRepository
 
         if (existing is null) return null;
 
-        existing.FullName = updated.FullName;
-        existing.Phone = updated.Phone;
+        // FullName line REMOVED — this is the actual enforcement point from
+        // last message. Self-edit can never change it, no matter what gets
+        // passed into `updated`, because this method physically never reads
+        // updated.FullName anymore.
+        existing.Address = updated.Address;
+        existing.Gender = updated.Gender;
+        existing.PhoneNumbers = updated.PhoneNumbers;
 
-        // Same "empty string means no new file" convention as SubmissionRepository.UpdateAsync —
-        // keeping this consistent rather than inventing a different convention here.
         if (!string.IsNullOrEmpty(updated.AvatarUrl))
             existing.AvatarUrl = updated.AvatarUrl;
 
@@ -52,20 +49,17 @@ public class UserProfileRepository : IUserProfileRepository
         await _context.SaveChangesAsync();
         return existing;
     }
-    public async Task<UserProfile?> GetByMemberNumberAsync(int memberNumber) =>
-    await _context.UserProfiles.FirstOrDefaultAsync(p => p.MemberNumber == memberNumber);
-    public async Task<(List<UserProfile> Items, int TotalCount)> SearchAsync(int page, int pageSize, string? search, int? rollNo, UserRole? role)
 
+    public async Task<UserProfile?> GetByMemberNumberAsync(int memberNumber) =>
+        await _context.UserProfiles.FirstOrDefaultAsync(p => p.MemberNumber == memberNumber);
+
+    public async Task<(List<UserProfile> Items, int TotalCount)> SearchAsync(
+        int page, int pageSize, string? search, int? rollNo, UserRole? role)
     {
-        // Query FROM Users, not UserProfiles. A user who registered (or was
-        // Admin-created) but never opened their own profile page has no
-        // UserProfile row yet — that's expected, lazy-creation is intentional.
-        // But they still need to be VISIBLE in this list, so we start from the
-        // table that's guaranteed to have a row for every real account.
         var query =
             from u in _context.Users
             join p in _context.UserProfiles on u.Id equals p.UserId into profileJoin
-            from p in profileJoin.DefaultIfEmpty() // LEFT JOIN — p is null when no profile exists yet
+            from p in profileJoin.DefaultIfEmpty()
             select new { User = u, Profile = p };
 
         if (!string.IsNullOrWhiteSpace(search))
@@ -77,34 +71,29 @@ public class UserProfileRepository : IUserProfileRepository
         if (rollNo.HasValue)
             query = query.Where(x => x.Profile != null && x.Profile.MemberNumber == rollNo.Value);
 
-        // Role lives on User.RoleAssignments, not UserProfile — same join
-        // pattern as everywhere else a role check happens (CreateUserAsync, etc).
         if (role.HasValue)
             query = query.Where(x => x.User.RoleAssignments.Any(ra => ra.Role == role.Value));
+
         var totalCount = await query.CountAsync();
 
         var raw = await query
-            // Users with a real profile sort by their assigned number;
-            // users without one yet sort last (int.MaxValue), not first.
             .OrderBy(x => x.Profile != null ? x.Profile.MemberNumber : int.MaxValue)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
 
-        // Where no profile exists, build a placeholder in memory — NOT saved to
-        // the database. MemberNumber = 0 is a sentinel the frontend can check
-        // for ("no profile yet") rather than a real assigned number.
+        // Placeholder now matches the CURRENT UserProfile shape — Phone is
+        // gone, so Address/PhoneNumbers get sensible empty defaults instead.
         var items = raw.Select(x => x.Profile ?? new UserProfile
         {
             UserId = x.User.Id,
             User = x.User,
             FullName = x.User.Email,
-            Phone = string.Empty,
+            Address = string.Empty,
+            PhoneNumbers = new List<string>(),
             MemberNumber = 0,
         }).ToList();
 
-
         return (items, totalCount);
     }
-
 }

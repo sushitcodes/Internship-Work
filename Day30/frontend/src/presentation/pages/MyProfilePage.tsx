@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, useFieldArray, SubmitHandler } from "react-hook-form";
 import {
   useGetOwnProfileQuery,
   useUpdateOwnProfileMutation,
@@ -10,18 +10,22 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { FormInput } from "../components/FormInput";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 import { getInitials } from "../../application/utils/getInitials";
 import { resolveFileUrl } from "../../lib/resolveFileUrl";
-import {
-  nameValidation,
-  phoneValidation,
-} from "../../application/validators/formValidators";
 import { toast } from "sonner";
+import { X, Plus } from "lucide-react";
 
 interface ProfileFormValues {
-  fullName: string;
-  phone: string;
+  address: string;
+  gender: string;
+  phoneNumbers: { value: string }[]; // useFieldArray needs objects, not raw strings
   avatar?: FileList;
 }
 
@@ -34,26 +38,39 @@ const MyProfilePage: React.FC = () => {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    control,
+    watch,
+    setValue,
+    // formState: { errors },
   } = useForm<ProfileFormValues>({
-    defaultValues: { fullName: "", phone: "" },
+    defaultValues: { address: "", gender: "", phoneNumbers: [] },
+  });
+  const gender = watch("gender");
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "phoneNumbers" as never,
   });
 
-  // Same pattern as FormPage's edit-mode reset — populate the form only
-  // once real data arrives, not on every render.
   useEffect(() => {
     if (profile) {
-      reset({ fullName: profile.fullName, phone: profile.phone });
+      reset({
+        address: profile.address,
+        gender: profile.gender ?? "",
+        phoneNumbers: profile.phoneNumbers.map((p) => ({ value: p })),
+      });
     }
   }, [profile, reset]);
 
   const onSubmit: SubmitHandler<ProfileFormValues> = async (data) => {
     const formData = new FormData();
-    formData.append("fullName", data.fullName);
-    formData.append("phone", data.phone);
-    if (data.avatar && data.avatar.length > 0) {
-      formData.append("avatar", data.avatar[0]);
-    }
+    formData.append("address", data.address);
+    if (data.gender) formData.append("gender", data.gender);
+    // Same key repeated for each number — ASP.NET Core model binding
+    // collects repeated form keys into the List<string> automatically.
+    data.phoneNumbers.forEach((p) => {
+      if (p.value.trim()) formData.append("phoneNumbers", p.value.trim());
+    });
+    if (data.avatar?.length) formData.append("avatar", data.avatar[0]);
 
     try {
       await updateProfile(formData).unwrap();
@@ -72,7 +89,6 @@ const MyProfilePage: React.FC = () => {
         </CardHeader>
         <CardContent className="space-y-4">
           <Skeleton className="h-20 w-20 rounded-full" />
-          <Skeleton className="h-10 w-full" />
           <Skeleton className="h-10 w-full" />
         </CardContent>
       </Card>
@@ -95,7 +111,7 @@ const MyProfilePage: React.FC = () => {
               <AvatarImage
                 src={resolveFileUrl(profile?.avatarUrl)}
                 alt={profile?.fullName}
-              />{" "}
+              />
               <AvatarFallback className="text-lg">
                 {profile ? getInitials(profile.fullName) : "?"}
               </AvatarFallback>
@@ -111,33 +127,76 @@ const MyProfilePage: React.FC = () => {
             </div>
           </div>
 
-          {/* Email and member number are read-only display — not form fields,
-              since neither can be edited from this endpoint (email is identity,
-              MemberNumber is DB-assigned). Showing them as plain text avoids
-              implying they're editable. */}
+          {/* Full Name — READ-ONLY display now, same treatment as Email/Member No.
+              No <Input>, no register() — there's no form field for it to submit. */}
           <div className="grid grid-cols-2 gap-4 text-sm">
+            <div>
+              <span className="block text-muted-foreground">Full Name</span>
+              <span className="font-medium">{profile?.fullName}</span>
+            </div>
             <div>
               <span className="block text-muted-foreground">Email</span>
               <span className="font-medium">{profile?.email}</span>
             </div>
             <div>
               <span className="block text-muted-foreground">Member No.</span>
-              <span className="font-medium">#{profile?.memberNumber}</span>
+              <span className="font-medium">
+                {profile && profile.memberNumber > 0
+                  ? `#${profile.memberNumber}`
+                  : "—"}
+              </span>
             </div>
           </div>
 
-          <FormInput
-            id="fullName"
-            label="Full Name"
-            registration={register("fullName", nameValidation)}
-            error={errors.fullName}
-          />
-          <FormInput
-            id="phone"
-            label="Phone"
-            registration={register("phone", phoneValidation)}
-            error={errors.phone}
-          />
+          <div className="space-y-2">
+            <Label>Gender</Label>
+            <Select
+              value={gender || undefined}
+              onValueChange={(v) => setValue("gender", v ?? "")}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select gender" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Male">Male</SelectItem>
+                <SelectItem value="Female">Female</SelectItem>
+                <SelectItem value="Other">Other</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="address">Address</Label>
+            <Input id="address" {...register("address")} />
+          </div>
+
+          <div className="space-y-2">
+            <Label>Phone Numbers</Label>
+            {fields.map((field, index) => (
+              <div key={field.id} className="flex gap-2">
+                <Input
+                  {...register(`phoneNumbers.${index}.value` as const)}
+                  placeholder="Phone number"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  onClick={() => remove(index)}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => append({ value: "" })}
+            >
+              <Plus className="h-4 w-4 mr-1" /> Add Phone Number
+            </Button>
+          </div>
 
           <Button type="submit" disabled={isSaving} className="w-full">
             {isSaving ? "Saving..." : "Save Changes"}

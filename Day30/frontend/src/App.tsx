@@ -16,6 +16,7 @@ import MyProfilePage from "./presentation/pages/MyProfilePage";
 import { Toaster } from "@/components/ui/sonner"; // shadcn's sonner wrapper, not the raw "sonner" package
 import CreateUserPage from "./presentation/pages/CreateUserPage";
 import DashboardPage from "./presentation/pages/DashboardPage";
+import UserDetailPage from "./presentation/pages/UserDetailPage";
 
 // Import any missing pages for the navigation
 // import CoursesPage from "./presentation/pages/CoursesPage";
@@ -54,6 +55,7 @@ function App() {
             <Route path="/submission/:id/edit" element={<FormPage />} />
             <Route path="/attendance/mark" element={<MarkAttendancePage />} />
             <Route path="/users" element={<UsersListPage />} />
+            <Route path="/users/:id" element={<UserDetailPage />} />
           </Route>
 
           {/* Attendance section */}

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSearchUsersInfiniteQuery } from "../../infrastructure/api/userApi";
+import { resolveFileUrl } from "../../lib/resolveFileUrl";
 import {
   Table,
   TableHeader,
@@ -181,7 +182,10 @@ const UsersListPage: React.FC = () => {
                     <TableCell>
                       <div className="flex items-center gap-3">
                         <Avatar className="h-8 w-8">
-                          <AvatarImage src={u.avatarUrl} alt={u.fullName} />
+                          <AvatarImage
+                            src={resolveFileUrl(u.avatarUrl)}
+                            alt={u.fullName}
+                          />
                           <AvatarFallback className="text-xs">
                             {getInitials(u.fullName)}
                           </AvatarFallback>

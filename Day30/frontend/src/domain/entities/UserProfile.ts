@@ -3,7 +3,9 @@ export interface UserProfile {
   userId: string;
   email: string;
   fullName: string;
-  phone: string;
-  avatarUrl?: string;
+  address: string;
+  gender?: string | null;
+  phoneNumbers: string[];
+  avatarUrl?: string | null;
   memberNumber: number;
 }

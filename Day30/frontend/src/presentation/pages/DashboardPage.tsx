@@ -138,7 +138,7 @@ const DashboardPage: React.FC = () => {
                       // (those are just the data keys WE chose when feeding it
                       // data). Typed `any` here since recharts' own type for
                       // this callback doesn't know our data's shape.
-                      label={(entry: any) => `${entry.name}: ${entry.value}`}
+                      // label={(entry: any) => `${entry.name}: ${entry.value}`}
                     >
                       {summary.todayAttendanceBreakdown.map((entry) => (
                         <Cell

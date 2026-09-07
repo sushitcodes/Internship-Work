@@ -8,7 +8,9 @@ public class UserProfile
     public User User { get; set; } = null!;
 
     public string FullName { get; set; } = string.Empty;
-    public string Phone { get; set; } = string.Empty;
+    public string Address { get; set; } = string.Empty;
+    public Gender? Gender { get; set; }
+    public List<string> PhoneNumbers { get; set; } = new();
     public string? AvatarUrl { get; set; }
 
     // No setter logic needed here — the database assigns this automatically
