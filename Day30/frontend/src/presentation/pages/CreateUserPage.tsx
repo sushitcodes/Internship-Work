@@ -56,7 +56,9 @@ const CreateUserPage: React.FC = () => {
       navigate("/users");
     } catch (err) {
       console.error("Failed to create user:", err);
-      toast.error("Could not create user. Check the details and try again.");
+      toast.error(
+        "Could not create user. Try with a different email address may already be in use.",
+      );
     }
   };
 

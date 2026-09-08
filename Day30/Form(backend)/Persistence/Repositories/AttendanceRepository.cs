@@ -102,4 +102,9 @@ public class AttendanceRepository : IAttendanceRepository
         .ToListAsync())
         .Select(x => (x.Status.ToString(), x.Count))
         .ToList();
+    public async Task<List<AttendanceRecord>> GetByClassRoomAndDateRangeAsync(Guid classRoomId, DateOnly start, DateOnly end) =>
+    await _context.AttendanceRecords
+        .Include(a => a.Enrollment)
+        .Where(a => a.Enrollment.ClassRoomId == classRoomId && a.Date >= start && a.Date <= end)
+        .ToListAsync();
 }

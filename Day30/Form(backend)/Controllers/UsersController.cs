@@ -94,4 +94,26 @@ public class UsersController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
+    [HttpPatch("{id:guid}/name")]
+    [Authorize(Policy = "AdminOnly")]
+    public async Task<ActionResult<UserProfileDto>> UpdateName(Guid id, UpdateUserNameRequest request)
+    {
+        try
+        {
+            var updated = await _profileService.AdminUpdateNameAsync(id, request.FullName);
+            return updated is null ? NotFound() : Ok(updated);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPatch("{id:guid}/status")]
+    [Authorize(Policy = "AdminOnly")]
+    public async Task<IActionResult> SetActiveStatus(Guid id, SetUserActiveRequest request)
+    {
+        await _profileService.SetActiveStatusAsync(id, request.IsActive);
+        return NoContent();
+    }
 }

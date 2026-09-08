@@ -17,6 +17,8 @@ public class UserProfileDto
     public string? AvatarUrl { get; set; }
 
     public int MemberNumber { get; set; }
+    public bool IsActive { get; set; }
+
 }
 
 
@@ -52,4 +54,13 @@ public class CreatedUserDto
     public string Email { get; set; } = string.Empty;
 
     public List<string> Roles { get; set; } = new();
+}
+public class UpdateUserNameRequest
+{
+    public string FullName { get; set; } = string.Empty;
+}
+
+public class SetUserActiveRequest
+{
+    public bool IsActive { get; set; }
 }

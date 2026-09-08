@@ -20,14 +20,24 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<ActionResult<AuthResponseDto>> Login(LoginRequest request)
     {
-        var result = await _authService.LoginAsync(request);
-        if (result is null) return Unauthorized("Invalid email or password.");
+        try
+        {
 
-        SetAuthCookie(result.Token, result.ExpiresAt);
-        SetRefreshCookie(result.RefreshToken, result.RefreshTokenExpiresAt);
-        // No longer send the raw token in the body — only non-sensitive info
-        return Ok(new { email = result.Email, expiresAt = result.ExpiresAt, roles = result.Roles });
+            var result = await _authService.LoginAsync(request);
+            if (result is null) return Unauthorized("Invalid email or password.");
+
+            SetAuthCookie(result.Token, result.ExpiresAt);
+            SetRefreshCookie(result.RefreshToken, result.RefreshTokenExpiresAt);
+            // No longer send the raw token in the body — only non-sensitive info
+            return Ok(new { email = result.Email, expiresAt = result.ExpiresAt, roles = result.Roles });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Unauthorized(ex.Message); // deactivated — a specific, readable message instead of the generic 401
+        }
+
     }
+
 
     [HttpPost("register")]
 

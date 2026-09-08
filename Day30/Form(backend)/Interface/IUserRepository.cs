@@ -11,5 +11,6 @@ namespace Form.Interfaces
         Task UpdateAsync(User user);
         Task<User?> GetByIdAsync(Guid id);
         Task<List<User>> GetByRoleAsync(UserRole role);
+        Task SetActiveStatusAsync(Guid userId, bool isActive);
     }
 }

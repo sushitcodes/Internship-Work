@@ -36,4 +36,11 @@ public class UserRepository : IUserRepository
     // RoleAssignments collections) into memory just to count them.
     public async Task<int> CountByRoleAsync(UserRole role) =>
         await _context.Users.CountAsync(u => u.RoleAssignments.Any(ra => ra.Role == role));
+    public async Task SetActiveStatusAsync(Guid userId, bool isActive)
+    {
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        if (user is null) return;
+        user.IsActive = isActive;
+        await _context.SaveChangesAsync();
+    }
 }

@@ -55,4 +55,24 @@ public class AttendanceController : ControllerBase
     public async Task<ActionResult<List<AttendanceRosterEntryDto>>> GetRoster(
     Guid classRoomId, [FromQuery] DateOnly date) =>
     Ok(await _attendanceService.GetRosterAsync(classRoomId, date));
+    [HttpGet("sheet/{classRoomId:guid}")]
+    [Authorize(Policy = "StaffOrAdmin")]
+    public async Task<ActionResult<AttendanceSheetDto>> GetSheet(
+    Guid classRoomId, [FromQuery] DateOnly startDate, [FromQuery] DateOnly endDate)
+    {
+        if (startDate > endDate) return BadRequest("Start date must be before end date.");
+        return Ok(await _attendanceService.GetSheetAsync(classRoomId, startDate, endDate));
+    }
+
+    [HttpGet("sheet/{classRoomId:guid}/export")]
+    [Authorize(Policy = "StaffOrAdmin")]
+    public async Task<IActionResult> ExportSheet(
+        Guid classRoomId, [FromQuery] DateOnly startDate, [FromQuery] DateOnly endDate)
+    {
+        if (startDate > endDate) return BadRequest("Start date must be before end date.");
+        var bytes = await _attendanceService.ExportSheetAsync(classRoomId, startDate, endDate);
+        return File(bytes,
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            $"attendance_{startDate:yyyy-MM-dd}_to_{endDate:yyyy-MM-dd}.xlsx");
+    }
 }

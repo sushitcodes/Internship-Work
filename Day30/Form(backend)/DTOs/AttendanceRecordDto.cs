@@ -30,3 +30,17 @@ public class AttendanceRosterEntryDto
     public Guid? AttendanceRecordId { get; set; }
     public string Status { get; set; } = "Unmarked";
 }
+public class AttendanceSheetRowDto
+{
+    public Guid EnrollmentId { get; set; }
+    public string StudentName { get; set; } = string.Empty;
+    // Keyed by "yyyy-MM-dd" so the frontend can look up any date directly
+    // without re-parsing DateOnly on every cell render.
+    public Dictionary<string, string> StatusByDate { get; set; } = new();
+}
+
+public class AttendanceSheetDto
+{
+    public List<string> Dates { get; set; } = new(); // "yyyy-MM-dd", in order
+    public List<AttendanceSheetRowDto> Rows { get; set; } = new();
+}

@@ -3,40 +3,12 @@
   "WorkspaceRootPath": "G:\\C sharp\\Day30\\Form(backend)\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\services\\gmailsmtpemailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:services\\gmailsmtpemailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\persistence\\repositories\\userprofilerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:persistence\\repositories\\userprofilerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\persistence\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:persistence\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\entities\\userprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:entities\\userprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\services\\userprofileservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:services\\userprofileservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\dtos\\userdtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:dtos\\userdtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\entities\\gender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:entities\\gender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\interface\\ienrollmentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:interface\\ienrollmentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -59,118 +31,27 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "GmailSmtpEmailService.cs",
-              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\GmailSmtpEmailService.cs",
-              "RelativeDocumentMoniker": "Services\\GmailSmtpEmailService.cs",
-              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Services\\GmailSmtpEmailService.cs",
-              "RelativeToolTip": "Services\\GmailSmtpEmailService.cs",
-              "ViewState": "AgIAAA8AAAAAAAAAAAAYwBMAAAA9AAAAAAAAAA==",
+              "Title": "AuthService.cs",
+              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\AuthService.cs",
+              "RelativeDocumentMoniker": "Services\\AuthService.cs",
+              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Services\\AuthService.cs",
+              "RelativeToolTip": "Services\\AuthService.cs",
+              "ViewState": "AgIAAFQAAAAAAAAAAAAIwGoAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-07T10:27:27.429Z",
+              "WhenOpened": "2026-09-08T10:57:06.169Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\appsettings.json",
-              "RelativeDocumentMoniker": "appsettings.json",
-              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\appsettings.json",
-              "RelativeToolTip": "appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-09-07T10:26:43.536Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "UserDtos.cs",
-              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\DTOs\\UserDtos.cs",
-              "RelativeDocumentMoniker": "DTOs\\UserDtos.cs",
-              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\DTOs\\UserDtos.cs",
-              "RelativeToolTip": "DTOs\\UserDtos.cs",
-              "ViewState": "AgIAABwAAAAAAAAAAAAcwBwAAAAbAAAAAAAAAA==",
+              "Title": "UsersController.cs",
+              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Controllers\\UsersController.cs",
+              "RelativeDocumentMoniker": "Controllers\\UsersController.cs",
+              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Controllers\\UsersController.cs",
+              "RelativeToolTip": "Controllers\\UsersController.cs",
+              "ViewState": "AgIAABgAAAAAAAAAAAA7wD4AAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-07T09:22:28.938Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "UserProfileRepository.cs",
-              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Persistence\\Repositories\\UserProfileRepository.cs",
-              "RelativeDocumentMoniker": "Persistence\\Repositories\\UserProfileRepository.cs",
-              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Persistence\\Repositories\\UserProfileRepository.cs",
-              "RelativeToolTip": "Persistence\\Repositories\\UserProfileRepository.cs",
-              "ViewState": "AgIAAEMAAAAAAAAAAADgv04AAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-07T09:18:49.897Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "AppDbContext.cs",
-              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Persistence\\AppDbContext.cs",
-              "RelativeDocumentMoniker": "Persistence\\AppDbContext.cs",
-              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Persistence\\AppDbContext.cs",
-              "RelativeToolTip": "Persistence\\AppDbContext.cs",
-              "ViewState": "AgIAAGAAAAAAAAAAAAAiwGQAAAAxAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-07T09:15:20.214Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "UserProfileService.cs",
-              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\UserProfileService.cs",
-              "RelativeDocumentMoniker": "Services\\UserProfileService.cs",
-              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Services\\UserProfileService.cs",
-              "RelativeToolTip": "Services\\UserProfileService.cs",
-              "ViewState": "AgIAAFgAAAAAAAAAAAAAAGMAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-07T09:19:34.221Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "UserProfile.cs",
-              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Entities\\UserProfile.cs",
-              "RelativeDocumentMoniker": "Entities\\UserProfile.cs",
-              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Entities\\UserProfile.cs",
-              "RelativeToolTip": "Entities\\UserProfile.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAADgvwwAAAAkAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-07T09:13:21.802Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "Gender.cs",
-              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Entities\\Gender.cs",
-              "RelativeDocumentMoniker": "Entities\\Gender.cs",
-              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Entities\\Gender.cs",
-              "RelativeToolTip": "Entities\\Gender.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-07T09:12:48.151Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "IEnrollmentService.cs",
-              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Interface\\IEnrollmentService.cs",
-              "RelativeDocumentMoniker": "Interface\\IEnrollmentService.cs",
-              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Interface\\IEnrollmentService.cs",
-              "RelativeToolTip": "Interface\\IEnrollmentService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-04T09:44:43.808Z",
+              "WhenOpened": "2026-09-08T10:02:35.087Z",
               "EditorCaption": ""
             }
           ]

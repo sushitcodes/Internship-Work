@@ -1,6 +1,7 @@
 ﻿using Form.DTOs;
-using Form.Interfaces;
 using Form.Entities;
+using Form.Interfaces;
+using Form.Repositories;
 
 namespace Form.Services;
 
@@ -8,11 +9,17 @@ public class UserProfileService : IUserProfileService
 {
     private readonly IUserProfileRepository _repository;
     private readonly IFileStorageService _fileStorage;
+    private readonly IUserRepository _userRepository;
+    private readonly IRefreshTokenService _refreshTokenService;
 
-    public UserProfileService(IUserProfileRepository repository, IFileStorageService fileStorage)
+    public UserProfileService(IUserProfileRepository repository, IFileStorageService fileStorage, IUserRepository userRepository, IRefreshTokenService refreshTokenService)
     {
         _repository = repository;
         _fileStorage = fileStorage;
+        _userRepository = userRepository;
+        _refreshTokenService = refreshTokenService;
+
+
     }
 
     public async Task<UserProfileDto> GetOrCreateOwnProfileAsync(Guid userId, string email)
@@ -113,5 +120,32 @@ public class UserProfileService : IUserProfileService
         PhoneNumbers = p.PhoneNumbers,
         AvatarUrl = p.AvatarUrl,
         MemberNumber = p.MemberNumber,
+        IsActive = p.User.IsActive,
+
     };
+    public async Task<UserProfileDto?> AdminUpdateNameAsync(Guid userId, string fullName)
+    {
+        if (string.IsNullOrWhiteSpace(fullName))
+            throw new InvalidOperationException("Name cannot be empty.");
+
+        var updated = await _repository.AdminUpdateNameAsync(userId, fullName);
+        return updated is null ? null : MapToDto(updated);
+    }
+
+    public async Task SetActiveStatusAsync(Guid userId, bool isActive)
+    {
+        await _userRepository.SetActiveStatusAsync(userId, isActive);
+
+        // Only kill sessions on DEACTIVATE, never on reactivate — turning
+        // someone back on should never forcibly log out whatever device
+        // they're already using elsewhere (there's nothing to revoke them
+        // FROM, since they were blocked from logging in during that time).
+        if (!isActive)
+        {
+            await _refreshTokenService.RevokeAllForUserAsync(userId);
+        }
+    }
+    // needs IUserRepository injected — see below
+
+
 }

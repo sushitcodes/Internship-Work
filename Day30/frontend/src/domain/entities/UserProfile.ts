@@ -8,4 +8,5 @@ export interface UserProfile {
   phoneNumbers: string[];
   avatarUrl?: string | null;
   memberNumber: number;
+  isActive: boolean;
 }

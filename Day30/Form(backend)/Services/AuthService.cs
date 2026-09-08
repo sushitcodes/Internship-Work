@@ -88,14 +88,19 @@ public class AuthService : IAuthService
         var user = await _userRepository.GetByEmailAsync(request.Email);
         if (user is null || !_passwordHasher.Verify(request.Password, user.PasswordHash))
             return null; // deliberately vague — don't reveal which part was wrong
+                         // Was missing entirely — this is the actual check that never existed.
+        if (!user.IsActive)
+            throw new InvalidOperationException("This account has been deactivated. Contact an administrator.");
 
         var (token, expiresAt) = _tokenService.CreateToken(user);
         var (refreshToken, refreshExpiresAt) = await _refreshTokenService.GenerateAsync(user.Id);
 
-        return new AuthResponseDto { Token = token,
+        return new AuthResponseDto
+        {
+            Token = token,
             Email = user.Email,
-            ExpiresAt = expiresAt ,
-            RefreshToken = refreshToken,             
+            ExpiresAt = expiresAt,
+            RefreshToken = refreshToken,
             RefreshTokenExpiresAt = refreshExpiresAt,
             Roles = user.RoleAssignments.Select(ra => ra.Role.ToString()).ToList(),
         };

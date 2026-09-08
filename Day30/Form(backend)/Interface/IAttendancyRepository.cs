@@ -13,4 +13,7 @@ public interface IAttendanceRepository
     // not "anything other than absent" — Late/Excused count toward totalMarked
     // but not toward present, which is the honest reading of the number.
     Task<List<(string Status, int Count)>> GetTodayBreakdownAsync(DateOnly date);
+    Task<List<AttendanceRecord>> GetByClassRoomAndDateRangeAsync(Guid classRoomId, DateOnly start, DateOnly end);
+
+
 }

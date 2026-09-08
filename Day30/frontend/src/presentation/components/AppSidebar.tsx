@@ -99,10 +99,15 @@ export function AppSidebar() {
       show: roles.includes("Admin"),
     },
     {
-      to: "/attendance/mark",
+      // No `to` anymore — a parent with subItems doesn't navigate itself,
+      // clicking it only expands/collapses (or opens the flyout in icon mode).
       label: "Attendance",
       icon: ClipboardCheck,
       show: roles.includes("Staff") || roles.includes("Admin"),
+      subItems: [
+        { to: "/attendance/mark", label: "Mark Attendance" },
+        { to: "/attendance/sheet", label: "Attendance Sheet" },
+      ],
     },
     { to: "/profile", label: "My Profile", icon: UserCircle, show: !!email },
     {

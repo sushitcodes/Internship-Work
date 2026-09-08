@@ -169,7 +169,6 @@ const SubmissionsListPage: React.FC = () => {
               <TableHeader>
                 <TableRow>
                   <TableHead className="py-2 pr-4">Name</TableHead>
-                  <TableHead className="py-2 pr-4">Email</TableHead>
                   <TableHead className="py-2"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -191,9 +190,7 @@ const SubmissionsListPage: React.FC = () => {
                         <span className="font-medium">{s.fullName}</span>
                       </div>
                     </TableCell>
-                    <TableCell className="py-3 pr-4 text-gray-600">
-                      {s.email}
-                    </TableCell>
+
                     <TableCell className="py-3">
                       <div className="flex items-center gap-2">
                         <Link to={`/submission/${s.id}`}>

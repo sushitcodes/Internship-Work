@@ -17,6 +17,7 @@ import { Toaster } from "@/components/ui/sonner"; // shadcn's sonner wrapper, no
 import CreateUserPage from "./presentation/pages/CreateUserPage";
 import DashboardPage from "./presentation/pages/DashboardPage";
 import UserDetailPage from "./presentation/pages/UserDetailPage";
+import AttendanceSheetPage from "./presentation/pages/AttendanceSheetPage";
 
 // Import any missing pages for the navigation
 // import CoursesPage from "./presentation/pages/CoursesPage";
@@ -54,6 +55,7 @@ function App() {
           <Route element={<ProtectedRoute allowedRoles={["Staff", "Admin"]} />}>
             <Route path="/submission/:id/edit" element={<FormPage />} />
             <Route path="/attendance/mark" element={<MarkAttendancePage />} />
+            <Route path="/attendance/sheet" element={<AttendanceSheetPage />} />
             <Route path="/users" element={<UsersListPage />} />
             <Route path="/users/:id" element={<UserDetailPage />} />
           </Route>

@@ -92,8 +92,23 @@ public class UserProfileRepository : IUserProfileRepository
             Address = string.Empty,
             PhoneNumbers = new List<string>(),
             MemberNumber = 0,
+            //IsActive = x.User.IsActive
+
         }).ToList();
 
         return (items, totalCount);
+    }
+    public async Task<List<UserProfile>> GetByUserIdsAsync(List<Guid> userIds) =>
+    await _context.UserProfiles.Where(p => userIds.Contains(p.UserId)).ToListAsync();
+
+    public async Task<UserProfile?> AdminUpdateNameAsync(Guid userId, string fullName)
+    {
+        var existing = await _context.UserProfiles.Include(p => p.User).FirstOrDefaultAsync(p => p.UserId == userId);
+        if (existing is null) return null;
+
+        existing.FullName = fullName;
+        existing.UpdatedAt = DateTime.UtcNow;
+        await _context.SaveChangesAsync();
+        return existing;
     }
 }

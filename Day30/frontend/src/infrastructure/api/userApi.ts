@@ -18,6 +18,7 @@ export interface CreatedUser {
   email: string;
   roles: string[];
 }
+
 export const userApi = createApi({
   reducerPath: "userApi",
   baseQuery: baseQueryWithAuth,
@@ -44,6 +45,29 @@ export const userApi = createApi({
         url: "/users/me/profile",
         method: "PUT",
         body: formData,
+      }),
+      invalidatesTags: ["UserProfile"],
+    }),
+    updateUserName: builder.mutation<
+      UserProfile,
+      { id: string; fullName: string }
+    >({
+      query: ({ id, fullName }) => ({
+        url: `/users/${id}/name`,
+        method: "PATCH",
+        body: { fullName },
+      }),
+      invalidatesTags: ["UserProfile"],
+    }),
+
+    setUserActiveStatus: builder.mutation<
+      void,
+      { id: string; isActive: boolean }
+    >({
+      query: ({ id, isActive }) => ({
+        url: `/users/${id}/status`,
+        method: "PATCH",
+        body: { isActive },
       }),
       invalidatesTags: ["UserProfile"],
     }),
@@ -84,4 +108,6 @@ export const {
   useSearchUsersInfiniteQuery,
   useGetUserProfileByIdQuery,
   useCreateUserMutation,
+  useSetUserActiveStatusMutation,
+  useUpdateUserNameMutation,
 } = userApi;
