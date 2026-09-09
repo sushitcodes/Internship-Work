@@ -18,15 +18,9 @@ import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Label } from "@/components/ui/label";
 import { FormInput } from "../components/FormInput";
-import {
-  SelectValue,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  Select,
-} from "@/components/ui/select";
 import { useGetClassRoomsQuery } from "@/infrastructure/api/classRoomApi";
 import { toast } from "sonner";
+import { IdSelect } from "../components/IdSelect";
 
 interface FormValues {
   fullName: string;
@@ -38,7 +32,8 @@ interface FormValues {
 // Extract a readable message from an RTK Query error object.
 // The backend returns either a plain string body or a { message } / { title } JSON object.
 function extractErrorMessage(err: unknown): string {
-  if (!err || typeof err !== "object") return "Could not save. Please try again.";
+  if (!err || typeof err !== "object")
+    return "Could not save. Please try again.";
   const e = err as Record<string, unknown>;
 
   // RTK Query wraps fetch errors as { status, data }
@@ -164,8 +159,10 @@ const FormPage: React.FC = () => {
       /\/api\/?$/,
       "",
     );
-    if (existingSubmission.fileUrl.startsWith("http")) return existingSubmission.fileUrl;
-    if (existingSubmission.fileUrl.startsWith("/")) return `${apiOrigin}${existingSubmission.fileUrl}`;
+    if (existingSubmission.fileUrl.startsWith("http"))
+      return existingSubmission.fileUrl;
+    if (existingSubmission.fileUrl.startsWith("/"))
+      return `${apiOrigin}${existingSubmission.fileUrl}`;
     return `${apiOrigin}/${existingSubmission.fileUrl}`;
   };
 
@@ -206,25 +203,20 @@ const FormPage: React.FC = () => {
           {/* Class Selection */}
           <div className="space-y-2">
             <Label>Class</Label>
-            <Select
+            <IdSelect
+              options={
+                classRooms?.map((c) => ({
+                  id: c.id,
+                  label: c.name,
+                })) || []
+              }
+              value={classRoomIdValue || existingSubmission?.classRoomId || ""}
               onValueChange={(v) =>
                 setValue("classRoomId", v ?? "", { shouldValidate: true })
               }
-              value={classRoomIdValue || existingSubmission?.classRoomId || ""}
-            >
-              <SelectTrigger
-                className={errors.classRoomId ? "border-red-500" : ""}
-              >
-                <SelectValue placeholder="Select a class" />
-              </SelectTrigger>
-              <SelectContent>
-                {classRooms?.map((c) => (
-                  <SelectItem key={c.id} value={c.id}>
-                    {c.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              placeholder="Select a class"
+              className={errors.classRoomId ? "border-red-500" : ""}
+            />
             {errors.classRoomId && (
               <p className="text-sm text-red-500">
                 {errors.classRoomId.message}

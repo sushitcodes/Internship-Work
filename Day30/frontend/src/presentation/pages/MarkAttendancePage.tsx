@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/table";
 import { CalendarIcon } from "lucide-react";
 import { toast } from "sonner";
+import { IdSelect } from "../components/IdSelect";
 
 const STATUS_OPTIONS = ["Present", "Absent", "Late", "Excused"];
 
@@ -97,21 +98,13 @@ const MarkAttendancePage: React.FC = () => {
         <CardContent className="flex gap-3 items-end">
           <div>
             <label className="text-sm font-medium mb-2 block">Class</label>
-            <Select
-              onValueChange={(v) => setClassRoomId(v ?? "")}
+            <IdSelect
+              options={classRooms?.map((c) => ({ id: c.id, label: c.name }))}
               value={classRoomId}
-            >
-              <SelectTrigger className="w-48">
-                <SelectValue placeholder="Select a class" />
-              </SelectTrigger>
-              <SelectContent>
-                {classRooms?.map((c) => (
-                  <SelectItem key={c.id} value={c.id}>
-                    {c.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              onValueChange={setClassRoomId}
+              placeholder="Select a class"
+              className="w-48"
+            />
           </div>
           <div>
             <label className="text-sm font-medium mb-2 block">Date</label>

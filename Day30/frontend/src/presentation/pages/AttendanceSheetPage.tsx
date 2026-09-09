@@ -13,13 +13,7 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@/components/ui/popover";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
+
 import {
   Table,
   TableHeader,
@@ -30,6 +24,7 @@ import {
 } from "@/components/ui/table";
 import { CalendarIcon, Download } from "lucide-react";
 import { toast } from "sonner";
+import { IdSelect } from "../components/IdSelect";
 
 const STATUS_BADGE: Record<string, string> = {
   Present: "bg-green-100 text-green-800",
@@ -84,21 +79,13 @@ const AttendanceSheetPage: React.FC = () => {
         <CardContent className="flex flex-wrap gap-3 items-end">
           <div>
             <label className="text-sm font-medium mb-2 block">Class</label>
-            <Select
-              onValueChange={(v) => setClassRoomId(v ?? "")}
+            <IdSelect
+              options={classRooms?.map((c) => ({ id: c.id, label: c.name }))}
               value={classRoomId}
-            >
-              <SelectTrigger className="w-48">
-                <SelectValue placeholder="Select a class" />
-              </SelectTrigger>
-              <SelectContent>
-                {classRooms?.map((c) => (
-                  <SelectItem key={c.id} value={c.id}>
-                    {c.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              onValueChange={setClassRoomId}
+              placeholder="Select a class"
+              className="w-48"
+            />
           </div>
 
           <div className="flex gap-2">

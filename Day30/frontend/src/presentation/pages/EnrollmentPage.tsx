@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import {
   useGetEnrollmentsByClassQuery,
   useEnrollStudentMutation,
@@ -16,13 +16,7 @@ import {
   TableRow,
   TableCell,
 } from "@/components/ui/table";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
+import { IdSelect } from "../components/IdSelect";
 
 interface EnrollFormValues {
   studentUserId: string;
@@ -39,14 +33,20 @@ const EnrollmentPage: React.FC = () => {
   const [enrollStudent, { isLoading: isEnrolling }] =
     useEnrollStudentMutation();
   const [error, setError] = useState<string | null>(null);
-  const { control, handleSubmit, reset } = useForm<EnrollFormValues>({
+
+  // ← Changed: Removed Controller, added setValue and watch
+  const { handleSubmit, reset, setValue, watch } = useForm<EnrollFormValues>({
     defaultValues: { studentUserId: "" },
   });
-  const onSubmit = async (data: EnrollFormValues) => {
+
+  const studentUserId = watch("studentUserId");
+
+  const onSubmit = async () => {
+    // ← Changed: no longer needs data parameter
     setError(null);
     try {
       await enrollStudent({
-        studentUserId: data.studentUserId,
+        studentUserId: studentUserId, // ← Use the watched value
         classRoomId: classRoomId!,
       }).unwrap();
       reset();
@@ -66,30 +66,21 @@ const EnrollmentPage: React.FC = () => {
             onSubmit={handleSubmit(onSubmit)}
             className="flex gap-3 items-end"
           >
-            <Controller
-              name="studentUserId"
-              control={control}
-              rules={{ required: true }}
-              render={({ field }) => (
-                <Select onValueChange={field.onChange} value={field.value}>
-                  <SelectTrigger className="w-60">
-                    <SelectValue
-                      placeholder={
-                        isLoadingStudents ? "Loading..." : "Select a student"
-                      }
-                    />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {students?.map((s) => (
-                      <SelectItem key={s.id} value={s.id}>
-                        {s.email}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )}
+            <IdSelect
+              options={
+                students?.map((s) => ({
+                  id: s.id,
+                  label: s.email,
+                })) || []
+              }
+              value={studentUserId}
+              onValueChange={(v) => setValue("studentUserId", v ?? "")}
+              placeholder={
+                isLoadingStudents ? "Loading..." : "Select a student"
+              }
+              className="w-60"
             />
-            <Button type="submit" disabled={isEnrolling}>
+            <Button type="submit" disabled={isEnrolling || !studentUserId}>
               {isEnrolling ? "Enrolling..." : "Enroll"}
             </Button>
           </form>

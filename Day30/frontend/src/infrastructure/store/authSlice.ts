@@ -21,7 +21,6 @@ const authSlice = createSlice({
     ) => {
       state.email = action.payload.email;
       state.roles = action.payload.roles;
-      // DELETE — no more localStorage.setItem("token", ...); nothing to store
     },
     logout: (state) => {
       state.email = null;

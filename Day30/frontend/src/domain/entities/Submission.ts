@@ -11,7 +11,7 @@ export interface Submission {
   id: string;
   fullName: string;
   classRoomId: string;
-  classRoomName: string; // For display purposes
+  classRoomName: string;
   rollNo: number;
   fileUrl: string;
   createdAt: string;

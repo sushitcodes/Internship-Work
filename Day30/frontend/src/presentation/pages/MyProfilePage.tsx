@@ -151,7 +151,7 @@ const MyProfilePage: React.FC = () => {
           <div className="space-y-2">
             <Label>Gender</Label>
             <Select
-              value={gender || undefined}
+              value={gender}
               onValueChange={(v) => setValue("gender", v ?? "")}
             >
               <SelectTrigger>
