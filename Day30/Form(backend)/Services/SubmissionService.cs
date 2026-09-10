@@ -54,7 +54,7 @@ public class SubmissionService : ISubmissionService
         return MapToDto(saved);
     }
 
-    private static SubmissionDto MapToDto(Submission s) => new()
+    private static SubmissionDto MapToDto(Submission s,string? avatarUrl = null) => new()
     {
         Id = s.Id,
         FullName = s.FullName,
@@ -63,12 +63,20 @@ public class SubmissionService : ISubmissionService
         RollNo = s.RollNo,
         FileUrl = s.FileUrl,
         CreatedAt = s.CreatedAt,
+        SubmitterAvatarUrl=avatarUrl,
     };
 
     public async Task<SubmissionDto?> GetByIdAsync(Guid id)
     {
         var submission = await _repository.GetByIdAsync(id);
-        return submission is null ? null : MapToDto(submission);
+        if (submission is null) return null;
+        string? avatar = null;
+        if(submission.CreatedByUserId.HasValue)
+        {
+            var profile = await _profileRepository.GetByUserIdAsync(submission.CreatedByUserId.Value);
+            avatar = profile?.AvatarUrl;
+        }
+        return MapToDto(submission,avatar);
     }
 
     public async Task<int> GetCountAsync() => await _repository.GetCountAsync();
@@ -78,9 +86,26 @@ public class SubmissionService : ISubmissionService
     public async Task<PagedResult<SubmissionDto>> GetPagedAsync(int page, int pageSize, string? search)
     {
         var (items, totalCount) = await _repository.GetPagedAsync(page, pageSize, search);
+
+        var userIds = items
+            .Where(s => s.CreatedByUserId.HasValue)
+            .Select(s => s.CreatedByUserId!.Value)
+            .Distinct()
+            .ToList();
+        var profiles = await _profileRepository.GetByUserIdsAsync(userIds);
+        var avatarByUserId = profiles.ToDictionary(p => p.UserId, p => p.AvatarUrl);
+
+        var dtos = items.Select(s =>
+        {
+            string? avatar = null;
+            if (s.CreatedByUserId.HasValue)
+                avatarByUserId.TryGetValue(s.CreatedByUserId.Value, out avatar);
+
+            return MapToDto(s, avatar);
+        }).ToList();
         return new PagedResult<SubmissionDto>
         {
-            Items = items.Select(MapToDto).ToList(),
+            Items = dtos,
             TotalCount = totalCount,
             Page = page,
             PageSize = pageSize,

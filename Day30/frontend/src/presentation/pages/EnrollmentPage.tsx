@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import {
   useGetEnrollmentsByClassQuery,
   useEnrollStudentMutation,
+  useRemoveEnrollmentMutation,
 } from "../../infrastructure/api/enrollmentApi";
 import { useGetStudentsQuery } from "../../infrastructure/api/userApi";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -32,6 +33,8 @@ const EnrollmentPage: React.FC = () => {
     useGetStudentsQuery();
   const [enrollStudent, { isLoading: isEnrolling }] =
     useEnrollStudentMutation();
+  const [removeEnrollment, { isLoading: isRemoving }] =
+    useRemoveEnrollmentMutation();
   const [error, setError] = useState<string | null>(null);
 
   // ← Changed: Removed Controller, added setValue and watch
@@ -40,6 +43,15 @@ const EnrollmentPage: React.FC = () => {
   });
 
   const studentUserId = watch("studentUserId");
+
+  // Hide students already enrolled in THIS class from the dropdown.
+  // (Backend still blocks the "enrolled elsewhere" case with a clear error.)
+  const enrolledHereIds = new Set(
+    enrollments?.map((e) => e.studentUserId) ?? [],
+  );
+  const availableStudents = (students ?? []).filter(
+    (s) => !enrolledHereIds.has(s.id),
+  );
 
   const onSubmit = async () => {
     // ← Changed: no longer needs data parameter
@@ -52,6 +64,17 @@ const EnrollmentPage: React.FC = () => {
       reset();
     } catch (err: any) {
       setError(err?.data ?? "Could not enroll student.");
+    }
+  };
+  const onRemove = async (studentUserId: string) => {
+    setError(null);
+    try {
+      await removeEnrollment({
+        studentUserId,
+        classRoomId: classRoomId!,
+      }).unwrap();
+    } catch (err: any) {
+      setError(err?.data ?? "Could not remove student.");
     }
   };
 
@@ -67,12 +90,10 @@ const EnrollmentPage: React.FC = () => {
             className="flex gap-3 items-end"
           >
             <IdSelect
-              options={
-                students?.map((s) => ({
-                  id: s.id,
-                  label: s.email,
-                })) || []
-              }
+              options={availableStudents.map((s) => ({
+                id: s.id,
+                label: `${s.email} - ${s.fullName}`,
+              }))}
               value={studentUserId}
               onValueChange={(v) => setValue("studentUserId", v ?? "")}
               placeholder={
@@ -97,16 +118,30 @@ const EnrollmentPage: React.FC = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Email</TableHead>
+                <TableHead>Roll No</TableHead>
+                <TableHead>Name</TableHead>
+                <TableHead>Class</TableHead>
                 <TableHead>Enrolled</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {enrollments?.map((e) => (
                 <TableRow key={e.id}>
-                  <TableCell>{e.studentEmail}</TableCell>
+                  <TableCell>{e.rollNo}</TableCell>
+                  <TableCell>{e.studentFullName}</TableCell>
+                  <TableCell>{e.classRoomName}</TableCell>
                   <TableCell>
                     {new Date(e.enrolledAt).toLocaleDateString()}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      disabled={isRemoving}
+                      onClick={() => onRemove(e.studentUserId)}
+                    >
+                      Remove
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}
@@ -117,5 +152,4 @@ const EnrollmentPage: React.FC = () => {
     </div>
   );
 };
-
 export default EnrollmentPage;

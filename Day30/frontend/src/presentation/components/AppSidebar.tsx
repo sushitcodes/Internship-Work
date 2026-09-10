@@ -239,11 +239,6 @@ export function AppSidebar() {
       <SidebarFooter>
         {email ? (
           <div className="flex flex-col gap-2 px-2 py-1">
-            {!isIconMode && (
-              <span className="text-sm text-muted-foreground truncate">
-                {email}
-              </span>
-            )}
             <Button
               variant="outline"
               size={isIconMode ? "icon" : "sm"}

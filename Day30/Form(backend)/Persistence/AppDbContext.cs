@@ -103,6 +103,24 @@ public class AppDbContext : DbContext
                   .WithMany()
                   .HasForeignKey(s => s.ClassRoomId)
                   .OnDelete(DeleteBehavior.Restrict);
+
+            
+        });
+        modelBuilder.Entity<Enrollment>(entity =>
+        {
+            entity.HasOne(e => e.StudentUser)
+                  .WithMany()
+                  .HasForeignKey(e => e.StudentUserId)
+                  .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(e => e.ClassRoom)
+                  .WithMany(c => c.Enrollments)
+                  .HasForeignKey(e => e.ClassRoomId)
+                  .OnDelete(DeleteBehavior.Cascade);
+
+            // ONE class per student, enforced by the database.
+            entity.HasIndex(e => e.StudentUserId).IsUnique();
         });
     }
+
 }

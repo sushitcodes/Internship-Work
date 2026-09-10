@@ -17,10 +17,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Label } from "@/components/ui/label";
-import { FormInput } from "../components/FormInput";
 import { useGetClassRoomsQuery } from "@/infrastructure/api/classRoomApi";
 import { toast } from "sonner";
 import { IdSelect } from "../components/IdSelect";
+import { useGetMyClassQuery } from "../../infrastructure/api/enrollmentApi";
 
 interface FormValues {
   fullName: string;
@@ -60,7 +60,12 @@ const FormPage: React.FC = () => {
 
   const { data: classRooms } = useGetClassRoomsQuery();
   const { data: ownProfile } = useGetOwnProfileQuery();
-
+  const { data: myClass, isLoading: isLoadingMyClass } = useGetMyClassQuery(
+    undefined,
+    {
+      skip: isStaffOrAdmin || isEditMode, // students only, create mode only
+    },
+  );
   const { data: existingSubmission, isLoading: isLoadingExisting } =
     useGetSubmissionByIdQuery(id!, { skip: !isEditMode });
 
@@ -103,10 +108,15 @@ const FormPage: React.FC = () => {
   // Create mode: auto-fill Roll No from the logged-in student's own profile.
   // Staff/Admin can type any number; students always submit their own.
   useEffect(() => {
-    if (!isEditMode && ownProfile?.memberNumber) {
-      setValue("rollNo", ownProfile.memberNumber);
+    if (isEditMode) return;
+    if (ownProfile) {
+      if (ownProfile.fullName) setValue("fullName", ownProfile.fullName);
+      if (ownProfile.memberNumber) setValue("rollNo", ownProfile.memberNumber);
     }
-  }, [isEditMode, ownProfile, setValue]);
+    if (myClass) {
+      setValue("classRoomId", myClass.classRoomId, { shouldValidate: true });
+    }
+  }, [isEditMode, ownProfile, myClass, setValue]);
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const formData = new FormData();
@@ -171,6 +181,9 @@ const FormPage: React.FC = () => {
   // If the student has no profile yet, warn them before they try to submit
   // and hit the backend validation.
   const studentHasNoProfile = !isStaffOrAdmin && !ownProfile?.memberNumber;
+  const studentHasNoClass =
+    !isStaffOrAdmin && !isEditMode && !isLoadingMyClass && !myClass;
+  const cannotSubmit = isSaving || studentHasNoProfile || studentHasNoClass;
 
   return (
     <Card className="max-w-2xl mx-auto mt-10">
@@ -186,40 +199,89 @@ const FormPage: React.FC = () => {
             administrator to set up your profile before submitting.
           </div>
         )}
+        {studentHasNoClass && (
+          <div className="mb-4 rounded-md border border-yellow-300 bg-yellow-50 p-3 text-sm text-yellow-800">
+            You are not enrolled in any class. Contact an admin before
+            submitting.
+          </div>
+        )}
 
         <form
           onSubmit={handleSubmit(onSubmit)}
           noValidate
           className="space-y-6"
         >
-          {/* Full Name */}
-          <FormInput
-            id="fullName"
-            label="Full Name"
-            registration={register("fullName", nameValidation)}
-            error={errors.fullName}
-          />
+          {/* Full Name — read-only for students, editable for Staff/Admin */}
+          <div className="space-y-2">
+            <Label htmlFor="fullName">Full Name</Label>
+            <Input
+              id="fullName"
+              readOnly={!isStaffOrAdmin}
+              className={!isStaffOrAdmin ? "bg-muted cursor-not-allowed" : ""}
+              {...register("fullName", nameValidation)}
+            />
+            {errors.fullName && (
+              <p className="text-sm text-red-500">{errors.fullName.message}</p>
+            )}
+            {!isStaffOrAdmin && (
+              <p className="text-xs text-muted-foreground">
+                From your profile. Contact an admin to change it.
+              </p>
+            )}
+          </div>
 
           {/* Class Selection */}
+          {/* Class — dropdown for Staff/Admin, read-only display for students */}
           <div className="space-y-2">
             <Label>Class</Label>
-            <IdSelect
-              options={
-                classRooms?.map((c) => ({
-                  id: c.id,
-                  label: c.name,
-                })) || []
-              }
-              value={classRoomIdValue || existingSubmission?.classRoomId || ""}
-              onValueChange={(v) =>
-                setValue("classRoomId", v ?? "", { shouldValidate: true })
-              }
-              placeholder="Select a class"
-              className={errors.classRoomId ? "border-red-500" : ""}
-            />
+
+            {isStaffOrAdmin ? (
+              <IdSelect
+                options={
+                  classRooms?.map((c) => ({
+                    id: c.id,
+                    label: c.name,
+                  })) || []
+                }
+                value={
+                  classRoomIdValue || existingSubmission?.classRoomId || ""
+                }
+                onValueChange={(v) =>
+                  setValue("classRoomId", v ?? "", { shouldValidate: true })
+                }
+                placeholder="Select a class"
+                className={errors.classRoomId ? "border-red-500" : ""}
+              />
+            ) : (
+              <>
+                <Input
+                  value={
+                    myClass?.classRoomName ??
+                    existingSubmission?.classRoomName ??
+                    "Not enrolled in any class"
+                  }
+                  readOnly
+                  className="bg-muted cursor-not-allowed"
+                />
+
+                {/* Hidden registered field so react-hook-form still submits classRoomId */}
+                <input
+                  type="hidden"
+                  {...register("classRoomId", {
+                    required: "You are not enrolled in any class",
+                  })}
+                />
+              </>
+            )}
+
             {errors.classRoomId && (
               <p className="text-sm text-red-500">
                 {errors.classRoomId.message}
+              </p>
+            )}
+            {!isStaffOrAdmin && myClass && (
+              <p className="text-xs text-muted-foreground">
+                Based on your enrollment. Contact an admin to change classes.
               </p>
             )}
           </div>
@@ -289,11 +351,7 @@ const FormPage: React.FC = () => {
           </div>
 
           {/* Submit Button */}
-          <Button
-            type="submit"
-            disabled={isSaving || studentHasNoProfile}
-            className="w-full"
-          >
+          <Button type="submit" disabled={cannotSubmit} className="w-full">
             {isSaving ? "Saving..." : isEditMode ? "Save Changes" : "Submit"}
           </Button>
         </form>

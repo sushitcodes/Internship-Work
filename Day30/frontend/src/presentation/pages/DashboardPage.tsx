@@ -19,6 +19,7 @@ import {
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useGetMyClassQuery } from "../../infrastructure/api/enrollmentApi";
 
 const StatCard: React.FC<{ label: string; value: string | number }> = ({
   label,
@@ -42,6 +43,7 @@ const STATUS_COLORS: Record<string, string> = {
 const DashboardPage: React.FC = () => {
   const roles = useAppSelector((state) => state.auth.roles);
   const isStaffOrAdmin = roles.includes("Staff") || roles.includes("Admin");
+  // const { data: myClass } = useGetMyClassQuery();
 
   const { data: summary, isLoading: isLoadingSummary } =
     useGetDashboardSummaryQuery(undefined, {
@@ -53,6 +55,9 @@ const DashboardPage: React.FC = () => {
       skip: isStaffOrAdmin,
     },
   );
+  const { data: myClass } = useGetMyClassQuery(undefined, {
+    skip: isStaffOrAdmin,
+  });
 
   if (isStaffOrAdmin) {
     const totalMarkedToday =
@@ -174,7 +179,7 @@ const DashboardPage: React.FC = () => {
                 >
                   <span className="font-medium">{s.fullName}</span>
                   <span className="text-muted-foreground">
-                    {s.classRoomName}
+                    {s.classRoomName || "—"}
                   </span>
                 </Link>
               ))
@@ -210,7 +215,27 @@ const DashboardPage: React.FC = () => {
           </div>
         )
       )}
+      <Card>
+        <CardHeader>
+          <CardTitle>My Class</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {myClass ? (
+            <div className="space-y-1">
+              <p className="font-medium">{myClass.classRoomName || "—"}</p>
 
+              <p className="text-sm text-muted-foreground">
+                Roll No: {myClass.rollNo} · Enrolled{" "}
+                {new Date(myClass.enrolledAt).toLocaleDateString()}
+              </p>
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">
+              Not enrolled in any class yet.
+            </p>
+          )}
+        </CardContent>
+      </Card>
       <Card>
         <CardHeader>
           <CardTitle>My Recent Attendance</CardTitle>

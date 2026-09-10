@@ -13,7 +13,8 @@ export const submissionApi = createApi({
 
   baseQuery: baseQueryWithAuth,
 
-  tagTypes: ["Submission"],
+  tagTypes: ["Submission", "Dashboard"],
+  refetchOnMountOrArgChange: 30,
 
   endpoints: (builder) => ({
     // 3 generics, in order:
@@ -63,7 +64,7 @@ export const submissionApi = createApi({
         method: "POST",
         body: formData,
       }),
-      invalidatesTags: ["Submission"],
+      invalidatesTags: ["Submission", "Dashboard"],
     }),
 
     // New: for the Edit feature. Takes both the id (which submission to
@@ -80,7 +81,7 @@ export const submissionApi = createApi({
       }),
       // Same handshake as submitForm — after a successful edit, any
       // component showing this submission (list, detail page) auto-refreshes.
-      invalidatesTags: ["Submission"],
+      invalidatesTags: ["Submission", "Dashboard"],
     }),
 
     deleteSubmission: builder.mutation<null, string>({
@@ -88,7 +89,7 @@ export const submissionApi = createApi({
         url: `/submissions/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Submission"],
+      invalidatesTags: ["Submission", "Dashboard"],
       transformResponse: (response: any) => {
         return response || null;
       },

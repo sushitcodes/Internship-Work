@@ -26,6 +26,7 @@ export const dashboardApi = createApi({
   reducerPath: "dashboardApi",
   baseQuery: baseQueryWithAuth,
   tagTypes: ["Dashboard"],
+  refetchOnMountOrArgChange: 15,
   endpoints: (builder) => ({
     getDashboardSummary: builder.query<DashboardSummary, void>({
       query: () => "/dashboard/summary",

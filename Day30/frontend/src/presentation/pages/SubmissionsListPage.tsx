@@ -45,6 +45,7 @@ import {
   canEdit,
   canDelete,
 } from "../config/authUiConfig";
+import { resolveFileUrl } from "@/lib/resolveFileUrl";
 
 const SubmissionsListPage: React.FC = () => {
   const [searchInput, setSearchInput] = useState("");
@@ -179,9 +180,10 @@ const SubmissionsListPage: React.FC = () => {
                       <div className="flex items-center gap-3">
                         <Avatar className="h-8 w-8">
                           <AvatarImage
-                            src="https://github.com/shadcn.png"
+                            src={
+                              resolveFileUrl(s.submitterAvatarUrl) ?? undefined
+                            }
                             alt={s.fullName}
-                            className="grayscale"
                           />
                           <AvatarFallback className="bg-blue-100 text-blue-800 text-xs">
                             {getInitials(s.fullName)}

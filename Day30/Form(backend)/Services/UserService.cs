@@ -9,16 +9,29 @@ public class UserService : IUserService
     private readonly IUserRepository _userRepository;
     private readonly IPasswordHasher _passwordHasher;
 
-    public UserService(IUserRepository userRepository, IPasswordHasher passwordHasher)
+    private readonly IUserProfileRepository _profileRepository;
+
+    public UserService(IUserRepository userRepository, IPasswordHasher passwordHasher, IUserProfileRepository profileRepository)
     {
         _userRepository = userRepository;
         _passwordHasher = passwordHasher;
+        _profileRepository = profileRepository;
     }
 
-    public async Task<List<UserSummaryDtos>> GetStudentsAsync() =>
-        (await _userRepository.GetByRoleAsync(UserRole.Student))
-            .Select(u => new UserSummaryDtos { Id = u.Id, Email = u.Email })
-            .ToList();
+    public async Task<List<UserSummaryDtos>> GetStudentsAsync()
+    {
+        var students = await _userRepository.GetByRoleAsync(UserRole.Student);
+        var profiles = await _profileRepository.GetByUserIdsAsync(students.Select(s => s.Id).ToList());
+        var nameByUserId = profiles.ToDictionary(p => p.UserId, profiles => profiles.FullName);
+
+        return students.Select(u => new UserSummaryDtos
+        {
+            Id = u.Id,
+            Email = u.Email,
+            FullName = nameByUserId.TryGetValue(u.Id, out var name) ? name : u.Email,
+        }).ToList();
+    }
+
 
     public async Task<CreatedUserDto> CreateUserAsync(CreateUserRequest request)
     {

@@ -11,6 +11,7 @@
             public int RollNo { get; set; }
             public string FileUrl { get; set; } = string.Empty;
             public DateTime CreatedAt { get; set; }
+            public string? SubmitterAvatarUrl { get; set; }
         }
 
         // Add CreateSubmissionRequest here

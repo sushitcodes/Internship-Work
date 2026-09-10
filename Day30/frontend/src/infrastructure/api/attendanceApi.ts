@@ -40,11 +40,11 @@ export interface AttendanceSheet {
 export const attendanceApi = createApi({
   reducerPath: "attendanceApi",
   baseQuery: baseQueryWithAuth,
-  tagTypes: ["Attendance"],
+  tagTypes: ["Attendance", "Dashboard"],
   endpoints: (builder) => ({
     markAttendance: builder.mutation<void, MarkAttendanceRequest>({
       query: (body) => ({ url: "/attendance/mark", method: "POST", body }),
-      invalidatesTags: ["Attendance"],
+      invalidatesTags: ["Attendance", "Dashboard"],
     }),
     getRoster: builder.query<
       AttendanceRosterEntry[],

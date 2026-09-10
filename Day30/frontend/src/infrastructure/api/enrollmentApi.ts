@@ -5,8 +5,16 @@ export interface EnrollmentDto {
   id: string;
   studentUserId: string;
   studentEmail: string;
+  studentFullName: string;
+  rollNo: number;
   classRoomId: string;
+  classRoomName: string;
   enrolledAt: string;
+}
+
+export interface CreateEnrollmentRequest {
+  studentUserId: string;
+  classRoomId: string;
 }
 
 export interface CreateEnrollmentRequest {
@@ -17,18 +25,43 @@ export interface CreateEnrollmentRequest {
 export const enrollmentApi = createApi({
   reducerPath: "enrollmentApi",
   baseQuery: baseQueryWithAuth,
-  tagTypes: ["Enrollment"],
+  tagTypes: ["Enrollment", "ClassRoom"],
   endpoints: (builder) => ({
     getEnrollmentsByClass: builder.query<EnrollmentDto[], string>({
       query: (classRoomId) => `/enrollments/class/${classRoomId}`,
-      providesTags: ["Enrollment"],
+      providesTags: (_r, _e, classRoomId) => [
+        { type: "Enrollment", id: classRoomId },
+      ],
     }),
     enrollStudent: builder.mutation<EnrollmentDto, CreateEnrollmentRequest>({
       query: (body) => ({ url: "/enrollments", method: "POST", body }),
-      invalidatesTags: ["Enrollment"],
+      invalidatesTags: (_r, _e, arg) => [
+        { type: "Enrollment", id: arg.classRoomId },
+        "ClassRoom",
+      ],
+    }),
+    removeEnrollment: builder.mutation<
+      void,
+      { studentUserId: string; classRoomId: string }
+    >({
+      query: ({ studentUserId, classRoomId }) => ({
+        url: `/enrollments/${studentUserId}/class/${classRoomId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: (_r, _e, arg) => [
+        { type: "Enrollment", id: arg.classRoomId },
+      ],
+    }),
+    getMyClass: builder.query<EnrollmentDto, void>({
+      query: () => "/enrollments/me/class",
+      providesTags: ["Enrollment"],
     }),
   }),
 });
 
-export const { useGetEnrollmentsByClassQuery, useEnrollStudentMutation } =
-  enrollmentApi;
+export const {
+  useGetEnrollmentsByClassQuery,
+  useEnrollStudentMutation,
+  useRemoveEnrollmentMutation,
+  useGetMyClassQuery,
+} = enrollmentApi;

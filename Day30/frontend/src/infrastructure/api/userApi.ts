@@ -6,6 +6,7 @@ import { PagedResult } from "../../domain/entities/Submission";
 export interface UserSummaryDto {
   id: string;
   email: string;
+  fullName: string;
 }
 export interface CreateUserRequest {
   email: string;
@@ -16,13 +17,14 @@ export interface CreateUserRequest {
 export interface CreatedUser {
   id: string;
   email: string;
+  fullName: string;
   roles: string[];
 }
 
 export const userApi = createApi({
   reducerPath: "userApi",
   baseQuery: baseQueryWithAuth,
-  tagTypes: ["UserProfile"], // new — getStudents doesn't need tags, profile endpoints do
+  tagTypes: ["UserProfile", "Submission"], // new — getStudents doesn't need tags, profile endpoints do
   endpoints: (builder) => ({
     getStudents: builder.query<UserSummaryDto[], void>({
       query: () => "/users/students",
@@ -33,7 +35,7 @@ export const userApi = createApi({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["UserProfile"], // so UsersListPage refetches and shows the new person
+      invalidatesTags: ["UserProfile", "Submission"], // so UsersListPage refetches and shows the new person
     }),
     getOwnProfile: builder.query<UserProfile, void>({
       query: () => "/users/me/profile",
@@ -46,7 +48,7 @@ export const userApi = createApi({
         method: "PUT",
         body: formData,
       }),
-      invalidatesTags: ["UserProfile"],
+      invalidatesTags: ["UserProfile", "Submission"], // so UsersListPage refetches and shows the new person
     }),
     updateUserName: builder.mutation<
       UserProfile,
@@ -57,7 +59,7 @@ export const userApi = createApi({
         method: "PATCH",
         body: { fullName },
       }),
-      invalidatesTags: ["UserProfile"],
+      invalidatesTags: ["UserProfile", "Submission"],
     }),
 
     setUserActiveStatus: builder.mutation<
@@ -69,7 +71,7 @@ export const userApi = createApi({
         method: "PATCH",
         body: { isActive },
       }),
-      invalidatesTags: ["UserProfile"],
+      invalidatesTags: ["UserProfile", "Submission"],
     }),
 
     searchUsers: builder.infiniteQuery<

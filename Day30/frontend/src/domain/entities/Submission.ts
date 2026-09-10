@@ -15,6 +15,7 @@ export interface Submission {
   rollNo: number;
   fileUrl: string;
   createdAt: string;
+  submitterAvatarUrl: string;
 }
 
 export interface PagedResult<T> {
