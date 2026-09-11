@@ -8,10 +8,27 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.AspNetCore.RateLimiting;
+using Serilog;
 
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseSerilog((context, services, config) =>
+{
+config
+    .ReadFrom.Configuration(context.Configuration)
+    .ReadFrom.Services(services)
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.File(
+        "logs/app-.log",
+        rollingInterval: RollingInterval.Day,
+        retainedFileCountLimit: 7,
+        fileSizeLimitBytes: 50_000_000,     // roll if a single file exceeds 50MB
+         rollOnFileSizeLimit: true,          // if exceeded, start a new file mid-day
+        shared: false);                    // single process writer
 
+});
 // --- Database (SQL Server via EF Core) ---
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -19,6 +36,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // --- Dependency Injection wiring: this block IS Clean Architecture at runtime.
 // Controllers ask for ISubmissionService; .NET hands them a SubmissionService.
 // Swap the right-hand side and nothing else in the app needs to change.
+
 builder.Services.AddScoped<ISubmissionRepository, SubmissionRepository>();
 builder.Services.AddScoped<ISubmissionService, SubmissionService>();
 builder.Services.AddScoped<IFileStorageService, LocalFileStorageService>();
@@ -93,6 +111,17 @@ options.AddPolicy("AllowFrontend", policy =>
           .AllowAnyMethod()
     .AllowCredentials());
 });
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.AddFixedWindowLimiter("AuthPolicy", opt =>
+    {
+        opt.Window = TimeSpan.FromMinutes(1);
+        opt.PermitLimit = 5;
+        opt.QueueLimit = 0;
+    });
+});
+
 
 var app = builder.Build();
 
@@ -101,8 +130,27 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseExceptionHandler(errApp =>
+{
+    errApp.Run(async context =>
+    {
+        var feature = context.Features.Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerFeature>();
+        var traceId = System.Diagnostics.Activity.Current?.Id ?? context.TraceIdentifier;
+        Log.Error(feature?.Error,
+            "Unhandled exception on {Path} (TraceId={TraceId})",
+            context.Request.Path,context.Request.Method, traceId);
+        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+        context.Response.ContentType = "application/json";
+        await context.Response.WriteAsJsonAsync(new
+        {
+            message = "An unexpected error occurred.Pleasse try again.",
+            traceId
+        });
+    });
+});
 app.UseStaticFiles();
 app.UseCors("AllowFrontend");
+app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

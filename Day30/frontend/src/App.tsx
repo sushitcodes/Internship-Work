@@ -41,12 +41,12 @@ function App() {
         {/* Protected routes with sidebar layout */}
         <Route element={<AppLayout />}>
           {/* Dashboard / Home */}
-          <Route path="/" element={<DashboardPage />} />
-          <Route path="/submissions" element={<SubmissionsListPage />} />
-          <Route path="/submission/:id" element={<SubmissionPage />} />
-
-          {/* Protected routes - require authentication */}
           <Route element={<ProtectedRoute />}>
+            <Route path="/" element={<DashboardPage />} />
+            <Route path="/submissions" element={<SubmissionsListPage />} />
+            <Route path="/submission/:id" element={<SubmissionPage />} />
+
+            {/* Protected routes - require authentication */}
             <Route path="/formpage" element={<FormPage />} />
             <Route path="/profile" element={<MyProfilePage />} />
           </Route>

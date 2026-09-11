@@ -2,6 +2,7 @@
 using Form.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace Form.Controllers;
 
@@ -12,6 +13,7 @@ public class AuthController(IAuthService _authService,IConfiguration _config) : 
     
 
     [HttpPost("login")]
+    [EnableRateLimiting("AuthPolicy")]
     public async Task<ActionResult<AuthResponseDto>> Login(LoginRequest request)
     {
         try
@@ -31,10 +33,6 @@ public class AuthController(IAuthService _authService,IConfiguration _config) : 
         }
 
     }
-
-
-    [HttpPost("register")]
-
     // logout
     // now genuinely needs the server, since JS can't clear an HttpOnly cookie.
     [HttpPost("logout")]
@@ -117,7 +115,10 @@ public class AuthController(IAuthService _authService,IConfiguration _config) : 
     }
 
     [AllowAnonymous]
+
     [HttpPost("forgot-password")]
+    [EnableRateLimiting("AuthPolicy")]
+
     public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest request)
     {
         var frontendBaseUrl = _config["Frontend:BaseUrl"]!;
@@ -135,6 +136,8 @@ public class AuthController(IAuthService _authService,IConfiguration _config) : 
 
     [AllowAnonymous]
     [HttpPost("reset-password")]
+    [EnableRateLimiting("AuthPolicy")]
+
     public async Task<IActionResult> ResetPassword(ResetPasswordRequest request)
     {
         var success = await _authService.ResetPasswordAsync(request.Email, request.Code, request.NewPassword);

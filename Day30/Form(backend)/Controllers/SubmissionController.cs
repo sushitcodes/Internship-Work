@@ -64,14 +64,12 @@ public class SubmissionsController(ISubmissionService _submissionService) : Cont
         return Ok(await _submissionService.GetPagedAsync(page, pageSize, search));
     }
 
-    [AllowAnonymous]
     [HttpGet("count")]
     public async Task<ActionResult<int>> GetCount()
     {
         return Ok(await _submissionService.GetCountAsync());
     }
 
-    [AllowAnonymous]
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<SubmissionDto>> GetById(Guid id)
     {
