@@ -26,11 +26,30 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
 
         // Prevent dual-cascade-path conflict for AttendanceRecord
-        modelBuilder.Entity<AttendanceRecord>()
-            .HasOne(a => a.MarkedByUser)
-            .WithMany()
-            .HasForeignKey(a => a.MarkedByUserId)
-            .OnDelete(DeleteBehavior.NoAction);
+        modelBuilder.Entity<Submission>(entity =>
+        {
+            // Relationship — WHERE it points and what happens on delete
+            entity.HasOne(s => s.ClassRoom)
+                  .WithMany()
+                  .HasForeignKey(s => s.ClassRoomId)
+                  .OnDelete(DeleteBehavior.Restrict);
+
+            // Index — HOW to look it up fast
+            entity.HasIndex(s => s.ClassRoomId);
+        });
+
+        modelBuilder.Entity<AttendanceRecord>(entity =>
+        {
+            // Relationship
+            entity.HasOne(a => a.MarkedByUser)
+                  .WithMany()
+                  .HasForeignKey(a => a.MarkedByUserId)
+                  .OnDelete(DeleteBehavior.NoAction);
+
+            // Index
+            entity.HasIndex(a => new { a.EnrollmentId, a.Date });
+        });
+
 
 
         // UserProfile configuration
@@ -88,18 +107,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                           v => v.ToList()
                       )
                   );
-        });
-
-
-        // Submission configuration
-        modelBuilder.Entity<Submission>(entity =>
-        {
-            entity.HasOne(s => s.ClassRoom)
-                  .WithMany()
-                  .HasForeignKey(s => s.ClassRoomId)
-                  .OnDelete(DeleteBehavior.Restrict);
-
-            
         });
         modelBuilder.Entity<Enrollment>(entity =>
         {
