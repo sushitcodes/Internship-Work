@@ -5,13 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Form.Repositories;
 
-public class SubmissionRepository : ISubmissionRepository
+public class SubmissionRepository(AppDbContext _context) : ISubmissionRepository
 {
-    private readonly AppDbContext _context;
-
-    public SubmissionRepository(AppDbContext context) => _context = context;
-
-    public async Task<Submission> AddAsync(Submission submission)
+   public async Task<Submission> AddAsync(Submission submission)
     {
         _context.Submissions.Add(submission);
         await _context.SaveChangesAsync();

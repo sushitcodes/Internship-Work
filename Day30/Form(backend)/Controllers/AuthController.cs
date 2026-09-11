@@ -7,15 +7,9 @@ namespace Form.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController : ControllerBase
+public class AuthController(IAuthService _authService,IConfiguration _config) : ControllerBase
 {
-    private readonly IAuthService _authService;
-    private readonly IConfiguration _config;
-    public AuthController(IAuthService authService, IConfiguration config)
-    {
-        _authService = authService;
-        _config = config;
-    }
+    
 
     [HttpPost("login")]
     public async Task<ActionResult<AuthResponseDto>> Login(LoginRequest request)

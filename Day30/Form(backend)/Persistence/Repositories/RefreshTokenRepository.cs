@@ -5,11 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Form.Repositories;
 
-public class RefreshTokenRepository : IRefreshTokenRepository
+public class RefreshTokenRepository(AppDbContext _context) : IRefreshTokenRepository
 {
-    private readonly AppDbContext _context;
-    public RefreshTokenRepository(AppDbContext context) => _context = context;
-
     public async Task<RefreshToken> AddAsync(RefreshToken token)
     {
         _context.RefreshTokens.Add(token);

@@ -5,12 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Form.Repositories;
 
-public class UserProfileRepository : IUserProfileRepository
+public class UserProfileRepository(AppDbContext _context) : IUserProfileRepository
 {
-    private readonly AppDbContext _context;
-
-    public UserProfileRepository(AppDbContext context) => _context = context;
-
     public async Task<UserProfile?> GetByUserIdAsync(Guid userId)
     {
         return await _context.UserProfiles

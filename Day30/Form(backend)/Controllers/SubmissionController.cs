@@ -9,14 +9,9 @@ namespace Form.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class SubmissionsController : ControllerBase
+public class SubmissionsController(ISubmissionService _submissionService) : ControllerBase
 {
-    private readonly ISubmissionService _submissionService;
-
-    public SubmissionsController(ISubmissionService submissionService)
-    {
-        _submissionService = submissionService;
-    }
+   
 
     [HttpPost]
     [RequestSizeLimit(10 * 1024 * 1024)]

@@ -7,10 +7,9 @@ namespace Form.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class EnrollmentsController : ControllerBase
+public class EnrollmentsController(IEnrollmentService _enrollmentService) : ControllerBase
 {
-    private readonly IEnrollmentService _enrollmentService;
-    public EnrollmentsController(IEnrollmentService enrollmentService) => _enrollmentService = enrollmentService;
+   
 
     [HttpPost]
     [Authorize(Policy = "AdminOnly")]

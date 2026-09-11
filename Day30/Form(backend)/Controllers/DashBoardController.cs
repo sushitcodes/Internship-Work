@@ -7,10 +7,9 @@ namespace Form.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class DashboardController : ControllerBase
+public class DashboardController(IDashboardService _dashboardService) : ControllerBase
 {
-    private readonly IDashboardService _dashboardService;
-    public DashboardController(IDashboardService dashboardService) => _dashboardService = dashboardService;
+    
 
     [HttpGet("summary")]
     [Authorize(Policy = "StaffOrAdmin")]

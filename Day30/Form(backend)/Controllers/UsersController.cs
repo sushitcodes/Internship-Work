@@ -8,17 +8,8 @@ namespace Form.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize] // baseline: must be logged in — specific actions below tighten this further
-public class UsersController : ControllerBase
+public class UsersController(IUserService _userService, IUserProfileService _profileService) : ControllerBase
 {
-    private readonly IUserService _userService;
-    private readonly IUserProfileService _profileService;
-
-    public UsersController(IUserService userService, IUserProfileService profileService)
-    {
-        _userService = userService;
-        _profileService = profileService;
-    }
-
     private Guid CurrentUserId =>
         Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
 

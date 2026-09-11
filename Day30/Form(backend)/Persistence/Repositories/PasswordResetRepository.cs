@@ -5,11 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Form.Repositories;
 
-public class PasswordResetRepository : IPasswordResetRepository
+public class PasswordResetRepository(AppDbContext _context) : IPasswordResetRepository
 {
-    private readonly AppDbContext _context;
-    public PasswordResetRepository(AppDbContext context) => _context = context;
-
     public async Task<PasswordResetToken> AddAsync(PasswordResetToken token)
     {
         _context.PasswordResetTokens.Add(token);

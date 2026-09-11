@@ -4,11 +4,8 @@ using Form.Persistence;
 using Microsoft.EntityFrameworkCore;
 namespace Form.Repositories;
 
-public class EnrollmentRepository : IEnrollmentRepository
+public class EnrollmentRepository(AppDbContext _context) : IEnrollmentRepository
 {
-    private readonly AppDbContext _context;
-    public EnrollmentRepository(AppDbContext context) => _context = context;
-
     public async Task<Enrollment> AddAsync(Enrollment enrollment)
     {
         _context.Enrollments.Add(enrollment);

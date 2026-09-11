@@ -5,11 +5,8 @@ using Form.Persistence;
 using Microsoft.EntityFrameworkCore;
 namespace Form.Repositories;
 
-public class AttendanceRepository : IAttendanceRepository
+public class AttendanceRepository(AppDbContext _context) : IAttendanceRepository
 {
-    private readonly AppDbContext _context;
-    public AttendanceRepository(AppDbContext context) => _context = context;
-
     public async Task<List<AttendanceRosterEntryDto>> GetRosterAsync(Guid classRoomId, DateOnly date)
     {
         // Pre-filter attendance to just this date FIRST — this becomes the

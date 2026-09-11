@@ -7,10 +7,9 @@ namespace Form.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class AttendanceController : ControllerBase
+public class AttendanceController(IAttendanceService _attendanceService) : ControllerBase
 {
-    private readonly IAttendanceService _attendanceService;
-    public AttendanceController(IAttendanceService attendanceService) => _attendanceService = attendanceService;
+
 
     [HttpPost("mark")]
     [Authorize(Policy = "StaffOrAdmin")]
