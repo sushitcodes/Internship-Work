@@ -15,6 +15,7 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { Link } from "react-router-dom";
+import { getModuleUrls } from "@/routes/getModuleUrls";
 
 interface ClassRoomFormValues {
   name: string;
@@ -84,7 +85,7 @@ const ClassRoomsPage: React.FC = () => {
                   <TableCell>{c.academicYear}</TableCell>
                   <TableCell>{c.studentCount}</TableCell>
                   <TableCell>
-                    <Link to={`/classes/${c.id}/enroll`}>
+                    <Link to={getModuleUrls("classEnroll", { id: c.id })}>
                       <Button variant="outline" size="sm">
                         Manage Enrollment
                       </Button>

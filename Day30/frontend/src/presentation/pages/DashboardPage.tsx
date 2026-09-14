@@ -20,6 +20,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGetMyClassQuery } from "../../infrastructure/api/enrollmentApi";
+import { getModuleUrls } from "@/routes/getModuleUrls";
 
 const StatCard: React.FC<{ label: string; value: string | number }> = ({
   label,
@@ -174,7 +175,7 @@ const DashboardPage: React.FC = () => {
               summary.recentSubmissions.map((s) => (
                 <Link
                   key={s.id}
-                  to={`/submission/${s.id}`}
+                  to={getModuleUrls("submissionDetail", { id: s.id })}
                   className="flex justify-between text-sm py-2 border-b last:border-0 hover:bg-muted/50 px-2 -mx-2 rounded"
                 >
                   <span className="font-medium">{s.fullName}</span>

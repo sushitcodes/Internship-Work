@@ -5,6 +5,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getInitials } from "../../application/utils/getInitials";
 import { resolveFileUrl } from "../../lib/resolveFileUrl";
+import { Paths } from "../../routes/paths";
+
 import { ArrowLeft } from "lucide-react";
 
 const UserDetailPage: React.FC = () => {
@@ -84,7 +86,7 @@ const UserDetailPage: React.FC = () => {
 
         <div className="pt-4 border-t">
           <Link
-            to="/users"
+            to={Paths.users}
             className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />

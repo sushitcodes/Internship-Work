@@ -5,13 +5,16 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import store from "./infrastructure/store";
 import "./index.css";
+import { ErrorBoundary } from "./presentation/components/ErrorBoundary";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
-        <App />
+        <ErrorBoundary>
+          <App />
+        </ErrorBoundary>
       </BrowserRouter>
     </Provider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

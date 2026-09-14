@@ -13,6 +13,7 @@ public class AuthService : IAuthService
     private readonly IRefreshTokenService _refreshTokenService;
     private readonly IPasswordResetService _passwordResetService;
     private readonly IEmailService _emailService;
+    private readonly ILogger<AuthService> _logger;
 
     public AuthService(
         IUserRepository userRepository,
@@ -20,15 +21,17 @@ public class AuthService : IAuthService
         ITokenService tokenService,
         IRefreshTokenService refreshTokenService,
          IPasswordResetService passwordResetService,   
-    IEmailService emailService)
+    IEmailService emailService,
+      ILogger<AuthService> logger)
 
     {
         _userRepository = userRepository;
         _passwordHasher = passwordHasher;
         _tokenService = tokenService;
         _refreshTokenService = refreshTokenService;
-        _passwordResetService = passwordResetService; 
+        _passwordResetService = passwordResetService;
         _emailService = emailService;
+            _logger = logger;
     }
     public async Task ForgotPasswordAsync(string email)
     {
@@ -36,7 +39,18 @@ public class AuthService : IAuthService
         if (user is null) return;
 
         var (code, expiryMinutes) = await _passwordResetService.GenerateAsync(user.Id);
-        await _emailService.SendPasswordResetCodeAsync(user.Email, code, expiryMinutes);
+        try
+        {
+            await _emailService.SendPasswordResetCodeAsync(user.Email, code, expiryMinutes);
+        }
+        catch (Exception ex)
+        {
+            // Never let an SMTP failure change the response the controller sends —
+            // that's exactly the enumeration side-channel this endpoint exists to avoid.
+            // The code is still generated and stored; the user just won't get the email
+            // this time. Logging it here is how you'll actually notice Gmail is rejecting you.
+            _logger.LogError(ex, "Failed to send password reset email to {Email}", user.Email);
+        }
     }
 
     //public async Task ForgotPasswordAsync(string email, string frontendBaseUrl)

@@ -9,6 +9,7 @@ import { FormInput } from "../components/FormInput";
 import { emailValidation } from "../../application/validators/formValidators";
 import { toast } from "sonner";
 import { displayRoleName } from "../../lib/roleDisplay";
+import { Paths } from "@/routes/paths";
 
 // Matches the backend UserRole enum's real names exactly — sent as-is,
 // only the LABEL shown to the Admin goes through displayRoleName.
@@ -53,7 +54,7 @@ const CreateUserPage: React.FC = () => {
         roles: data.roles,
       }).unwrap();
       toast.success("User created.");
-      navigate("/users");
+      navigate(Paths.users);
     } catch (err) {
       console.error("Failed to create user:", err);
       toast.error(

@@ -1,6 +1,6 @@
 ﻿namespace Form.Entities;
 
-public class Submission
+public class Submission : IAuditable, ISoftDelete
 {
     public Guid Id { get; set; } = Guid.NewGuid();
     public Guid? CreatedByUserId { get; set; }
@@ -11,6 +11,10 @@ public class Submission
 
     public string FileUrl { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime? UpdatedAt { get; set; }
+    public bool IsDeleted { get; set; } = false;
+    public DateTime? DeletedAt { get; set; }
+
 
     public ClassRoom ClassRoom { get; set; } = null!;
 

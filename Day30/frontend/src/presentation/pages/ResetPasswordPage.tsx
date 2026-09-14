@@ -8,6 +8,7 @@ import {
   emailValidation,
   passwordValidation,
 } from "../../application/validators/formValidators";
+import { Paths } from "../../routes/paths";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
@@ -34,7 +35,7 @@ const ResetPasswordPage: React.FC = () => {
     setServerError(null);
     try {
       await resetPassword(data).unwrap();
-      navigate("/login");
+      navigate(Paths.login);
     } catch {
       setServerError("Invalid or expired code. Please try again.");
     }

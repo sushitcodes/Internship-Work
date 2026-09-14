@@ -51,6 +51,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { displayRoleName } from "../../lib/roleDisplay";
 import { toast } from "sonner";
+import { Paths } from "@/routes/paths";
 
 const ROLE_OPTIONS = ["Student", "Staff", "Admin"] as const;
 
@@ -167,7 +168,7 @@ const UsersListPage: React.FC = () => {
         <div className="flex justify-between items-center mb-4">
           <CardTitle className="text-2xl font-bold">Users</CardTitle>
           {roles.includes("Admin") && (
-            <Link to="/users/create">
+            <Link to={Paths.userCreate}>
               <Button className="gap-2">
                 <Plus className="h-4 w-4" />
                 Add User
@@ -300,7 +301,7 @@ const UsersListPage: React.FC = () => {
 
                       <TableCell>
                         <div className="flex items-center gap-2">
-                          <Link to={`/users/${u.userId}`}>
+                          <Link to={`${Paths.users}/${u.userId}`}>
                             <Button variant="outline" size="sm">
                               View
                             </Button>

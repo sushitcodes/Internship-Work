@@ -4,6 +4,7 @@ using Form.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Form.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260914053611_AddAuditAndSOftDeleteSubmission")]
+    partial class AddAuditAndSOftDeleteSubmission
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,7 +52,7 @@ namespace Form.Migrations
 
                     b.HasIndex("EnrollmentId", "Date");
 
-                    b.ToTable("AttendanceRecords", (string)null);
+                    b.ToTable("AttendanceRecords");
                 });
 
             modelBuilder.Entity("Form.Entities.ClassRoom", b =>
@@ -70,7 +73,7 @@ namespace Form.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ClassRooms", (string)null);
+                    b.ToTable("ClassRooms");
                 });
 
             modelBuilder.Entity("Form.Entities.Enrollment", b =>
@@ -95,7 +98,7 @@ namespace Form.Migrations
                     b.HasIndex("StudentUserId")
                         .IsUnique();
 
-                    b.ToTable("Enrollments", (string)null);
+                    b.ToTable("Enrollments");
                 });
 
             modelBuilder.Entity("Form.Entities.PasswordResetToken", b =>
@@ -124,7 +127,7 @@ namespace Form.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("PasswordResetTokens", (string)null);
+                    b.ToTable("PasswordResetTokens");
                 });
 
             modelBuilder.Entity("Form.Entities.RefreshToken", b =>
@@ -156,7 +159,7 @@ namespace Form.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RefreshTokens", (string)null);
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("Form.Entities.Submission", b =>
@@ -200,7 +203,7 @@ namespace Form.Migrations
 
                     b.HasIndex("CreatedByUserId");
 
-                    b.ToTable("Submissions", (string)null);
+                    b.ToTable("Submissions");
                 });
 
             modelBuilder.Entity("Form.Entities.User", b =>
@@ -225,7 +228,7 @@ namespace Form.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Form.Entities.UserProfile", b =>
@@ -272,7 +275,7 @@ namespace Form.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("UserProfiles", (string)null);
+                    b.ToTable("UserProfiles");
                 });
 
             modelBuilder.Entity("Form.Entities.UserRoleAssignment", b =>
@@ -292,7 +295,7 @@ namespace Form.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserRoleAssignments", (string)null);
+                    b.ToTable("UserRoleAssignments");
                 });
 
             modelBuilder.Entity("Form.Entities.AttendanceRecord", b =>

@@ -35,7 +35,7 @@ import { useLogoutUserMutation } from "../../infrastructure/api/authApi";
 import { useState } from "react";
 import { LayoutDashboard, FileText } from "lucide-react";
 import { toast } from "sonner";
-
+import { Paths } from "../../routes/paths";
 // Kept for when a section genuinely has multiple real children (Phase 1+).
 // Today nothing does yet, so no item below actually uses this — but the
 // rendering code supports it so we don't have to rewrite this file again
@@ -83,35 +83,38 @@ export function AppSidebar() {
 
   const handleLogout = async () => {
     await logoutUser();
-    navigate("/login");
+    navigate(Paths.login);
     toast.success("Logged out.");
   };
 
   // Only routes that exist in App.tsx today. Add more here the same day
   // the real page + route lands — never point a nav link at a dead route.
   const navItems: NavItem[] = [
-    { to: "/", label: "Dashboard", icon: LayoutDashboard, show: true },
-    { to: "/submissions", label: "Submissions", icon: FileText, show: true },
     {
-      to: "/classes",
+      to: Paths.dashboard,
+      label: "Dashboard",
+      icon: LayoutDashboard,
+      show: true,
+    },
+    { to: Paths.submissions, label: "Submissions", icon: FileText, show: true },
+    {
+      to: Paths.classes,
       label: "Classes",
       icon: GraduationCap,
       show: roles.includes("Admin"),
     },
     {
-      // No `to` anymore — a parent with subItems doesn't navigate itself,
-      // clicking it only expands/collapses (or opens the flyout in icon mode).
       label: "Attendance",
       icon: ClipboardCheck,
       show: roles.includes("Staff") || roles.includes("Admin"),
       subItems: [
-        { to: "/attendance/mark", label: "Mark Attendance" },
-        { to: "/attendance/sheet", label: "Attendance Sheet" },
+        { to: Paths.markAttendance, label: "Mark Attendance" },
+        { to: Paths.attendanceSheet, label: "Attendance Sheet" },
       ],
     },
-    { to: "/profile", label: "My Profile", icon: UserCircle, show: !!email },
+    { to: Paths.profile, label: "My Profile", icon: UserCircle, show: !!email },
     {
-      to: "/users",
+      to: Paths.users,
       label: "Users",
       icon: Users,
       show: roles.includes("Staff") || roles.includes("Admin"),
@@ -146,7 +149,7 @@ export function AppSidebar() {
     <Sidebar collapsible="icon">
       <SidebarHeader>
         <Link
-          to="/"
+          to={Paths.dashboard}
           className="font-semibold text-lg px-2 py-1 flex items-center gap-2"
         >
           {state === "collapsed" ? (
@@ -250,7 +253,7 @@ export function AppSidebar() {
           </div>
         ) : (
           <div className="flex flex-col gap-2 px-2 py-1">
-            <Link to="/login">
+            <Link to={Paths.login}>
               <Button
                 variant="outline"
                 size={isIconMode ? "icon" : "sm"}

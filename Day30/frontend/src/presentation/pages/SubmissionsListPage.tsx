@@ -46,6 +46,8 @@ import {
   canDelete,
 } from "../config/authUiConfig";
 import { resolveFileUrl } from "@/lib/resolveFileUrl";
+import { Paths } from "@/routes/paths";
+import { getModuleUrls } from "@/routes/getModuleUrls";
 
 const SubmissionsListPage: React.FC = () => {
   const [searchInput, setSearchInput] = useState("");
@@ -116,14 +118,14 @@ const SubmissionsListPage: React.FC = () => {
 
             {(isLoggedIn || !HIDE_ACTIONS_WHEN_LOGGED_OUT) &&
               (isLoggedIn ? (
-                <Link to="/formpage">
+                <Link to={Paths.submissionCreate}>
                   <Button className="gap-2">
                     <Plus className="h-4 w-4" />
                     New Submission
                   </Button>
                 </Link>
               ) : (
-                <Button className="gap-2" onClick={() => navigate("/login")}>
+                <Button className="gap-2" onClick={() => navigate(Paths.login)}>
                   <Plus className="h-4 w-4" />
                   New Submission
                 </Button>
@@ -195,14 +197,18 @@ const SubmissionsListPage: React.FC = () => {
 
                     <TableCell className="py-3">
                       <div className="flex items-center gap-2">
-                        <Link to={`/submission/${s.id}`}>
+                        <Link
+                          to={getModuleUrls("submissionDetail", { id: s.id })}
+                        >
                           <Button variant="outline" size="sm">
                             View
                           </Button>
                         </Link>
                         {(canEdit(roles) || !HIDE_ACTIONS_WHEN_LOGGED_OUT) &&
                           (canEdit(roles) ? (
-                            <Link to={`/submission/${s.id}/edit`}>
+                            <Link
+                              to={getModuleUrls("submissionEdit", { id: s.id })}
+                            >
                               <Button variant="outline" size="sm">
                                 Edit
                               </Button>
@@ -211,7 +217,7 @@ const SubmissionsListPage: React.FC = () => {
                             <Button
                               variant="outline"
                               size="sm"
-                              onClick={() => navigate("/login")}
+                              onClick={() => navigate(Paths.login)}
                             >
                               Edit
                             </Button>

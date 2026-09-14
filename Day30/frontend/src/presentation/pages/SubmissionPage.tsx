@@ -4,6 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
+import { Paths } from "@/routes/paths";
+import { getModuleUrls } from "@/routes/getModuleUrls";
 
 const SubmissionPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -109,7 +111,7 @@ const SubmissionPage: React.FC = () => {
           <Button onClick={() => window.open(fileHref, "_blank")}>
             View / Download File
           </Button>
-          <Link to={`/submission/${id}/edit`}>
+          <Link to={getModuleUrls("submissionEdit", { id: submission.id })}>
             <Button variant="outline">Edit</Button>
           </Link>
         </div>
@@ -117,7 +119,7 @@ const SubmissionPage: React.FC = () => {
         {/* Back Link */}
         <div className="pt-4 border-t">
           <Link
-            to="/submissions"
+            to={Paths.submissions}
             className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />

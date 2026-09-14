@@ -6,6 +6,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Paths } from "../../routes/paths";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAppSelector } from "../../infrastructure/store/hooks";
 import { useLogoutUserMutation } from "../../infrastructure/api/authApi";
@@ -28,7 +30,7 @@ export function UserMenu() {
   const handleLogout = async () => {
     await logoutUser();
     toast.success("Logged out.");
-    navigate("/login");
+    navigate(Paths.login);
   };
 
   return (
@@ -58,7 +60,7 @@ export function UserMenu() {
           <span className="text-xs text-muted-foreground">{email}</span>
         </div>
         <DropdownMenuSeparator />
-        <DropdownMenuItem render={<Link to="/profile">My Profile</Link>} />
+        <DropdownMenuItem render={<Link to={Paths.profile}>My Profile</Link>} />
         <DropdownMenuItem onClick={handleLogout}>Log Out</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

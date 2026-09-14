@@ -21,6 +21,7 @@ import { useGetClassRoomsQuery } from "@/infrastructure/api/classRoomApi";
 import { toast } from "sonner";
 import { IdSelect } from "../components/IdSelect";
 import { useGetMyClassQuery } from "../../infrastructure/api/enrollmentApi";
+import { getModuleUrls } from "@/routes/getModuleUrls";
 
 interface FormValues {
   fullName: string;
@@ -33,7 +34,7 @@ interface FormValues {
 // The backend returns either a plain string body or a { message } / { title } JSON object.
 function extractErrorMessage(err: unknown): string {
   if (!err || typeof err !== "object")
-    return "Could not save. Please try again.";
+    return "Could not save. Please try again. With Different File extension and less than 10mb file size.";
   const e = err as Record<string, unknown>;
 
   // RTK Query wraps fetch errors as { status, data }
@@ -47,7 +48,7 @@ function extractErrorMessage(err: unknown): string {
     }
   }
   if (typeof e.message === "string") return e.message;
-  return "Could not save. Please try again.";
+  return "Could not save. Please try again. With Different File extension and less than 10mb file size.";
 }
 
 const FormPage: React.FC = () => {
@@ -130,11 +131,13 @@ const FormPage: React.FC = () => {
     try {
       if (isEditMode) {
         await updateSubmission({ id: id!, formData }).unwrap();
-        navigate(`/submission/${id}`);
+        navigate(getModuleUrls("submissionDetail", { id: id! }));
+        toast.success("Saved changes.");
       } else {
         const result = await submitForm(formData).unwrap();
         reset();
-        navigate(`/submission/${result.id}`);
+        navigate(getModuleUrls("submissionDetail", { id: result.id }));
+        toast.success("Form submitted.");
       }
     } catch (err) {
       // Show the backend's actual error message (e.g. "No student found with

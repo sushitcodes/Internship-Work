@@ -11,6 +11,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { Paths } from "../../routes/paths";
 
 interface AuthFormValues {
   email: string;
@@ -33,7 +34,7 @@ export function AuthForm() {
     setServerError(null);
     try {
       await login(data).unwrap();
-      navigate("/");
+      navigate(Paths.dashboard);
       toast.success("Logged in successfully.");
     } catch {
       setServerError("Invalid email or password.");
@@ -71,7 +72,7 @@ export function AuthForm() {
 
         <div className="mt-4 text-center">
           <Link
-            to="/forgot-password"
+            to={Paths.forgotPassword}
             className="text-sm underline text-red-500 hover:text-red-700"
           >
             Forgot password?

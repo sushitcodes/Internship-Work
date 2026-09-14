@@ -6,6 +6,7 @@ import { FormInput } from "../components/FormInput";
 import { emailValidation } from "../../application/validators/formValidators";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Paths } from "@/routes/paths";
 
 interface ForgotPasswordValues {
   email: string;
@@ -81,7 +82,7 @@ const ForgotPasswordPage: React.FC = () => {
         <p className="text-sm text-center mt-4 text-muted-foreground">
           Remembered it?{" "}
           <Link
-            to="/login"
+            to={Paths.login}
             className="underline text-red-500 hover:text-red-700"
           >
             Log In

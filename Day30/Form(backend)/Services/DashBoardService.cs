@@ -29,7 +29,7 @@ public class DashboardService : IDashboardService
         var totalStaff = await _userRepository.CountByRoleAsync(UserRole.Staff);
         
         var totalSubmissions = await _submissionRepository.GetCountAsync();
-        var breakdown = await _attendanceRepository.GetTodayBreakdownAsync(today);
+        var stats = await _attendanceRepository.GetTodayStatsAsync(today);
 
         var recent = await _submissionRepository.GetRecentAsync(5);
 
@@ -39,7 +39,9 @@ public class DashboardService : IDashboardService
             TotalStaff = totalStaff,
             TotalSubmissions = totalSubmissions,
             // Guard against divide-by-zero when nobody's marked attendance yet today.
-            TodayAttendanceBreakdown = breakdown.Select(b => new StatusCountDto { Status = b.Status, Count = b.Count }).ToList(),
+            TodayAttendanceBreakdown = stats.Breakdown
+            .Select(b => new StatusCountDto { Status = b.Status, Count = b.Count })
+            .ToList(),
             RecentSubmissions = recent.Select(MapSubmission).ToList(),
         };
     }
