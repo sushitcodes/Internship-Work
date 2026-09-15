@@ -32,13 +32,13 @@ public class AttendanceService : IAttendanceService
         await _repository.UpsertRangeAsync(request.ClassRoomId, request.Date, entries, markedByUserId);
     }
 
-    public async Task<List<AttendanceRecordDto>> GetForClassAsync(Guid classRoomId, DateOnly date) =>
+    public async Task<List<AttendanceRecordDtos>> GetForClassAsync(Guid classRoomId, DateOnly date) =>
         (await _repository.GetByClassRoomAndDateAsync(classRoomId, date)).Select(MapToDto).ToList();
 
-    public async Task<List<AttendanceRecordDto>> GetForStudentAsync(Guid studentUserId) =>
+    public async Task<List<AttendanceRecordDtos>> GetForStudentAsync(Guid studentUserId) =>
         (await _repository.GetByStudentAsync(studentUserId)).Select(MapToDto).ToList();
 
-    private static AttendanceRecordDto MapToDto(AttendanceRecord a) => new()
+    private static AttendanceRecordDtos MapToDto(AttendanceRecord a) => new()
     {
         Id = a.Id,
         EnrollmentId = a.EnrollmentId,

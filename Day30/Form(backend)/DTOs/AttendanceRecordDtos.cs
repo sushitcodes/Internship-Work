@@ -1,6 +1,6 @@
 ﻿namespace Form.DTOs;
 
-public class AttendanceRecordDto
+public class AttendanceRecordDtos
 {
     public Guid Id { get; set; }
     public Guid EnrollmentId { get; set; }

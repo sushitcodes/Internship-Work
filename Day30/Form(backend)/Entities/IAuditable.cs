@@ -4,7 +4,7 @@
     {
         // Any entity that wants automatic CreatedAt/UpdatedAt stamping implements this.
 
-        DateTime CreatedAt { get; set; }
-        DateTime? UpdatedAt { get; set; }
+        DateTimeOffset CreatedAt { get; set; }
+        DateTimeOffset? UpdatedAt { get; set; }
     }
 }

@@ -9,7 +9,6 @@ import { getModuleUrls } from "@/routes/getModuleUrls";
 
 const SubmissionPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-
   const {
     data: submission,
     isLoading,

@@ -21,5 +21,5 @@ public class MyDashboardDto
     public int MySubmissionsCount { get; set; }
     public List<SubmissionDto> MyRecentSubmissions { get; set; } = new();
     public double MyAttendancePercentage { get; set; } // across all their own marked records, all-time
-    public List<AttendanceRecordDto> MyRecentAttendance { get; set; } = new();
+    public List<AttendanceRecordDtos> MyRecentAttendance { get; set; } = new();
 }

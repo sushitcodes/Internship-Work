@@ -32,12 +32,12 @@ public class AttendanceController(IAttendanceService _attendanceService) : Contr
 
     [HttpGet("class/{classRoomId:guid}")]
     [Authorize(Policy = "StaffOrAdmin")]
-    public async Task<ActionResult<List<AttendanceRecordDto>>> GetForClass(
+    public async Task<ActionResult<List<AttendanceRecordDtos>>> GetForClass(
         Guid classRoomId, [FromQuery] DateOnly date) =>
         Ok(await _attendanceService.GetForClassAsync(classRoomId, date));
 
     [HttpGet("me")]
-    public async Task<ActionResult<List<AttendanceRecordDto>>> GetMine()
+    public async Task<ActionResult<List<AttendanceRecordDtos>>> GetMine()
     {
         // Deliberately reads the CALLER's own ID from the token — no
         // studentUserId parameter accepted here at all. This is what

@@ -7,15 +7,19 @@ namespace Form.Persistence;
 
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
-    public DbSet<RefreshToken> RefreshTokens { get; set; }
-    public DbSet<User> Users { get; set; }
+    // old ways to do this same
+    // public DbSet<RefreshToken> RefreshTokens { get; set; }
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+    public DbSet<User> Users => Set<User>();
     public DbSet<Submission> Submissions => Set<Submission>();
-    public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
-    public DbSet<UserRoleAssignment> UserRoleAssignments { get; set; }
-    public DbSet<ClassRoom> ClassRooms { get; set; }
-    public DbSet<Enrollment> Enrollments { get; set; }
-    public DbSet<UserProfile> UserProfiles { get; set; }
-    public DbSet<AttendanceRecord> AttendanceRecords { get; set; }
+    public DbSet<PasswordResetToken> PasswordResetTokens => Set<PasswordResetToken>();
+    public DbSet<UserRoleAssignment> UserRoleAssignments => Set<UserRoleAssignment>();
+    public DbSet<ClassRoom> ClassRooms => Set<ClassRoom>();
+    public DbSet<Enrollment> Enrollments => Set<Enrollment>();
+    public DbSet<UserProfile> UserProfiles => Set<UserProfile>();
+    public DbSet<AttendanceRecord> AttendanceRecords => Set<AttendanceRecord>();
+    public DbSet<Subject> Subjects => Set<Subject>();
+    public DbSet<Grade> Grades => Set<Grade>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -131,6 +135,42 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             // ONE class per student, enforced by the database.
             entity.HasIndex(e => e.StudentUserId).IsUnique();
         });
+
+
+        modelBuilder.Entity<Subject>()
+            .HasOne(s => s.ClassRoom)
+            .WithMany()
+            .HasForeignKey(s => s.ClassRoomId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Grade>()
+            .HasOne(g => g.Enrollment)
+            .WithMany()
+            .HasForeignKey(g => g.EnrollmentId)
+            .OnDelete(DeleteBehavior.Cascade);
+       
+        modelBuilder.Entity<Grade>()
+    .HasOne(g => g.Subject)
+    .WithMany(s => s.Grades)
+    .HasForeignKey(g => g.SubjectId)
+    .OnDelete(DeleteBehavior.NoAction);
+        modelBuilder.Entity<Grade>()
+    .HasOne(g => g.GradedByUser)
+    .WithMany()
+    .HasForeignKey(g => g.GradedByUserId)
+    .OnDelete(DeleteBehavior.NoAction); // same reason as AttendanceRecord.MarkedByUser —
+                                        // Grade already cascades through Enrollment → StudentUser,
+                                        // a second cascade path through GradedByUser would make
+                                        // SQL Server reject the migration outright.
+
+        // "Simple" scope means exactly one grade per student per subject —
+        // this index makes that a database-level guarantee, not just something
+        // the upsert logic happens to do.
+        modelBuilder.Entity<Grade>()
+            .HasIndex(g => new { g.EnrollmentId, g.SubjectId })
+            .IsUnique();
+
+
     }
 
     // Intercepts every SaveChangesAsync call. Two jobs:
@@ -172,4 +212,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
         return await base.SaveChangesAsync(cancellationToken);
     }
+
+
 }
