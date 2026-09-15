@@ -7,6 +7,7 @@ import { enrollmentApi } from "../api/enrollmentApi";
 import { userApi } from "../api/userApi";
 import { attendanceApi } from "../api/attendanceApi";
 import { dashboardApi } from "../api/dashboardApi";
+import { gradeApi } from "../api/gradeApi";
 export const store = configureStore({
   reducer: {
     [submissionApi.reducerPath]: submissionApi.reducer,
@@ -17,6 +18,7 @@ export const store = configureStore({
     [userApi.reducerPath]: userApi.reducer,
     [attendanceApi.reducerPath]: attendanceApi.reducer,
     [dashboardApi.reducerPath]: dashboardApi.reducer,
+    [gradeApi.reducerPath]: gradeApi.reducer,
     auth: authReducer,
   },
 
@@ -29,6 +31,7 @@ export const store = configureStore({
       userApi.middleware,
       attendanceApi.middleware,
       dashboardApi.middleware,
+      gradeApi.middleware,
     ),
 });
 

@@ -90,6 +90,11 @@ const ClassRoomsPage: React.FC = () => {
                         Manage Enrollment
                       </Button>
                     </Link>
+                    <Link to={getModuleUrls("classSubjects", { id: c.id })}>
+                      <Button variant="outline" size="sm">
+                        Manage Subjects
+                      </Button>
+                    </Link>
                   </TableCell>
                 </TableRow>
               ))}

@@ -19,6 +19,9 @@ import DashboardPage from "./presentation/pages/DashboardPage";
 import UserDetailPage from "./presentation/pages/UserDetailPage";
 import AttendanceSheetPage from "./presentation/pages/AttendanceSheetPage";
 import { Paths } from "../src/routes/paths";
+import ClassSubjectPage from "./presentation/pages/ClassSubjectPage";
+import EnterGradesPage from "./presentation/pages/EnterGradesPage";
+import ReportCardPage from "./presentation/pages/ReportCardPage";
 
 function App() {
   useGetMeQuery();
@@ -43,6 +46,7 @@ function App() {
             {/* Protected routes - require authentication */}
             <Route path={Paths.submissionCreate} element={<FormPage />} />
             <Route path={Paths.profile} element={<MyProfilePage />} />
+            <Route path={Paths.reportCard} element={<ReportCardPage />} />
           </Route>
 
           {/* Staff and Admin routes */}
@@ -58,6 +62,9 @@ function App() {
             />
             <Route path={Paths.users} element={<UsersListPage />} />
             <Route path={Paths.userDetail} element={<UserDetailPage />} />
+
+            <Route path={Paths.classSubjects} element={<ClassSubjectPage />} />
+            <Route path={Paths.gradesEnter} element={<EnterGradesPage />} />
           </Route>
 
           {/* Admin only */}
@@ -65,7 +72,6 @@ function App() {
             <Route path={Paths.userCreate} element={<CreateUserPage />} />
             <Route path={Paths.classes} element={<ClassRoomsPage />} />
             <Route path={Paths.classEnroll} element={<EnrollmentPage />} />
-            <Route path={Paths.enrollments} element={<EnrollmentPage />} />
           </Route>
         </Route>
       </Routes>

@@ -29,11 +29,14 @@ import {
   UserCircle,
   Users,
   GraduationCap,
+  LayoutDashboard,
+  FileText,
+  Award,
+  BookOpenCheck,
 } from "lucide-react";
 import { useAppSelector } from "../../infrastructure/store/hooks";
 import { useLogoutUserMutation } from "../../infrastructure/api/authApi";
 import { useState } from "react";
-import { LayoutDashboard, FileText } from "lucide-react";
 import { toast } from "sonner";
 import { Paths } from "../../routes/paths";
 // Kept for when a section genuinely has multiple real children (Phase 1+).
@@ -119,6 +122,18 @@ export function AppSidebar() {
       icon: Users,
       show: roles.includes("Staff") || roles.includes("Admin"),
     },
+    {
+      to: Paths.reportCard,
+      label: "My Report Card",
+      icon: Award,
+      show: !!email,
+    },
+    {
+      label: "Grades",
+      icon: BookOpenCheck,
+      show: roles.includes("Staff") || roles.includes("Admin"),
+      subItems: [{ to: Paths.gradesEnter, label: "Enter Grades" }],
+    },
   ];
 
   const visibleItems = navItems.filter((item) => item.show);
@@ -170,8 +185,6 @@ export function AppSidebar() {
               {visibleItems.map((item) => {
                 const hasSubItems = !!item.subItems?.length;
 
-                // Plain link — no sub-items. `asChild` merges SidebarMenuButton
-                // and Link into ONE element instead of nesting <button><a>.
                 if (!hasSubItems) {
                   return (
                     <SidebarMenuItem key={item.label}>
