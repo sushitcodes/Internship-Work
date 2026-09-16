@@ -25,7 +25,7 @@ public class SubjectsController : ControllerBase
     [Authorize(Policy = "StaffOrAdmin")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        await _subjectService.DeleteAsync(id);
+        await _subjectService.ArchiveAsync(id);   // ← was DeleteAsync
         return NoContent();
     }
 }

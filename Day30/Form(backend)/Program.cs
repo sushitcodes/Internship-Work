@@ -1,3 +1,4 @@
+using Form.Exceptions;
 using Form.FileStorage;
 using Form.Interfaces;
 using Form.Persistence;
@@ -5,11 +6,12 @@ using Form.Persistence.Repositories;
 using Form.Repositories;
 using Form.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Microsoft.AspNetCore.RateLimiting;
 using Serilog;
+using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -137,25 +139,51 @@ app.UseExceptionHandler(errApp =>
 {
     errApp.Run(async context =>
     {
-        var feature = context.Features.Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerFeature>();
+        var feature = context.Features.Get<IExceptionHandlerFeature>();
+        var ex = feature?.Error;
         var traceId = System.Diagnostics.Activity.Current?.Id ?? context.TraceIdentifier;
-        Log.Error(feature?.Error,
-            "Unhandled exception on {Path} (TraceId={TraceId})",
-            context.Request.Path,context.Request.Method, traceId);
-        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+
+        // Domain exceptions are expected — log at Warning, no stack trace needed.
+        // Unexpected exceptions are bugs — log at Error with the exception.
+        var (status, message, isExpected) = ex switch
+        {
+            ValidateException v => (StatusCodes.Status400BadRequest, v.Message, true),
+            NotFoundException n => (StatusCodes.Status404NotFound, n.Message, true),
+            ConflictException c => (StatusCodes.Status409Conflict, c.Message, true),
+            _ => (StatusCodes.Status500InternalServerError,
+                                    "An unexpected error occurred. Please try again.",
+                                    false)
+        };
+
+        if (isExpected)
+        {
+            Log.Warning("Domain error on {Method} {Path}: {Message} (TraceId={TraceId})",
+                context.Request.Method, context.Request.Path, ex!.Message, traceId);
+        }
+        else
+        {
+            Log.Error(ex,
+                "Unhandled exception on {Method} {Path} (TraceId={TraceId})",
+                context.Request.Method, context.Request.Path, traceId);
+        }
+
+        context.Response.StatusCode = status;
         context.Response.ContentType = "application/json";
         await context.Response.WriteAsJsonAsync(new
         {
-            message = "An unexpected error occurred.Pleasse try again.",
-            traceId
+            message,
+            traceId = isExpected ? null : traceId
         });
     });
 });
-app.UseStaticFiles();
-app.UseCors("AllowFrontend");
-app.UseRateLimiter();
-app.UseAuthentication();
-app.UseAuthorization();
-app.MapControllers();
 
-app.Run();
+
+app.UseStaticFiles();
+    app.UseCors("AllowFrontend");
+    app.UseRateLimiter();
+    app.UseAuthentication();
+    app.UseAuthorization();
+    app.MapControllers();
+
+    app.Run();
+

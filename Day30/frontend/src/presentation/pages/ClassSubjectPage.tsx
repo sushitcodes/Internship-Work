@@ -22,7 +22,7 @@ interface SubjectFormValues {
   name: string;
 }
 
-const ClassSubjectsPage: React.FC = () => {
+function ClassSubjectsPage() {
   // Non-null assertion is safe here — this page only renders behind
   // the /classes/:id/subjects route, so React Router guarantees the param.
   const { id: classRoomId } = useParams<{ id: string }>();
@@ -46,6 +46,15 @@ const ClassSubjectsPage: React.FC = () => {
     }
   };
 
+  //delete taost
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteSubject({ id, classRoomId: classRoomId! }).unwrap();
+      toast.success("Subject deleted");
+    } catch (err: any) {
+      toast.error(err?.data?.message ?? "Could not delete subject");
+    }
+  };
   return (
     <div className="max-w-2xl mx-auto mt-10 space-y-6">
       <Card>
@@ -92,9 +101,7 @@ const ClassSubjectsPage: React.FC = () => {
                       className="text-sm text-red-500 "
                       variant="outline"
                       size="sm"
-                      onClick={() =>
-                        deleteSubject({ id: s.id, classRoomId: classRoomId! })
-                      }
+                      onClick={() => handleDelete(s.id)}
                     >
                       Delete
                     </Button>
@@ -107,6 +114,6 @@ const ClassSubjectsPage: React.FC = () => {
       </Card>
     </div>
   );
-};
+}
 
 export default ClassSubjectsPage;

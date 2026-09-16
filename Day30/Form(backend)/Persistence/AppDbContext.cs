@@ -65,7 +65,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             // Index
             entity.HasIndex(a => new { a.EnrollmentId, a.Date });
         });
-
+       
         // UserProfile configuration
         modelBuilder.Entity<UserProfile>(entity =>
         {
@@ -135,7 +135,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             // ONE class per student, enforced by the database.
             entity.HasIndex(e => e.StudentUserId).IsUnique();
         });
-
+        //this make the subject with added archieved 0 means active
+        modelBuilder.Entity<Subject>().HasQueryFilter(s => !s.IsArchived);
+        // it check if there is same name of it or not
+        modelBuilder.Entity<Subject>()
+    .HasIndex(s => new { s.ClassRoomId, s.Name })
+    .IsUnique();
 
         modelBuilder.Entity<Subject>()
             .HasOne(s => s.ClassRoom)

@@ -7,7 +7,12 @@
 
             public string Name { get; set; } = string.Empty;
 
-            public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
+        public bool IsArchived { get; set; }
+
+        public DateTimeOffset? Archieved { get; set; }
+        public DateTimeOffset? ArchivedAt { get; set; }
+
+        public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 
             public ClassRoom ClassRoom { get; set; } = null!;
             public ICollection<Grade> Grades { get; set; } = new List<Grade>();
