@@ -83,9 +83,15 @@ const MarkAttendancePage: React.FC = () => {
     try {
       await markAttendance({ classRoomId, date: dateStr, entries }).unwrap();
       toast.success("Attendance saved.");
-    } catch (err) {
-      console.error("Failed to save attendance:", err);
-      toast.error("Could not save attendance. Please try again.");
+    } catch (err: any) {
+      if (err?.status === 403) {
+        toast.error(
+          "Only this class's teacher or an admin can take attendance.",
+        );
+      } else {
+        console.error("Failed to save attendance:", err);
+        toast.error("Could not save attendance. Please try again.");
+      }
     }
   };
 

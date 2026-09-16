@@ -1,3 +1,4 @@
+using Form.Authorization;
 using Form.Exceptions;
 using Form.FileStorage;
 using Form.Interfaces;
@@ -6,6 +7,7 @@ using Form.Persistence.Repositories;
 using Form.Repositories;
 using Form.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
@@ -68,7 +70,9 @@ builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<ISubjectRepository, SubjectRepository>();
 builder.Services.AddScoped<ISubjectService, SubjectService>();
 builder.Services.AddScoped<IGradeRepository, GradeRepository>();
-builder.Services.AddScoped<IGradeService, GradeService>(); builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+builder.Services.AddScoped<IGradeService, GradeService>(); 
+builder.Services.AddScoped<IAuthorizationHandler, ClassTeacherAuthorizationHandler>();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
     .AddJwtBearer(options =>
     {
@@ -107,6 +111,8 @@ builder.Services.AddAuthorization(options =>
         policy.RequireRole("Admin"));
     options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
     options.AddPolicy("StaffOrAdmin", policy => policy.RequireRole("Staff", "Admin"));
+    options.AddPolicy("ClassTeacherOrAdmin", policy =>              // ADD
+       policy.Requirements.Add(new ClassTeacherRequirement()));
 });// --- CORS: lets the Vite dev server (different port) call this API ---
 builder.Services.AddCors(options =>
 {

@@ -24,7 +24,7 @@ public class UserRepository(AppDbContext _context) : IUserRepository
         await _context.SaveChangesAsync();
     }
     public async Task<User?> GetByIdAsync(Guid id) =>
-    await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+    await _context.Users.Include(u => u.RoleAssignments).FirstOrDefaultAsync(u => u.Id == id);
     public async Task<List<User>> GetByRoleAsync(UserRole role) =>
     await _context.Users
         .Where(u => u.RoleAssignments.Any(ra => ra.Role == role))

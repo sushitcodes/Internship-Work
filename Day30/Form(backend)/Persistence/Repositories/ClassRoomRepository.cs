@@ -15,10 +15,21 @@ public class ClassRoomRepository(AppDbContext _context) : IClassRoomRepository
 
     public async Task<List<ClassRoom>> GetAllAsync() =>
         await _context.ClassRooms
+        .AsNoTracking()
+        
             .Include(c => c.Enrollments)
+        .Include(c => c.ClassTeacher)
             .OrderByDescending(c => c.AcademicYear)
             .ThenBy(c => c.Name)
             .ToListAsync();
+
+    public async Task AssignClassTeacherAsync(Guid classRoomId, Guid? teacherUserId)
+    {
+        var classRoom = await _context.ClassRooms.FirstOrDefaultAsync(c => c.Id == classRoomId);
+        if (classRoom == null) throw new InvalidOperationException("Class not found.");
+        classRoom.ClassTeacherUserId = teacherUserId;
+        await _context.SaveChangesAsync();
+    }
 }
 
 

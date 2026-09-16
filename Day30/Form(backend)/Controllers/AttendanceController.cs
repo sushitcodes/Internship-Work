@@ -7,14 +7,19 @@ namespace Form.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class AttendanceController(IAttendanceService _attendanceService) : ControllerBase
+public class AttendanceController(IAttendanceService _attendanceService, IAuthorizationService authorizationService) : ControllerBase
 {
-
-
     [HttpPost("mark")]
-    [Authorize(Policy = "StaffOrAdmin")]
+    [Authorize(Policy = "StaffOrAdmin")] // Layer 1: must be Staff or Admin at all
     public async Task<IActionResult> Mark(MarkAttendanceRequest request)
     {
+        // Layer 2: must specifically be THIS class's teacher, or an Admin —
+        // this is the actual "extra power" check the whole feature is about.
+        var authResult = await authorizationService.AuthorizeAsync(
+            User, request.ClassRoomId, "ClassTeacherOrAdmin");
+        if (!authResult.Succeeded)
+            return Forbid();
+
         var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
         if (!Guid.TryParse(userIdClaim, out var markedByUserId))
             return Unauthorized();

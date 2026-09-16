@@ -65,7 +65,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             // Index
             entity.HasIndex(a => new { a.EnrollmentId, a.Date });
         });
-       
+
         // UserProfile configuration
         modelBuilder.Entity<UserProfile>(entity =>
         {
@@ -153,7 +153,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .WithMany()
             .HasForeignKey(g => g.EnrollmentId)
             .OnDelete(DeleteBehavior.Cascade);
-       
+
         modelBuilder.Entity<Grade>()
     .HasOne(g => g.Subject)
     .WithMany(s => s.Grades)
@@ -174,9 +174,15 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<Grade>()
             .HasIndex(g => new { g.EnrollmentId, g.SubjectId })
             .IsUnique();
+        modelBuilder.Entity<ClassRoom>()
+            .HasOne(c => c.ClassTeacher)
+            .WithMany()
+            .HasForeignKey(c => c.ClassTeacherUserId)
 
-
+            .OnDelete(DeleteBehavior.SetNull);
     }
+        // teacher account deleted → class just loses its head teacher, not itself}
+
 
     // Intercepts every SaveChangesAsync call. Two jobs:
     //   1. Auditing  — auto-set CreatedAt on insert, UpdatedAt on update.
