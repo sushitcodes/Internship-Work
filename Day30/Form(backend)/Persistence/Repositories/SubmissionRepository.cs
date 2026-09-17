@@ -17,6 +17,8 @@ public class SubmissionRepository(AppDbContext _context) : ISubmissionRepository
     public async Task<Submission?> GetByIdAsync(Guid id)
     {
         return await _context.Submissions
+                        .AsNoTracking()
+
             .Include(s => s.ClassRoom)
             
             // Changed: Include ClassRoom instead of Education
@@ -44,6 +46,7 @@ public class SubmissionRepository(AppDbContext _context) : ISubmissionRepository
         if (!string.IsNullOrWhiteSpace(search))
         {
             query = query.Where(s =>
+
                 s.FullName.Contains(search) ||
                 s.RollNo.ToString().Contains(search) ||  // Added: Search by RollNo
                 s.ClassRoom.Name.Contains(search));      // Added: Search by ClassRoom name
@@ -51,6 +54,7 @@ public class SubmissionRepository(AppDbContext _context) : ISubmissionRepository
 
         var totalCount = await query.CountAsync();
         var items = await query
+            .AsNoTracking()
             .Include(s => s.ClassRoom)  // Changed: Include ClassRoom instead of Education
             .OrderByDescending(s => s.CreatedAt)
             .Skip((page - 1) * pageSize)
@@ -88,6 +92,7 @@ public class SubmissionRepository(AppDbContext _context) : ISubmissionRepository
 
     public async Task<List<Submission>> GetRecentAsync(int count) =>
         await _context.Submissions
+                    .AsNoTracking()
             .Include(s => s.ClassRoom)  // Added: Include ClassRoom for display
             .OrderByDescending(s => s.CreatedAt)
             .Take(count)
@@ -95,6 +100,7 @@ public class SubmissionRepository(AppDbContext _context) : ISubmissionRepository
 
     public async Task<List<Submission>> GetRecentByUserAsync(Guid userId, int count) =>
         await _context.Submissions
+                    .AsNoTracking()
             .Where(s => s.CreatedByUserId == userId)
             .Include(s => s.ClassRoom)  // Added: Include ClassRoom for display
             .OrderByDescending(s => s.CreatedAt)

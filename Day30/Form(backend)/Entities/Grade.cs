@@ -18,6 +18,9 @@ namespace Form.Entities
 
         public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
         public DateTimeOffset? UpdatedAt { get; set; }
+        public bool IsDeleted { get; set; }
+
+
 
         public Enrollment Enrollment { get; set; } = null!;
         public Subject Subject { get; set; } = null!;

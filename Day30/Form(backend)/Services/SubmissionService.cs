@@ -1,8 +1,6 @@
 ﻿using Form.DTOs;
 using Form.Interfaces;
 using Form.Entities;
-using static Form.DTOs.ClassRoomDtos;
-
 namespace Form.Services;
 
 public class SubmissionService : ISubmissionService
@@ -131,7 +129,16 @@ public class SubmissionService : ISubmissionService
         };
 
         var result = await _repository.UpdateAsync(id, updated);
-        return result is null ? null : MapToDto(result);
+        if (result is null) return null;
+
+        string? avatar = null;
+        if (result.CreatedByUserId.HasValue)
+        {
+            var profile = await _profileRepository.GetByUserIdAsync(result.CreatedByUserId.Value);
+            avatar = profile?.AvatarUrl;
+        }
+
+        return MapToDto(result, avatar);
     }
 
     private static void ValidateFile(IFormFile file)

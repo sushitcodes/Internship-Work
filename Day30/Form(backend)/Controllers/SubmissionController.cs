@@ -1,7 +1,6 @@
 using Form.DTOs;
 using Form.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using static Form.DTOs.ClassRoomDtos;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Form.Controllers;
@@ -15,17 +14,8 @@ public class SubmissionsController(ISubmissionService _submissionService) : Cont
 
     [HttpPost]
     [RequestSizeLimit(10 * 1024 * 1024)]
-    public async Task<ActionResult<SubmissionDto>> Create([FromForm] SubmissionFormRequest form)
+    public async Task<ActionResult<SubmissionDto>> Create([FromForm] CreateSubmissionFormRequest form)
     {
-        if (form.File is null || form.File.Length == 0)
-            return BadRequest("A file is required.");
-
-        if (form.ClassRoomId == Guid.Empty)
-            return BadRequest("ClassRoomId is required.");
-
-        if (form.RollNo <= 0)
-            return BadRequest("RollNo must be greater than 0.");
-
         // Get user ID from claims - must exist since [Authorize] is used
         var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var createdByUserId))
@@ -36,7 +26,7 @@ public class SubmissionsController(ISubmissionService _submissionService) : Cont
             FullName = form.FullName,
             ClassRoomId = form.ClassRoomId,
             RollNo = form.RollNo,
-            File = form.File,
+            File = form.File!,
             CreatedByUserId = createdByUserId, // Non-nullable Guid
         };
 
@@ -51,7 +41,6 @@ public class SubmissionsController(ISubmissionService _submissionService) : Cont
         }
     }
 
-    [AllowAnonymous]
     [HttpGet]
     public async Task<ActionResult<PagedResult<SubmissionDto>>> GetAll(
         [FromQuery] int page = 1,
@@ -79,14 +68,8 @@ public class SubmissionsController(ISubmissionService _submissionService) : Cont
 
     [HttpPut("{id:guid}")]
     [Authorize(Policy = "CanEdit")]
-    public async Task<ActionResult<SubmissionDto>> Update(Guid id, [FromForm] SubmissionFormRequest form)
+    public async Task<ActionResult<SubmissionDto>> Update(Guid id, [FromForm] UpdateSubmissionFormRequest form)
     {
-        if (form.ClassRoomId == Guid.Empty)
-            return BadRequest("ClassRoomId is required.");
-
-        if (form.RollNo <= 0)
-            return BadRequest("RollNo must be greater than 0.");
-
         var request = new UpdateSubmissionRequest
         {
             FullName = form.FullName,
@@ -108,10 +91,3 @@ public class SubmissionsController(ISubmissionService _submissionService) : Cont
     }
 }
 
-public class SubmissionFormRequest
-{
-    public string FullName { get; set; } = string.Empty;
-    public Guid ClassRoomId { get; set; }
-    public int RollNo { get; set; }
-    public IFormFile? File { get; set; }
-}

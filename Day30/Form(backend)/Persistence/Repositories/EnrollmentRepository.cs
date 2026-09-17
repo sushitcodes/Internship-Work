@@ -19,6 +19,7 @@ public class EnrollmentRepository(AppDbContext _context) : IEnrollmentRepository
 
     public async Task<List<Enrollment>> GetByClassRoomIdAsync(Guid classRoomId) =>
         await _context.Enrollments
+        .AsNoTracking()
             .Include(e => e.StudentUser)
         .Include(e=> e.ClassRoom)
             .Where(e => e.ClassRoomId == classRoomId)
@@ -28,6 +29,8 @@ public class EnrollmentRepository(AppDbContext _context) : IEnrollmentRepository
 
 public async Task<Enrollment?> GetByStudentUserIdAsync(Guid studentUserId) =>
         await _context.Enrollments
+                .AsNoTracking()
+
         .Include(e => e.ClassRoom)
         .Include(e=> e.StudentUser)
         .FirstOrDefaultAsync(e => e.StudentUserId == studentUserId);

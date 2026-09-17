@@ -16,12 +16,6 @@ export interface CreateEnrollmentRequest {
   studentUserId: string;
   classRoomId: string;
 }
-
-export interface CreateEnrollmentRequest {
-  studentUserId: string;
-  classRoomId: string;
-}
-
 export const enrollmentApi = createApi({
   reducerPath: "enrollmentApi",
   baseQuery: baseQueryWithAuth,

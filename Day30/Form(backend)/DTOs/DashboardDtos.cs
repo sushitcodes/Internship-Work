@@ -1,6 +1,4 @@
-﻿using static Form.DTOs.ClassRoomDtos;
-
-namespace Form.DTOs;
+﻿namespace Form.DTOs;
 
 public class StatusCountDto
 {

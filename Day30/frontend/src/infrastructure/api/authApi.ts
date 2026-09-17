@@ -1,8 +1,7 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithAuth } from "./baseQueryWithAuth";
 import { setCredentials, logout } from "../store/authSlice";
-import { submissionApi } from "./submissionApi";
-import { userApi } from "./userApi";
+import { clearAllApiCaches } from "./clearAllCaches";
 export interface AuthResponse {
   email: string;
   expiresAt: string;
@@ -54,8 +53,7 @@ export const authApi = createApi({
         // log in on this same browser tab would briefly see whatever the
         // PREVIOUS person's profile/submissions data was, until something
         // happens to trigger a real refetch.
-        dispatch(submissionApi.util.resetApiState());
-        dispatch(userApi.util.resetApiState());
+        clearAllApiCaches(dispatch);
       },
     }),
     // ADD — called once on app load to check "is the cookie still valid"
@@ -69,8 +67,7 @@ export const authApi = createApi({
           dispatch(logout());
           // Same reasoning — a failed refresh (session actually expired) should
           // also drop cached data, not just the auth slice.
-          dispatch(submissionApi.util.resetApiState());
-          dispatch(userApi.util.resetApiState());
+          clearAllApiCaches(dispatch);
         }
       },
     }),

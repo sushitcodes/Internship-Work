@@ -6,10 +6,8 @@ namespace Form.FileStorage;
 
 public class LocalFileStorageService(IWebHostEnvironment _env) : IFileStorageService
 {
-    private static readonly HashSet<string> AllowedExtensions = new(StringComparer.OrdinalIgnoreCase)
-    {
-        ".pdf", ".jpg", ".jpeg", ".png", ".docx"
-    };
+    private static readonly string[] AllowedExtensions =
+    { ".pdf", ".jpg", ".jpeg", ".png", ".docx" };
 
     private const long MaxFileSizeBytes = 10 * 1024 * 1024; // 10 MB
 
@@ -33,14 +31,13 @@ public class LocalFileStorageService(IWebHostEnvironment _env) : IFileStorageSer
 
         var uploadsFolder = Path.Combine(webRoot, "uploads");
         Directory.CreateDirectory(uploadsFolder);
-
-        // Guid prefix stops two different users' "resume.pdf" from colliding
-        var uniqueFileName = $"{Guid.NewGuid()}_{file.FileName}_{ext}";
+        // Guid alone is the filename. We never trust or embed the client's
+        // original filename — it's attacker-controlled and Path.Combine
+        // doesn't sanitize it for us.
+        var uniqueFileName = $"{Guid.NewGuid()}{ext}";
         var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
         using var stream = new FileStream(filePath, FileMode.Create);
         await file.CopyToAsync(stream);
-
         return $"/uploads/{uniqueFileName}"; // stored in DB as Submission.FileUrl
     }
 }

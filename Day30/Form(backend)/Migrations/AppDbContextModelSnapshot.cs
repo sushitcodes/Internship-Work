@@ -118,6 +118,9 @@ namespace Form.Migrations
                     b.Property<Guid>("GradedByUserId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<decimal>("MarksObtained")
                         .HasColumnType("decimal(18,2)");
 

@@ -64,6 +64,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
             // Index
             entity.HasIndex(a => new { a.EnrollmentId, a.Date });
+
+            // TODO: If AttendanceRecord implements ISoftDelete, uncomment the
+            // line below. Without it, soft-deleted attendance rows are never
+            // physically removed AND never hidden from queries — they leak
+            // into every list view.
+            // entity.HasQueryFilter(a => !a.IsDeleted);
         });
 
         // UserProfile configuration
@@ -134,55 +140,85 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
             // ONE class per student, enforced by the database.
             entity.HasIndex(e => e.StudentUserId).IsUnique();
+
+            // TODO: If Enrollment implements ISoftDelete, uncomment the line
+            // below. Same reasoning as AttendanceRecord above.
+            // entity.HasQueryFilter(e => !e.IsDeleted);
         });
-        //this make the subject with added archieved 0 means active
-        modelBuilder.Entity<Subject>().HasQueryFilter(s => !s.IsArchived);
-        // it check if there is same name of it or not
-        modelBuilder.Entity<Subject>()
-    .HasIndex(s => new { s.ClassRoomId, s.Name })
-    .IsUnique();
 
-        modelBuilder.Entity<Subject>()
-            .HasOne(s => s.ClassRoom)
-            .WithMany()
-            .HasForeignKey(s => s.ClassRoomId)
-            .OnDelete(DeleteBehavior.Cascade);
+        // Subject configuration — all in one block.
+        //
+        // Note on the Subject/Grade soft-delete interaction (Option 2A):
+        //   Subject uses IsArchived, Grade uses IsDeleted. These are two
+        //   DIFFERENT flags, which means archiving a Subject does NOT
+        //   automatically hide that Subject's Grades. The two filters
+        //   must be kept consistent at the SERVICE layer — see
+        //   ArchiveSubjectAsync(...) at the bottom of this file.
+        modelBuilder.Entity<Subject>(b =>
+        {
+            // this make the subject with added archieved 0 means active
+            b.HasQueryFilter(s => !s.IsArchived);
 
-        modelBuilder.Entity<Grade>()
-            .HasOne(g => g.Enrollment)
-            .WithMany()
-            .HasForeignKey(g => g.EnrollmentId)
-            .OnDelete(DeleteBehavior.Cascade);
+            // it check if there is same name of it or not
+            b.HasIndex(s => new { s.ClassRoomId, s.Name })
+             .IsUnique();
 
-        modelBuilder.Entity<Grade>()
-    .HasOne(g => g.Subject)
-    .WithMany(s => s.Grades)
-    .HasForeignKey(g => g.SubjectId)
-    .OnDelete(DeleteBehavior.NoAction);
-        modelBuilder.Entity<Grade>()
-    .HasOne(g => g.GradedByUser)
-    .WithMany()
-    .HasForeignKey(g => g.GradedByUserId)
-    .OnDelete(DeleteBehavior.NoAction); // same reason as AttendanceRecord.MarkedByUser —
-                                        // Grade already cascades through Enrollment → StudentUser,
-                                        // a second cascade path through GradedByUser would make
-                                        // SQL Server reject the migration outright.
+            b.HasOne(s => s.ClassRoom)
+             .WithMany()
+             .HasForeignKey(s => s.ClassRoomId)
+             .OnDelete(DeleteBehavior.Cascade);
+        });
 
-        // "Simple" scope means exactly one grade per student per subject —
-        // this index makes that a database-level guarantee, not just something
-        // the upsert logic happens to do.
-        modelBuilder.Entity<Grade>()
-            .HasIndex(g => new { g.EnrollmentId, g.SubjectId })
-            .IsUnique();
-        modelBuilder.Entity<ClassRoom>()
-            .HasOne(c => c.ClassTeacher)
-            .WithMany()
-            .HasForeignKey(c => c.ClassTeacherUserId)
+        // Grade configuration — all in one block.
+        //
+        // Filter note: Grade's filter is !IsDeleted. A Grade is hidden
+        // whenever its OWN IsDeleted is true. Subject.IsArchived on the
+        // parent does not, by itself, hide Grades — the archive cascade
+        // in ArchiveSubjectAsync sets IsDeleted on each Grade so the two
+        // filters stay in lockstep.
+        modelBuilder.Entity<Grade>(b =>
+        {
+            b.HasQueryFilter(g => !g.IsDeleted);
 
-            .OnDelete(DeleteBehavior.SetNull);
+            b.Property(g => g.MarksObtained).HasPrecision(18, 4);
+            b.Property(g => g.MaxMarks).HasPrecision(18, 4);
+
+            b.HasOne(g => g.Enrollment)
+             .WithMany()
+             .HasForeignKey(g => g.EnrollmentId)
+             .OnDelete(DeleteBehavior.Cascade);
+
+            b.HasOne(g => g.Subject)
+             .WithMany(s => s.Grades)
+             .HasForeignKey(g => g.SubjectId)
+             .OnDelete(DeleteBehavior.NoAction);
+
+            b.HasOne(g => g.GradedByUser)
+             .WithMany()
+             .HasForeignKey(g => g.GradedByUserId)
+             .OnDelete(DeleteBehavior.NoAction);
+            // same reason as AttendanceRecord.MarkedByUser —
+            // Grade already cascades through Enrollment → StudentUser,
+            // a second cascade path through GradedByUser would make
+            // SQL Server reject the migration outright.
+
+            // "Simple" scope means exactly one grade per student per subject —
+            // this index makes that a database-level guarantee, not just something
+            // the upsert logic happens to do.
+            b.HasIndex(g => new { g.EnrollmentId, g.SubjectId })
+             .IsUnique();
+        });
+
+        modelBuilder.Entity<ClassRoom>(b =>
+        {
+            b.HasOne(c => c.ClassTeacher)
+             .WithMany()
+             .HasForeignKey(c => c.ClassTeacherUserId)
+             .OnDelete(DeleteBehavior.SetNull);
+            // teacher account deleted → class just loses its head teacher,
+            // not itself.
+        });
     }
-        // teacher account deleted → class just loses its head teacher, not itself}
-
 
     // Intercepts every SaveChangesAsync call. Two jobs:
     //   1. Auditing  — auto-set CreatedAt on insert, UpdatedAt on update.
@@ -224,5 +260,41 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         return await base.SaveChangesAsync(cancellationToken);
     }
 
+    // --------------------------------------------------------------------
+    // Option 2A — keep Subject (IsArchived) and Grade (IsDeleted) filters
+    // consistent at the service layer.
+    //
+    // Subject and Grade use different soft-delete flags, so EF has no way
+    // to know that archiving a Subject should hide its Grades. This helper
+    // is the bridge: call it anywhere a Subject is archived. It loads the
+    // subject with its Grades included, flips IsArchived on the subject,
+    // and flips IsDeleted on every Grade belonging to it — so both query
+    // filters (`!IsArchived` on Subject, `!IsDeleted` on Grade) hide the
+    // pair together.
+    //
+    // Where to call it: from SubjectService.ArchiveAsync (or whatever
+    // method currently sets subject.IsArchived = true).
+    // --------------------------------------------------------------------
+    public async Task ArchiveSubjectAsync(Guid subjectId, CancellationToken cancellationToken = default)
+    {
+        // .IgnoreQueryFilters() so we can re-archive a subject that was
+        // already archived (idempotent), and still reach its grades.
+        var subject = await Subjects
+            .IgnoreQueryFilters()
+            .Include(s => s.Grades)
+            .FirstOrDefaultAsync(s => s.Id == subjectId, cancellationToken);
 
+        if (subject is null)
+            return;
+
+        subject.IsArchived = true;
+
+        // Cascade to Grades — this is what keeps the two filters aligned.
+        foreach (var grade in subject.Grades)
+        {
+            grade.IsDeleted = true;
+        }
+
+        await SaveChangesAsync(cancellationToken);
+    }
 }
