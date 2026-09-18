@@ -68,6 +68,9 @@ const SubmissionsListPage: React.FC = () => {
   const [deleteSubmission, { isLoading: isDeleting }] =
     useDeleteSubmissionMutation();
   const roles = useAppSelector((state) => state.auth.roles);
+  const pendingUploads = useAppSelector((state) =>
+    Object.values(state.uploadProgress.byId),
+  );
   const isLoggedIn = Boolean(useAppSelector((state) => state.auth.email));
   const navigate = useNavigate();
   const pages = data?.pages ?? [];
@@ -166,7 +169,7 @@ const SubmissionsListPage: React.FC = () => {
           </p>
         )}
 
-        {submissions.length > 0 && (
+        {(submissions.length > 0 || pendingUploads.length > 0) && (
           <div className="rounded-md border">
             <Table>
               <TableHeader>
@@ -176,6 +179,38 @@ const SubmissionsListPage: React.FC = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
+                {/* Pending uploads render FIRST, above real rows — this
+                    is the actual feature: a live row that fills in as
+                    the file goes out over the wire, then disappears
+                    once invalidateTags brings in the real saved row. */}
+                {pendingUploads.map((u) => (
+                  <TableRow key={u.id} className="bg-muted/40">
+                    <TableCell className="py-3 pr-4">
+                      <div className="flex flex-col gap-1">
+                        <span className="font-medium text-muted-foreground">
+                          {u.fileName}
+                        </span>
+                        {u.status === "uploading" && (
+                          <div className="h-1.5 w-40 rounded-full bg-gray-200 overflow-hidden">
+                            <div
+                              className="h-full bg-blue-500 transition-all duration-150"
+                              style={{ width: `${u.progress}%` }}
+                            />
+                          </div>
+                        )}
+                        {u.status === "error" && (
+                          <span className="text-xs text-red-500">
+                            {u.errorMessage}
+                          </span>
+                        )}
+                      </div>
+                    </TableCell>
+                    <TableCell className="py-3 text-xs text-muted-foreground">
+                      {u.status === "uploading" ? `${u.progress}%` : "Failed"}
+                    </TableCell>
+                  </TableRow>
+                ))}
+                {/* // ...unchanged — everything below this stays exactly as it was */}
                 {submissions.map((s) => (
                   <TableRow key={s.id}>
                     <TableCell className="py-3 pr-4">

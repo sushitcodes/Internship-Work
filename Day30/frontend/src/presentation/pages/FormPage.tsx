@@ -1,15 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   nameValidation,
   fileValidation,
 } from "../../application/validators/formValidators";
-import {
-  useGetSubmissionByIdQuery,
-  useSubmitFormMutation,
-  useUpdateSubmissionMutation,
-} from "../../infrastructure/api/submissionApi";
+import { useGetSubmissionByIdQuery } from "../../infrastructure/api/submissionApi";
 import { useGetOwnProfileQuery } from "../../infrastructure/api/userApi";
 import { useAppSelector } from "../../infrastructure/store/hooks";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,6 +18,7 @@ import { toast } from "sonner";
 import { IdSelect } from "../components/IdSelect";
 import { useGetMyClassQuery } from "../../infrastructure/api/enrollmentApi";
 import { getModuleUrls } from "@/routes/getModuleUrls";
+import { useUploadSubmission } from "../../infrastructure/api/useUploadSubmission";
 
 interface FormValues {
   fullName: string;
@@ -69,11 +66,19 @@ const FormPage: React.FC = () => {
   );
   const { data: existingSubmission, isLoading: isLoadingExisting } =
     useGetSubmissionByIdQuery(id!, { skip: !isEditMode });
+  const [activeUploadId, setActiveUploadId] = useState<string | null>(null);
+  const activeUpload = useAppSelector((state) =>
+    activeUploadId ? state.uploadProgress.byId[activeUploadId] : undefined,
+  );
+  const { uploadCreate, uploadUpdate } = useUploadSubmission();
+  const [isCreating, setIsCreating] = useState(false);
 
-  const [submitForm, { isLoading: isCreating }] = useSubmitFormMutation();
-  const [updateSubmission, { isLoading: isUpdating }] =
-    useUpdateSubmissionMutation();
-  const isSaving = isCreating || isUpdating;
+  // You can now delete the useUpdateSubmissionMutation import and its
+  // destructured hook entirely from this file — nothing in FormPage
+  // calls it anymore. (Leave the endpoint itself in submissionApi.ts;
+  // it's harmless to keep even if unused here.)  const [isCreating, setIsCreating] = useState(false);
+
+  const isSaving = isCreating || isCreating;
 
   const {
     register,
@@ -128,23 +133,38 @@ const FormPage: React.FC = () => {
       formData.append("file", data.file[0]);
     }
 
+    const fileName = data.file?.[0]?.name ?? "file";
+
     try {
+      setIsCreating(true);
       if (isEditMode) {
-        await updateSubmission({ id: id!, formData }).unwrap();
-        navigate(getModuleUrls("submissionDetail", { id: id! }));
+        const result = await uploadUpdate(
+          id!,
+          formData,
+          fileName,
+          setActiveUploadId,
+        );
+        navigate(getModuleUrls("submissionDetail", { id: result.id }));
         toast.success("Saved changes.");
       } else {
-        const result = await submitForm(formData).unwrap();
+        const result = await uploadCreate(
+          formData,
+          fileName,
+          setActiveUploadId,
+        );
         reset();
         navigate(getModuleUrls("submissionDetail", { id: result.id }));
         toast.success("Form submitted.");
       }
     } catch (err) {
-      // Show the backend's actual error message (e.g. "No student found with
-      // roll number X") so the user knows exactly what to fix.
       const message = extractErrorMessage(err);
       toast.error(message);
       console.error("Failed to save submission:", err);
+    } finally {
+      setIsCreating(false);
+      setActiveUploadId(null); // detach — the slice entry itself was
+      // already removed on success by the hook; on failure it's left
+      // in "error" status so the message stays visible until they retry
     }
   };
 
@@ -357,6 +377,25 @@ const FormPage: React.FC = () => {
           <Button type="submit" disabled={cannotSubmit} className="w-full">
             {isSaving ? "Saving..." : isEditMode ? "Save Changes" : "Submit"}
           </Button>
+
+          {activeUpload?.status === "uploading" && (
+            <div className="space-y-1">
+              <div className="flex justify-between text-xs text-muted-foreground">
+                <span>{activeUpload.fileName}</span>
+                <span>{activeUpload.progress}%</span>
+              </div>
+              <div className="h-1.5 w-full rounded-full bg-gray-200 overflow-hidden">
+                <div
+                  className="h-full bg-blue-500 transition-all duration-150"
+                  style={{ width: `${activeUpload.progress}%` }}
+                />
+              </div>
+            </div>
+          )}
+
+          {activeUpload?.status === "error" && (
+            <p className="text-xs text-red-500">{activeUpload.errorMessage}</p>
+          )}
         </form>
       </CardContent>
     </Card>

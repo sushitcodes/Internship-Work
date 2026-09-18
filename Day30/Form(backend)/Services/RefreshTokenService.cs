@@ -30,6 +30,7 @@ public class RefreshTokenService : IRefreshTokenService
 
         if (existing.IsRevoked)
         {
+        
             // Revoked can mean two very different things:
             //  1. Normal logout — ReplacedByTokenId is still null.
             //  2. This token was already rotated once (has a replacement)

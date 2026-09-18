@@ -1,8 +1,6 @@
-import { createApi } from "@reduxjs/toolkit/query/react";
-import { baseQueryWithAuth } from "./baseQueryWithAuth";
 import { UserProfile } from "../../domain/entities/UserProfile";
 import { PagedResult } from "../../domain/entities/Submission";
-
+import { api } from "./api";
 export interface UserSummaryDto {
   id: string;
   email: string;
@@ -21,10 +19,8 @@ export interface CreatedUser {
   roles: string[];
 }
 
-export const userApi = createApi({
-  reducerPath: "userApi",
-  baseQuery: baseQueryWithAuth,
-  tagTypes: ["UserProfile", "Submission"], // new — getStudents doesn't need tags, profile endpoints do
+export const userApi = api.injectEndpoints({
+  // new — getStudents doesn't need tags, profile endpoints do
   endpoints: (builder) => ({
     getStudents: builder.query<UserSummaryDto[], void>({
       query: () => "/users/students",

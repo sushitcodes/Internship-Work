@@ -1,6 +1,4 @@
-import { createApi } from "@reduxjs/toolkit/query/react";
-import { baseQueryWithAuth } from "./baseQueryWithAuth";
-
+import { api } from "./api";
 export interface AttendanceRecordDto {
   id: string;
   enrollmentId: string;
@@ -37,10 +35,7 @@ export interface AttendanceSheet {
   rows: AttendanceSheetRow[];
 }
 
-export const attendanceApi = createApi({
-  reducerPath: "attendanceApi",
-  baseQuery: baseQueryWithAuth,
-  tagTypes: ["Attendance", "Dashboard"],
+export const attendanceApi = api.injectEndpoints({
   endpoints: (builder) => ({
     markAttendance: builder.mutation<void, MarkAttendanceRequest>({
       query: (body) => ({ url: "/attendance/mark", method: "POST", body }),

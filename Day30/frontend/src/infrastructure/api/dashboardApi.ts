@@ -1,8 +1,6 @@
-import { createApi } from "@reduxjs/toolkit/query/react";
-import { baseQueryWithAuth } from "./baseQueryWithAuth";
 import { Submission } from "../../domain/entities/Submission";
 import { AttendanceRecordDto } from "./attendanceApi";
-
+import { api } from "./api";
 export interface StatusCount {
   status: string;
   count: number;
@@ -22,11 +20,7 @@ export interface MyDashboard {
   myRecentAttendance: AttendanceRecordDto[];
 }
 
-export const dashboardApi = createApi({
-  reducerPath: "dashboardApi",
-  baseQuery: baseQueryWithAuth,
-  tagTypes: ["Dashboard"],
-  refetchOnMountOrArgChange: 15,
+export const dashboardApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getDashboardSummary: builder.query<DashboardSummary, void>({
       query: () => "/dashboard/summary",

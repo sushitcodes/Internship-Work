@@ -1,6 +1,4 @@
-import { createApi } from "@reduxjs/toolkit/query/react";
-import { baseQueryWithAuth } from "./baseQueryWithAuth";
-
+import { api } from "./api";
 export interface EnrollmentDto {
   id: string;
   studentUserId: string;
@@ -16,10 +14,7 @@ export interface CreateEnrollmentRequest {
   studentUserId: string;
   classRoomId: string;
 }
-export const enrollmentApi = createApi({
-  reducerPath: "enrollmentApi",
-  baseQuery: baseQueryWithAuth,
-  tagTypes: ["Enrollment", "ClassRoom"],
+export const enrollmentApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getEnrollmentsByClass: builder.query<EnrollmentDto[], string>({
       query: (classRoomId) => `/enrollments/class/${classRoomId}`,

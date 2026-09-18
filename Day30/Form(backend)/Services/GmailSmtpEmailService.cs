@@ -5,19 +5,13 @@ using Microsoft.Extensions.Configuration;
 
 namespace Form.Services;
 
-public class GmailSmtpEmailService : IEmailService
+public class GmailSmtpEmailService(IConfiguration config) : IEmailService
 {
-    private readonly IConfiguration _config;
-
-    public GmailSmtpEmailService(IConfiguration config)
-    {
-        _config = config;
-    }
 
     public async Task SendPasswordResetCodeAsync(string toEmail, string code, int expiryMinutes)
     {
-        var senderEmail = _config["Email:GmailAddress"]!;
-        var appPassword = _config["Email:GmailAppPassword"]!;
+        var senderEmail = config["Email:GmailAddress"]!;
+        var appPassword = config["Email:GmailAppPassword"]!;
 
         using var client = new SmtpClient("smtp.gmail.com", 587)
         {

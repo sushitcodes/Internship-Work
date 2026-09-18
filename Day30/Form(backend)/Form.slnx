@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="../Form.Tests/Form.Tests.csproj" Id="8f5eab24-a914-4afe-872b-c504be149043" />
   <Project Path="Form.csproj" />
 </Solution>
