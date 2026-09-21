@@ -65,7 +65,11 @@ export function AuthForm() {
           />
           {serverError && <p className="text-sm text-red-500">{serverError}</p>}
 
-          <Button type="submit" disabled={isLoading} className="w-full">
+          <Button
+            type="submit"
+            disabled={isLoading}
+            className="w-full bg-green-100 text-green-700 hover:bg-green-400"
+          >
             {isLoading ? "Logging in..." : "Log In"}
           </Button>
         </form>

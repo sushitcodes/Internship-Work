@@ -131,8 +131,7 @@
               "RelativeToolTip": "..\\Form.Tests\\SubmissionServiceTests.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-18T11:06:04.301Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-18T11:06:04.301Z"
             },
             {
               "$type": "Document",
@@ -142,7 +141,7 @@
               "RelativeDocumentMoniker": "..\\Form.Tests\\AuthServiceTests.cs",
               "ToolTip": "G:\\C sharp\\Day30\\Form.Tests\\AuthServiceTests.cs",
               "RelativeToolTip": "..\\Form.Tests\\AuthServiceTests.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFwAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAADsAAAAAAAAAAAAgwFwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-09-18T07:14:11.004Z",
               "EditorCaption": ""
@@ -157,8 +156,7 @@
               "RelativeToolTip": "..\\Form.Tests\\RefreshTokenServiceTests.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAIwAAAAOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-17T09:58:26.507Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-17T09:58:26.507Z"
             },
             {
               "$type": "Document",
@@ -170,8 +168,7 @@
               "RelativeToolTip": "Services\\SubmissionService.cs",
               "ViewState": "AgIAAIYAAAAAAAAAAAAuwJUAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-17T09:22:44.048Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-17T09:22:44.048Z"
             },
             {
               "$type": "Document",
@@ -183,8 +180,7 @@
               "RelativeToolTip": "Services\\GmailSmtpEmailService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAA4AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-18T04:44:05.669Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-18T04:44:05.669Z"
             },
             {
               "$type": "Document",
@@ -196,8 +192,7 @@
               "RelativeToolTip": "Services\\AuthService.cs",
               "ViewState": "AgIAAAoAAAAAAAAAAAAQwHwAAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-17T10:03:31.705Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-17T10:03:31.705Z"
             },
             {
               "$type": "Document",
@@ -209,8 +204,7 @@
               "RelativeToolTip": "Services\\PasswordResetService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-18T04:43:28.946Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-18T04:43:28.946Z"
             },
             {
               "$type": "Document",

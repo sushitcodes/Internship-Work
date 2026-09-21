@@ -165,14 +165,23 @@ export function AppSidebar() {
       <SidebarHeader>
         <Link
           to={Paths.dashboard}
-          className="font-semibold text-lg px-2 py-1 flex items-center gap-2"
+          className={`flex items-center gap-2.5 py-2 rounded-lg hover:bg-sidebar-accent transition-colors ${
+            state === "collapsed" ? "justify-center px-0" : "px-2"
+          }`}
         >
-          {state === "collapsed" ? (
-            // Show only icon when collapsed
-            <span className="text-xl">📚</span>
-          ) : (
-            // Show full text when expanded
-            <span>Student Submission</span>
+          <div className="h-8 w-8 rounded-lg bg-primary text-primary-foreground flex items-center justify-center shrink-0 shadow-sm">
+            <GraduationCap className="h-5 w-5" />
+          </div>
+
+          {state !== "collapsed" && (
+            <div className="flex flex-col leading-none overflow-hidden">
+              <span className="font-semibold text-sm tracking-tight text-sidebar-foreground">
+                Academix
+              </span>
+              <span className="text-[11px] text-muted-foreground font-normal mt-0.5">
+                Student Portal
+              </span>
+            </div>
           )}
         </Link>
       </SidebarHeader>
