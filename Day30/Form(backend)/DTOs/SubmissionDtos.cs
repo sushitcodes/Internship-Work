@@ -55,8 +55,6 @@ namespace Form.DTOs
 
         [Range(1, int.MaxValue)]
         public int RollNo { get; set; }
-        [Required]
-
         public IFormFile? File { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

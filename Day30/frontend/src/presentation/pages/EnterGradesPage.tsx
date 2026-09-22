@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/table";
 import { toast } from "sonner";
 import { IdSelect } from "../components/IdSelect";
-
+import { PageHeader } from "../components/PageHeader";
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
@@ -79,10 +79,16 @@ function EnterGradesPage() {
   //   }, [roster]);
 
   return (
-    <div className="max-w-3xl mx-auto mt-10 space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Enter Grades</CardTitle>
+    <div className="max-w-4xl mx-auto space-y-6">
+      <PageHeader
+        title="Grade Entry"
+        description="Select a class and subject to record or update term marks."
+      />
+      <Card className="border-border/70 shadow-xs">
+        <CardHeader className="border-b bg-muted/20 pb-3">
+          <CardTitle className="text-base font-semibold">
+            Select Class & Subject
+          </CardTitle>
         </CardHeader>
 
         <CardContent className="flex gap-3 items-end">

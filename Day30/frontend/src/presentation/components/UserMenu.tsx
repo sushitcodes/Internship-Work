@@ -33,7 +33,10 @@ export function UserMenu() {
     document.documentElement.classList.toggle("dark", dark);
     localStorage.setItem("theme", dark ? "dark" : "light");
   }, [dark]);
-  const { data: profile } = useGetOwnProfileQuery(undefined, { skip: !email });
+  const { data: profile } = useGetOwnProfileQuery(undefined, {
+    skip: !email,
+    refetchOnMountOrArgChange: true,
+  });
 
   if (!email) return null; // header shows nothing for logged-out visitors
 

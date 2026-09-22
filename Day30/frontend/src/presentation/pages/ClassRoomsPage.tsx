@@ -20,7 +20,7 @@ import { getModuleUrls } from "@/routes/getModuleUrls";
 import { toast } from "sonner";
 import { useSearchUsersInfiniteQuery } from "@/infrastructure/api/userApi";
 import { IdSelect } from "../components/IdSelect";
-
+import { PageHeader } from "../components/PageHeader";
 interface ClassRoomFormValues {
   name: string;
   academicYear: number;
@@ -61,11 +61,18 @@ function ClassRoomsPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto mt-10 space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Create Class</CardTitle>
+    <div className="max-w-4xl mx-auto space-y-6">
+      <PageHeader
+        title="Classrooms"
+        description="Create academic classes and manage student enrollments."
+      />
+      <Card className="border-border/70 shadow-xs">
+        <CardHeader className="border-b bg-muted/20 pb-4">
+          <CardTitle className="text-base font-semibold">
+            Create New Class
+          </CardTitle>
         </CardHeader>
+
         <CardContent>
           <form
             onSubmit={handleSubmit(onSubmit)}

@@ -5,14 +5,9 @@ import {
   useGetAttendanceSheetQuery,
   downloadAttendanceSheet,
 } from "../../infrastructure/api/attendanceApi";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@/components/ui/popover";
+import { Popover, PopoverTrigger } from "@/components/ui/popover";
 
 import {
   Table,
@@ -25,7 +20,7 @@ import {
 import { CalendarIcon, Download } from "lucide-react";
 import { toast } from "sonner";
 import { IdSelect } from "../components/IdSelect";
-
+import { PageHeader } from "../components/PageHeader";
 const STATUS_BADGE: Record<string, string> = {
   Present: "bg-green-100 text-green-800",
   Absent: "bg-red-100 text-red-800",
@@ -69,14 +64,26 @@ const AttendanceSheetPage: React.FC = () => {
       toast.error("Could not export the sheet. Please try again.");
     }
   };
-
+  // ✅ PUT THIS INSTEAD:
   return (
-    <div className="max-w-5xl mx-auto mt-10 space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Attendance Sheet</CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-wrap gap-3 items-end">
+    <div className="max-w-5xl mx-auto space-y-6">
+      <PageHeader
+        title="Attendance Sheet"
+        description="View monthly attendance reports and export records to Excel."
+      >
+        <Button
+          onClick={handleDownload}
+          disabled={!classRoomId || !sheet}
+          size="sm"
+          className="gap-2 shadow-xs"
+        >
+          <Download className="h-4 w-4" />
+          Export Sheet
+        </Button>
+      </PageHeader>
+
+      <Card className="border-border/70 shadow-xs">
+        <CardContent className="pt-6 flex flex-wrap gap-3 items-end">
           <div>
             <label className="text-sm font-medium mb-2 block">Class</label>
             <IdSelect
@@ -109,26 +116,8 @@ const AttendanceSheetPage: React.FC = () => {
                   </Button>
                 }
               />
-              <PopoverContent className="p-0" align="start">
-                <Calendar
-                  mode="range"
-                  selected={range}
-                  onSelect={(r) =>
-                    r?.from && r?.to && setRange({ from: r.from, to: r.to })
-                  }
-                />
-              </PopoverContent>
             </Popover>
           </div>
-
-          <Button
-            onClick={handleDownload}
-            disabled={!classRoomId || !sheet}
-            className="gap-2"
-          >
-            <Download className="h-4 w-4" />
-            Download Excel
-          </Button>
         </CardContent>
       </Card>
 

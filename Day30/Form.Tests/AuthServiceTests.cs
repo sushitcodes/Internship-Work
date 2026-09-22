@@ -4,8 +4,6 @@ using Form.Interfaces;
 using Form.Services;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Xunit;
-
 namespace Form.Tests.Services;
 
 public class AuthServiceTests

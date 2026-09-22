@@ -79,6 +79,25 @@ export const gradeApi = api.injectEndpoints({
     }),
   }),
 });
+export async function downloadMyReportCardPdf(
+  classRoomId: string,
+  studentName?: string,
+) {
+  const apiOrigin = import.meta.env.VITE_API_URL ?? "";
+  const res = await fetch(
+    `${apiOrigin}/grades/report-card/me/${classRoomId}/pdf`,
+    { credentials: "include" },
+  );
+
+  if (!res.ok) throw new Error("Could not download report card PDF.");
+  const blob = await res.blob();
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `ReportCard_${studentName ? studentName.replace(/\s+/g, "_") : "Academic"}.pdf`;
+  a.click();
+  window.URL.revokeObjectURL(url);
+}
 
 export const {
   useGetSubjectsByClassQuery,

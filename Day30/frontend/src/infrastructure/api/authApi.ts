@@ -39,6 +39,8 @@ export const authApi = api.injectEndpoints({
       query: (body) => ({ url: "/auth/login", method: "POST", body }),
       onQueryStarted: async (_arg, { dispatch, queryFulfilled }) => {
         const { data } = await queryFulfilled;
+        dispatch(api.util.resetApiState());
+
         dispatch(setCredentials({ email: data.email, roles: data.roles }));
       },
     }),
@@ -60,19 +62,12 @@ export const authApi = api.injectEndpoints({
         await queryFulfilled;
         dispatch(logout());
 
-        // ONE call. This now clears attendance, classrooms, dashboard,
-        // enrollment, grades, submissions, and users, because they're
-        // all injected into the same `api` instance. This is the exact
-        // thing you were pointing at — there's nothing left to
-        // enumerate, so nothing left to forget when a new api file
-        // gets added six months from now.
-
-        // CHANGED from resetApiState(). This marks every DATA query
-        // stale so the next mount refetches fresh, WITHOUT touching
-        // getMe's own cache entry — getMe has no providesTags, so it's
-        // simply not in the blast radius of this call.
-        dispatch(api.util.invalidateTags([...DATA_TAGS]));
-        // dispatch(api.util.resetApiState());
+        // Explicitly wipe the own-profile cache entry so the next user
+        // who logs in never briefly sees the previous user's avatar.
+        // invalidateTags alone marks it stale but still serves cached
+        // data until the component refetches — resetApiState is the
+        // sledgehammer that clears every single cache entry at once.
+        dispatch(api.util.resetApiState());
       },
     }),
 

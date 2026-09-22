@@ -31,21 +31,27 @@ interface FormValues {
 // The backend returns either a plain string body or a { message } / { title } JSON object.
 function extractErrorMessage(err: unknown): string {
   if (!err || typeof err !== "object")
-    return "Could not save. Please try again. With Different File extension and less than 10mb file size.";
+    return "Could not save. Please try again.";
   const e = err as Record<string, unknown>;
 
-  // RTK Query wraps fetch errors as { status, data }
-  if ("data" in e) {
-    const data = e.data;
-    if (typeof data === "string" && data.length > 0) return data;
-    if (data && typeof data === "object") {
-      const d = data as Record<string, unknown>;
-      if (typeof d.message === "string") return d.message;
-      if (typeof d.title === "string") return d.title;
+  if ("data" in e && e.data && typeof e.data === "object") {
+    const d = e.data as Record<string, unknown>;
+
+    // Unpack ASP.NET validation error dictionary if present
+    if (d.errors && typeof d.errors === "object") {
+      const errorEntries = Object.entries(d.errors as Record<string, string[]>);
+      if (errorEntries.length > 0) {
+        return errorEntries
+          .map(([field, msgs]) => `${field}: ${msgs.join(", ")}`)
+          .join(" | ");
+      }
     }
+
+    if (typeof d.message === "string") return d.message;
+    if (typeof d.title === "string") return d.title;
   }
   if (typeof e.message === "string") return e.message;
-  return "Could not save. Please try again. With Different File extension and less than 10mb file size.";
+  return "Could not save. Please try again.";
 }
 
 const FormPage: React.FC = () => {

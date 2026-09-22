@@ -1,6 +1,7 @@
 using Form.Authorization;
 using Form.Exceptions;
 using Form.FileStorage;
+using Form.Interface;
 using Form.Interfaces;
 using Form.Persistence;
 using Form.Persistence.Repositories;
@@ -14,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Text;
+QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -72,6 +74,7 @@ builder.Services.AddScoped<ISubjectService, SubjectService>();
 builder.Services.AddScoped<IGradeRepository, GradeRepository>();
 builder.Services.AddScoped<IGradeService, GradeService>(); 
 builder.Services.AddScoped<IAuthorizationHandler, ClassTeacherAuthorizationHandler>();
+builder.Services.AddScoped<IReportCardPdfService, ReportCardPdfService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
     .AddJwtBearer(options =>
