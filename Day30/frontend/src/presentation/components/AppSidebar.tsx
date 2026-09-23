@@ -33,6 +33,7 @@ import {
   FileText,
   Award,
   BookOpenCheck,
+  Megaphone,
 } from "lucide-react";
 import { useAppSelector } from "../../infrastructure/store/hooks";
 import { useLogoutUserMutation } from "../../infrastructure/api/authApi";
@@ -123,11 +124,18 @@ export function AppSidebar() {
       show: roles.includes("Staff") || roles.includes("Admin"),
     },
     {
+      to: Paths.broadcast,
+      label: "Send Notification",
+      icon: Megaphone,
+      show: roles.includes("Admin"),
+    },
+    {
       to: Paths.reportCard,
       label: "My Report Card",
       icon: Award,
       show: !!email,
     },
+
     {
       label: "Grades",
       icon: BookOpenCheck,

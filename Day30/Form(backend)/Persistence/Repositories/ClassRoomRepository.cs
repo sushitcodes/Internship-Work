@@ -30,6 +30,24 @@ public class ClassRoomRepository(AppDbContext _context) : IClassRoomRepository
         classRoom.ClassTeacherUserId = teacherUserId;
         await _context.SaveChangesAsync();
     }
+
+    public async Task<IReadOnlyList<Guid>> GetTeacherUserIdsAsync(
+    Guid classRoomId, CancellationToken ct = default)
+    {
+        var teacherId = await _context.ClassRooms
+            .Where(c => c.Id == classRoomId)
+            .Select(c => c.ClassTeacherUserId)
+            .FirstOrDefaultAsync(ct);
+
+        return teacherId is null ? Array.Empty<Guid>() : new[] { teacherId.Value };
+    }
+
+    public async Task<string?> GetNameAsync(
+        Guid classRoomId, CancellationToken ct = default)
+        => await _context.ClassRooms
+            .Where(c => c.Id == classRoomId)
+            .Select(c => c.Name)
+            .FirstOrDefaultAsync(ct);
 }
 
 

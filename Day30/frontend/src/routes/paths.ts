@@ -33,6 +33,8 @@ export const Paths = {
   classEnroll: "/classes/:id/enroll",
 
   enrollments: "/enrollments",
+
+  broadcast: "/admin/broadcast",
 } as const;
 
 export type PathKey = keyof typeof Paths;

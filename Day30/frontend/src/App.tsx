@@ -22,6 +22,7 @@ import { Paths } from "../src/routes/paths";
 import ClassSubjectPage from "./presentation/pages/ClassSubjectPage";
 import EnterGradesPage from "./presentation/pages/EnterGradesPage";
 import ReportCardPage from "./presentation/pages/ReportCardPage";
+import AdminBroadcastPage from "./presentation/pages/AdminBroadcastPage";
 
 function App() {
   useGetMeQuery();
@@ -72,6 +73,7 @@ function App() {
             <Route path={Paths.userCreate} element={<CreateUserPage />} />
             <Route path={Paths.classes} element={<ClassRoomsPage />} />
             <Route path={Paths.classEnroll} element={<EnrollmentPage />} />
+            <Route path={Paths.broadcast} element={<AdminBroadcastPage />} />
           </Route>
         </Route>
       </Routes>

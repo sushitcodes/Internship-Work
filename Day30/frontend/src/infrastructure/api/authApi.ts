@@ -31,6 +31,7 @@ const DATA_TAGS = [
   "Subject",
   "Grade",
   "UserProfile",
+  "Notification",
 ] as const;
 
 export const authApi = api.injectEndpoints({

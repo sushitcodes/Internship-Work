@@ -1,25 +1,18 @@
 ﻿using Form.DTOs;
-using Form.Interfaces;
 using Form.Entities;
+using Form.Interface;
+using Form.Interfaces;
 namespace Form.Services;
 
-public class SubmissionService : ISubmissionService
+public class SubmissionService(
+    ISubmissionRepository _repository, 
+    IFileStorageService _fileStorage, 
+    IUserProfileRepository _profileRepository,  
+    IEnrollmentService _enrollmentService,
+INotificationService _notificationService,
+IClassRoomRepository _classRoomRepository)   : ISubmissionService
+
 {
-    private readonly ISubmissionRepository _repository;
-    private readonly IFileStorageService _fileStorage;
-    private readonly IUserProfileRepository _profileRepository; 
-    private readonly IEnrollmentService _enrollmentService;
-
-    public SubmissionService(ISubmissionRepository repository, IFileStorageService fileStorage, IUserProfileRepository profileRepository,
-        IEnrollmentService enrollmentService)
-    {
-                _repository = repository;
-        _fileStorage = fileStorage;
-        _profileRepository = profileRepository;
-        _enrollmentService = enrollmentService;
-
-    }
-
     public async Task<SubmissionDto> CreateSubmissionAsync(CreateSubmissionRequest request)
     {
         ValidateFile(request.File);
@@ -47,9 +40,28 @@ public class SubmissionService : ISubmissionService
         // I don't guess a shape that conflicts with what already exists.
 
         var saved = await _repository.AddAsync(submission);
+
         await _enrollmentService.EnsureEnrolledAsync(profile.UserId, request.ClassRoomId);
+        var teacherUserIds = await _classRoomRepository
+                    .GetTeacherUserIdsAsync(request.ClassRoomId);
+
+        if (teacherUserIds.Count > 0)
+        {
+            var classRoomName = await _classRoomRepository
+                .GetNameAsync(request.ClassRoomId) ?? "the class assignment";
+
+            await _notificationService.NotifyNewSubmissionAsync(
+                recipientUserIds: teacherUserIds,
+                studentName: request.FullName,
+                assignmentTitle: classRoomName,
+                submissionId: saved.Id);
+        }
+
+
 
         return MapToDto(saved);
+
+
     }
 
     private static SubmissionDto MapToDto(Submission s,string? avatarUrl = null) => new()

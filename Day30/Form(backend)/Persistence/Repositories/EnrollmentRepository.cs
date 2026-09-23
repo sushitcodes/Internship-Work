@@ -45,4 +45,28 @@ public async Task<Enrollment?> GetByStudentUserIdAsync(Guid studentUserId) =>
         return true;
     }
 
+    public async Task<Dictionary<Guid, (Guid StudentUserId, string SubjectName)>>
+    GetGradeNotificationMapAsync(
+        IEnumerable<Guid> enrollmentIds,
+        Guid subjectId,
+        CancellationToken ct = default)
+    {
+        var ids = enrollmentIds.Distinct().ToList();
+
+        var subjectName = await _context.Subjects
+            .IgnoreQueryFilters()   // safe: a subject mid-archive should still resolve its name
+            .Where(s => s.Id == subjectId)
+            .Select(s => s.Name)
+            .FirstOrDefaultAsync(ct) ?? "your subject";
+
+        var rows = await _context.Enrollments
+            .Where(e => ids.Contains(e.Id))
+            .Select(e => new { e.Id, e.StudentUserId })
+            .ToListAsync(ct);
+
+        return rows.ToDictionary(
+            r => r.Id,
+            r => (r.StudentUserId, subjectName));
+    }
+
 }

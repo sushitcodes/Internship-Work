@@ -1,4 +1,5 @@
 ﻿using Form.Entities;
+using Form.Interface;
 using Form.Interfaces;
 using Form.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -41,4 +42,29 @@ public class UserRepository(AppDbContext _context) : IUserRepository
         user.IsActive = isActive;
         await _context.SaveChangesAsync();
     }
+    public async Task<List<Guid>> GetUserIdsByRoleAsync(UserRole role) =>
+    await _context.Users
+        .AsNoTracking()
+        .Where(u => u.IsActive &&
+                    u.RoleAssignments.Any(ra => ra.Role == role))
+        .Select(u => u.Id)
+        .ToListAsync();
+
+    public async Task<List<Guid>> GetUserIdsByRolesAsync(IEnumerable<UserRole> roles)
+    {
+        var set = roles.Distinct().ToList();
+        return await _context.Users
+            .AsNoTracking()
+            .Where(u => u.IsActive &&
+                        u.RoleAssignments.Any(ra => set.Contains(ra.Role)))
+            .Select(u => u.Id)
+            .ToListAsync();
+    }
+
+    public async Task<List<Guid>> GetAllUserIdsAsync() =>
+        await _context.Users
+            .AsNoTracking()
+            .Where(u => u.IsActive)
+            .Select(u => u.Id)
+            .ToListAsync();
 }

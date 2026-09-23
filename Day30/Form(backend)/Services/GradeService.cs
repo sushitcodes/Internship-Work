@@ -1,8 +1,13 @@
 ﻿using Form.DTOs;
+using Form.Interface;
 using Form.Interfaces;
 namespace Form.Services;
 
-public class GradeService(IGradeRepository repository, IUserProfileRepository profileRepository) : IGradeService
+public class GradeService(
+    IGradeRepository repository,
+    IUserProfileRepository profileRepository,
+    INotificationService notificationService,
+    IEnrollmentRepository enrollmentRepository) : IGradeService
 {
     public async Task<List<GradeRosterEntryDto>> GetRosterAsync(Guid subjectId)
     {
@@ -17,7 +22,35 @@ public class GradeService(IGradeRepository repository, IUserProfileRepository pr
             .Select(e => (e.EnrollmentId, e.MarksObtained, e.MaxMarks, e.Remarks))
             .ToList();
 
+        // 1. Persist first. If the upsert fails, no notification goes out.
         await repository.UpsertRangeAsync(request.SubjectId, entries, gradedByUserId);
+
+        // 2. Then notify each student whose grade was touched.
+        await NotifyGradeTargetsAsync(entries, request.SubjectId);
+    }
+
+    private async Task NotifyGradeTargetsAsync(
+        List<(Guid EnrollmentId, decimal MarksObtained, decimal MaxMarks, string? Remarks)> entries,
+        Guid subjectId)
+    {
+        if (entries.Count == 0) return;
+
+        var enrollmentIds = entries.Select(e => e.EnrollmentId).Distinct().ToList();
+
+        // One DB round-trip for the whole batch — not one per student.
+        var map = await enrollmentRepository
+            .GetGradeNotificationMapAsync(enrollmentIds, subjectId);
+
+        foreach (var entry in entries)
+        {
+            if (!map.TryGetValue(entry.EnrollmentId, out var target)) continue;
+
+            await notificationService.NotifyGradePublishedAsync(
+                studentUserId: target.StudentUserId,
+                subjectName: target.SubjectName,
+                marks: entry.MarksObtained,
+                maxMarks: entry.MaxMarks);
+        }
     }
 
     public async Task<StudentReportCardDto?> GetReportCardAsync(Guid studentUserId, Guid classRoomId)

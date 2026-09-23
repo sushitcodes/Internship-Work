@@ -1,6 +1,7 @@
 using Form.Authorization;
 using Form.Exceptions;
 using Form.FileStorage;
+using Form.Hubs;
 using Form.Interface;
 using Form.Interfaces;
 using Form.Persistence;
@@ -49,6 +50,8 @@ builder.Services.AddScoped<IFileStorageService, LocalFileStorageService>();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSignalR();
+
 
 builder.Services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();
 builder.Services.AddScoped<ITokenService, TokenService>();
@@ -75,6 +78,8 @@ builder.Services.AddScoped<IGradeRepository, GradeRepository>();
 builder.Services.AddScoped<IGradeService, GradeService>(); 
 builder.Services.AddScoped<IAuthorizationHandler, ClassTeacherAuthorizationHandler>();
 builder.Services.AddScoped<IReportCardPdfService, ReportCardPdfService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
     .AddJwtBearer(options =>
@@ -89,6 +94,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)),
+            NameClaimType = "sub"
+
         };
         options.Events = new JwtBearerEvents
         {
@@ -97,6 +104,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 if (context.Request.Cookies.TryGetValue("jwt", out var token))
                 {
                     context.Token = token;
+                }
+                //  SignalR passes the token via query string on the WebSocket handshake,
+                //    because browsers can't attach headers after the upgrade.
+                var accessToken = context.Request.Query["access_token"];
+                var path = context.HttpContext.Request.Path;
+                if (!string.IsNullOrEmpty(accessToken) &&
+                    path.StartsWithSegments("/hubs"))
+                {
+                    context.Token = accessToken;
                 }
                 return Task.CompletedTask;
             }
@@ -192,7 +208,9 @@ app.UseStaticFiles();
     app.UseRateLimiter();
     app.UseAuthentication();
     app.UseAuthorization();
-    app.MapControllers();
+app.MapHub<NotificationHub>("/hubs/notifications")
+    .RequireAuthorization();
+app.MapControllers();
 
     app.Run();
 

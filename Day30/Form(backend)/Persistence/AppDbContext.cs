@@ -1,4 +1,5 @@
-﻿using Form.Entities;
+﻿using Form.Domain.Entities;
+using Form.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Text.Json;
@@ -20,6 +21,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<AttendanceRecord> AttendanceRecords => Set<AttendanceRecord>();
     public DbSet<Subject> Subjects => Set<Subject>();
     public DbSet<Grade> Grades => Set<Grade>();
+    public DbSet<Notification> Notifications => Set<Notification>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -218,6 +220,23 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             // teacher account deleted → class just loses its head teacher,
             // not itself.
         });
+
+
+        // for the notification
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<Notification>(b =>
+        {
+            b.HasKey(n => n.Id);
+            b.Property(n => n.Title).HasMaxLength(200).IsRequired();
+            b.Property(n => n.Body).HasMaxLength(1000).IsRequired();
+            b.Property(n => n.Link).HasMaxLength(500);
+            b.Property(n => n.Kind).HasMaxLength(50).IsRequired();
+
+            // Fast lookups: "my unread notifications, newest first"
+            b.HasIndex(n => new { n.UserId, n.IsRead, n.CreatedAt });
+        });
+
     }
 
     // Intercepts every SaveChangesAsync call. Two jobs:
@@ -296,5 +315,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         }
 
         await SaveChangesAsync(cancellationToken);
+
+
     }
+
 }

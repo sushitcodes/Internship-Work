@@ -12,5 +12,10 @@ namespace Form.Interfaces
         Task<User?> GetByIdAsync(Guid id);
         Task<List<User>> GetByRoleAsync(UserRole role);
         Task SetActiveStatusAsync(Guid userId, bool isActive);
+
+        Task<List<Guid>> GetUserIdsByRoleAsync(UserRole role);
+        Task<List<Guid>> GetAllUserIdsAsync();
+        Task<List<Guid>> GetUserIdsByRolesAsync(IEnumerable<UserRole> roles);
+
     }
 }

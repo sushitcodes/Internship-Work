@@ -21,6 +21,7 @@ export const api = createApi({
     "Subject",
     "Grade",
     "UserProfile",
+    "Notification",
   ],
 
   // No endpoints here — every one gets added via injectEndpoints below.
