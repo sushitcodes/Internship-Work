@@ -8,3 +8,16 @@ public record NotificationDto(
     string Kind,
     bool IsRead,
     DateTime  CreatedAt);
+
+public record BroadcastRequest(
+string Title,
+string Body,
+string? Link,
+String Scope);
+
+public enum BroadcastScope
+{
+    AllTeachers,
+    AllStudents,
+    Everyone,
+}

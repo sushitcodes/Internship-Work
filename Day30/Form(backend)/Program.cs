@@ -79,6 +79,7 @@ builder.Services.AddScoped<IGradeService, GradeService>();
 builder.Services.AddScoped<IAuthorizationHandler, ClassTeacherAuthorizationHandler>();
 builder.Services.AddScoped<IReportCardPdfService, ReportCardPdfService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<IBulkImportService, BulkImportService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 

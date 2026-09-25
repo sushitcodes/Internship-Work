@@ -54,6 +54,7 @@ import { toast } from "sonner";
 import { Paths } from "@/routes/paths";
 import { PageHeader } from "../components/PageHeader";
 import { useDebounce } from "../hooks/useDebounce";
+import { BulkImportModal } from "../components/BulkImport";
 const ROLE_OPTIONS = ["Student", "Staff", "Admin"] as const;
 
 function UsersListPage() {
@@ -159,12 +160,19 @@ function UsersListPage() {
         description="View, search, and manage student, staff, and admin accounts."
       >
         {roles.includes("Admin") && (
-          <Link to={Paths.userCreate}>
-            <Button size="sm" className="gap-2 shadow-xs">
-              <Plus className="h-4 w-4" />
-              Add User
-            </Button>
-          </Link>
+          <div className="flex items-center gap-2">
+            <BulkImportModal
+              onSuccess={() => {
+                /* tags already invalidated */
+              }}
+            />
+            <Link to={Paths.userCreate}>
+              <Button size="sm" className="gap-2 shadow-xs">
+                <Plus className="h-4 w-4" />
+                Add User
+              </Button>
+            </Link>
+          </div>
         )}
       </PageHeader>
 

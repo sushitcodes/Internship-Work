@@ -5,7 +5,6 @@ import { api } from "./api";
 import {
   startUpload,
   updateUploadProgress,
-  uploadFailed,
   removeUpload,
 } from "../store/uploadProgressSlice";
 import type { Submission } from "../../domain/entities/Submission";
@@ -52,8 +51,7 @@ export function useUploadSubmission() {
             (typeof err.response?.data === "string"
               ? err.response.data
               : null) ??
-            "Upload failed. Please try again.";
-          dispatch(uploadFailed({ id: tempId, errorMessage: message }));
+            "Upload failed put file less than 10mb. Please try again.";
           throw new Error(message);
         });
     },

@@ -82,17 +82,28 @@ public class NotificationsController(
         return NoContent();
 
     }
-    public record BroadcastRequest(
-string Title,
-string Body,
-string? Link,
-BroadcastScope Scope);
 
-    public enum BroadcastScope
+    // NotificationsController
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete(
+        Guid id,
+        CancellationToken cancellationToken = default)
     {
-        AllTeachers,
-        AllStudents,
-        Everyone,
+        var deleted = await db.Notifications
+            .Where(n => n.Id == id && n.UserId == CurrentUserId)
+            .ExecuteDeleteAsync(cancellationToken);
+
+        return deleted > 0 ? NoContent() : NotFound();
+    }
+
+    [HttpDelete("clear-all")]
+    public async Task<IActionResult> ClearAll(CancellationToken cancellationToken = default)
+    {
+        await db.Notifications
+            .Where(n => n.UserId == CurrentUserId)
+            .ExecuteDeleteAsync(cancellationToken);
+
+        return NoContent();
     }
 
     [HttpPost("broadcast")]
@@ -107,11 +118,13 @@ BroadcastScope Scope);
         if (string.IsNullOrWhiteSpace(request.Body))
             return BadRequest("Body is required.");
 
-        // Cap the length so a runaway script can't insert a megabyte per row.
         if (request.Title.Length > 200 || request.Body.Length > 1000)
             return BadRequest("Title max 200 chars, body max 1000 chars.");
 
-        switch (request.Scope)
+        if (!Enum.TryParse<BroadcastScope>(request.Scope, ignoreCase: true, out var scope))
+            return BadRequest($"Unknown scope: '{request.Scope}'");
+
+        switch (scope)
         {
             case BroadcastScope.AllTeachers:
                 await _notificationService.NotifyAllTeachersAsync(

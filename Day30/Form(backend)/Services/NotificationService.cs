@@ -25,7 +25,7 @@ public class NotificationService(
             recipientUserIds,
             title: "New Submission Received",
             body: $"{studentName} uploaded a submission for \"{assignmentTitle}\".",
-            link: $"/submissions/{submissionId}",
+            link: $"/submission/{submissionId}",
             kind: "submission",
             cancellationToken);
 

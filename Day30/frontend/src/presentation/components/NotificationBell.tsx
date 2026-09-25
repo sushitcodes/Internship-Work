@@ -5,13 +5,15 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { Bell, FileText, Award } from "lucide-react";
+import { Bell, FileText, Award, Trash2, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import {
   useGetNotificationsQuery,
   useGetUnreadCountQuery,
   useMarkNotificationReadMutation,
   useMarkAllNotificationsReadMutation,
+  useDeleteNotificationMutation,
+  useClearAllNotificationsMutation,
 } from "../../infrastructure/api/notificationApi";
 
 export function NotificationBell() {
@@ -22,11 +24,18 @@ export function NotificationBell() {
   const { data: notifications = [], isLoading } = useGetNotificationsQuery();
   const [markRead] = useMarkNotificationReadMutation();
   const [markAllRead] = useMarkAllNotificationsReadMutation();
+  const [deleteOne] = useDeleteNotificationMutation();
+  const [clearAll] = useClearAllNotificationsMutation();
 
   const handleClick = async (id: string, link?: string | null) => {
     await markRead(id);
     setOpen(false);
     if (link) navigate(link);
+  };
+
+  const handleDismiss = async (e: React.MouseEvent, id: string) => {
+    e.stopPropagation(); // don't let the row's onClick (navigate) fire
+    await deleteOne(id);
   };
 
   return (
@@ -47,6 +56,7 @@ export function NotificationBell() {
         }
       />
       <PopoverContent align="end" className="w-80 sm:w-96 p-0 shadow-lg">
+        {/* Header */}
         <div className="flex items-center justify-between p-3 border-b bg-muted/20">
           <div className="flex items-center gap-2">
             <h3 className="font-semibold text-sm">Notifications</h3>
@@ -56,18 +66,33 @@ export function NotificationBell() {
               </span>
             )}
           </div>
-          {unreadCount > 0 && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => markAllRead()}
-              className="h-7 text-xs px-2"
-            >
-              Mark all read
-            </Button>
-          )}
+
+          <div className="flex items-center gap-1">
+            {unreadCount > 0 && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => markAllRead()}
+                className="h-7 text-xs px-2"
+              >
+                Mark all read
+              </Button>
+            )}
+            {notifications.length > 0 && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => clearAll()}
+                className="h-7 w-7 p-0 text-muted-foreground hover:text-destructive"
+                title="Clear all notifications"
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+              </Button>
+            )}
+          </div>
         </div>
 
+        {/* List */}
         <div className="max-h-80 overflow-y-auto divide-y divide-border/60">
           {isLoading ? (
             <div className="py-8 text-center text-xs text-muted-foreground">
@@ -78,7 +103,7 @@ export function NotificationBell() {
               <button
                 key={n.id}
                 onClick={() => handleClick(n.id, n.link)}
-                className={`w-full text-left p-3 flex items-start gap-3 transition-colors ${
+                className={`relative w-full text-left p-3 pr-10 flex items-start gap-3 transition-colors ${
                   !n.isRead ? "bg-primary/5" : "hover:bg-muted/40"
                 }`}
               >
@@ -99,6 +124,7 @@ export function NotificationBell() {
                     <Bell className="h-4 w-4" />
                   )}
                 </div>
+
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-semibold text-foreground truncate">
                     {n.title}
@@ -115,9 +141,27 @@ export function NotificationBell() {
                     })}
                   </span>
                 </div>
+
                 {!n.isRead && (
                   <span className="w-2 h-2 rounded-full bg-primary shrink-0 mt-1.5" />
                 )}
+
+                {/* Per-row dismiss — always visible */}
+                <span
+                  role="button"
+                  tabIndex={0}
+                  aria-label="Dismiss notification"
+                  onClick={(e) => handleDismiss(e, n.id)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleDismiss(e as unknown as React.MouseEvent, n.id);
+                    }
+                  }}
+                  className="absolute top-1/2 -translate-y-1/2 right-2 p-1.5 rounded-md text-muted-foreground/60 hover:bg-muted hover:text-destructive transition-colors cursor-pointer"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </span>
               </button>
             ))
           ) : (

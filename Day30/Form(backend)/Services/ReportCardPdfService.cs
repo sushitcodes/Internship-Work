@@ -51,9 +51,7 @@ public class ReportCardPdfService : IReportCardPdfService
                     col.Item().PaddingTop(10).LineHorizontal(1.5f).LineColor(Colors.Blue.Darken2);
                 });
 
-                // ----------------------------------------------------
                 // CONTENT: Student Information, Grades Table & Summary
-                // ----------------------------------------------------
                 page.Content().PaddingVertical(15).Column(col =>
                 {
                     // Student Info Card
