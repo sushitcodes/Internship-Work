@@ -13,4 +13,8 @@ public interface IEnrollmentRepository
         IEnumerable<Guid> enrollmentIds,
         Guid subjectId,
         CancellationToken ct = default);
+    //Methods for deactivation
+    Task DeactivateByStudentUserIdAsync(Guid studentUserId);
+    Task ReactivateByStudentUserIdAsync(Guid studentUserId);
+
 }

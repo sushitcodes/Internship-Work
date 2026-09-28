@@ -7,6 +7,8 @@ public class Enrollment
     public Guid ClassRoomId { get; set; }
     public DateTime EnrolledAt { get; set; } = DateTime.UtcNow;
 
+     public bool IsActive { get; set; } = true;
+    public DateTime? DeactivatedAt { get; set; }
     public User StudentUser { get; set; } = null!;
     public ClassRoom ClassRoom { get; set; } = null!;
     public ICollection<AttendanceRecord> AttendanceRecords { get; set; } = new List<AttendanceRecord>();

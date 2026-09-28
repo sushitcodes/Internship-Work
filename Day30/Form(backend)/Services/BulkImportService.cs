@@ -117,6 +117,13 @@ public class BulkImportService : IBulkImportService
             if (!seenEmailsInFile.Add(r.Email))
                 result.Errors.Add(
                     $"Row {r.RowNumber}: Duplicate email '{r.Email}' found within the spreadsheet.");
+
+            if (existingDbEmails.Contains(r.Email.ToLower()))
+            {
+                result.Errors.Add(
+                    $"Row {r.RowNumber}: Email '{r.Email}' is already registered in the system. " +
+                    $"If the account is deactivated, reactivate it first or use a different email.");
+            }
         }
 
         if (result.Errors.Count > 0)

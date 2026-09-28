@@ -1,7 +1,11 @@
-﻿using Form.Domain.Entities;
+﻿using DocumentFormat.OpenXml.Drawing.Charts;
+using DocumentFormat.OpenXml.Spreadsheet;
+using DocumentFormat.OpenXml.Wordprocessing;
+using Form.Domain.Entities;
 using Form.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Serilog.Filters;
 using System.Text.Json;
 
 namespace Form.Persistence;
@@ -66,6 +70,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
             // Index
             entity.HasIndex(a => new { a.EnrollmentId, a.Date });
+            //Matching query filter
+    entity.HasQueryFilter(a => a.Enrollment.IsActive);
 
             // TODO: If AttendanceRecord implements ISoftDelete, uncomment the
             // line below. Without it, soft-deleted attendance rows are never
@@ -142,6 +148,11 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
             // ONE class per student, enforced by the database.
             entity.HasIndex(e => e.StudentUserId).IsUnique();
+            //Set the schema - level default to true
+    entity.Property(e => e.IsActive)
+          .HasDefaultValue(true);
+            //Global query filter — inactive enrollments are hidden by default
+            entity.HasQueryFilter(e => e.IsActive);
 
             // TODO: If Enrollment implements ISoftDelete, uncomment the line
             // below. Same reasoning as AttendanceRecord above.
@@ -180,7 +191,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         // filters stay in lockstep.
         modelBuilder.Entity<Grade>(b =>
         {
-            b.HasQueryFilter(g => !g.IsDeleted);
+            b.HasQueryFilter(g => !g.IsDeleted && g.Enrollment.IsActive);
 
             b.Property(g => g.MarksObtained).HasPrecision(18, 4);
             b.Property(g => g.MaxMarks).HasPrecision(18, 4);

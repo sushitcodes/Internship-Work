@@ -11,16 +11,26 @@ public class UserProfileService : IUserProfileService
     private readonly IFileStorageService _fileStorage;
     private readonly IUserRepository _userRepository;
     private readonly IRefreshTokenService _refreshTokenService;
+    private readonly IEnrollmentRepository _enrollmentRepository; 
 
-    public UserProfileService(IUserProfileRepository repository, IFileStorageService fileStorage, IUserRepository userRepository, IRefreshTokenService refreshTokenService)
+    public UserProfileService(
+        IUserProfileRepository repository,
+        IFileStorageService fileStorage,
+        IUserRepository userRepository, 
+        IRefreshTokenService refreshTokenService,
+        IEnrollmentRepository enrollmentRepository
+
+        )
     {
         _repository = repository;
         _fileStorage = fileStorage;
         _userRepository = userRepository;
         _refreshTokenService = refreshTokenService;
+        _enrollmentRepository = enrollmentRepository;
 
 
     }
+
 
     public async Task<UserProfileDto> GetOrCreateOwnProfileAsync(Guid userId, string email)
     {
@@ -134,18 +144,21 @@ public class UserProfileService : IUserProfileService
 
     public async Task SetActiveStatusAsync(Guid userId, bool isActive)
     {
+        // Step 1: Update the User.IsActive flag
         await _userRepository.SetActiveStatusAsync(userId, isActive);
 
-        // Only kill sessions on DEACTIVATE, never on reactivate — turning
-        // someone back on should never forcibly log out whatever device
-        // they're already using elsewhere (there's nothing to revoke them
-        // FROM, since they were blocked from logging in during that time).
         if (!isActive)
         {
+            // Step 2: Revoke all sessions
             await _refreshTokenService.RevokeAllForUserAsync(userId);
+
+            // Step 3: Deactivate all their enrollments
+            await _enrollmentRepository.DeactivateByStudentUserIdAsync(userId);
+        }
+        else
+        {
+            // Step 4: Reactivate their enrollments when reactivating the user
+            await _enrollmentRepository.ReactivateByStudentUserIdAsync(userId);
         }
     }
-    // needs IUserRepository injected — see below
-
-
 }

@@ -68,5 +68,40 @@ public async Task<Enrollment?> GetByStudentUserIdAsync(Guid studentUserId) =>
             r => r.Id,
             r => (r.StudentUserId, subjectName));
     }
+    // Deactivate all enrollments for a student
+    public async Task DeactivateByStudentUserIdAsync(Guid studentUserId)
+    {
+        // Use IgnoreQueryFilters so we can find already-inactive ones too
+        var enrollments = await _context.Enrollments
+            .IgnoreQueryFilters()
+            .Where(e => e.StudentUserId == studentUserId)
+            .ToListAsync();
+
+        foreach (var enrollment in enrollments)
+        {
+            enrollment.IsActive = false;
+            enrollment.DeactivatedAt = DateTime.UtcNow;
+        }
+
+        await _context.SaveChangesAsync();
+    }
+
+    //  Reactivate when the user is reactivated
+    public async Task ReactivateByStudentUserIdAsync(Guid studentUserId)
+    {
+        var enrollments = await _context.Enrollments
+            .IgnoreQueryFilters()
+            .Where(e => e.StudentUserId == studentUserId)
+            .ToListAsync();
+
+        foreach (var enrollment in enrollments)
+        {
+            enrollment.IsActive = true;
+            enrollment.DeactivatedAt = null;
+        }
+
+        await _context.SaveChangesAsync();
+    }
+
 
 }

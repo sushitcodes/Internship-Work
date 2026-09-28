@@ -14,9 +14,13 @@ public class ReportCardPdfService : IReportCardPdfService
         var gradedSubjects = reportCard.Subjects.Where(s => s.MarksObtained.HasValue).ToList();
         var totalObtained = gradedSubjects.Sum(s => s.MarksObtained!.Value);
         var totalMax = gradedSubjects.Sum(s => s.MaxMarks);
-        var overallPercentage = totalMax > 0 ? Math.Round((totalObtained * 100) / totalMax, 1) : 0;
-        var isPassed = overallPercentage >= 40 && !gradedSubjects.Any(s => (s.MarksObtained!.Value / s.MaxMarks) < 0.35m);
-
+        var overallPercentage = totalMax > 0
+            ? Math.Round((totalObtained * 100) / totalMax, 1, MidpointRounding.AwayFromZero)
+            : 0;
+        //skip subjects with maxMarks = 0
+var isPassed = overallPercentage >= 40
+    && !gradedSubjects.Any(s => s.MaxMarks > 0
+                             && (s.MarksObtained!.Value / s.MaxMarks) < 0.35m);
         //  Generate QuestPDF Document structure
         var document = Document.Create(container =>
         {

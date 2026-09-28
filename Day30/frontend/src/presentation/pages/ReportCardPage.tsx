@@ -92,8 +92,9 @@ function ReportCardPage() {
     0,
   );
   const totalMax = gradedSubjects.reduce((acc, curr) => acc + curr.maxMarks, 0);
+  //  round to 1 decimal like backend
   const overallPercentage =
-    totalMax > 0 ? Math.round((totalObtained * 100) / totalMax) : 0;
+    totalMax > 0 ? Math.round(((totalObtained * 100) / totalMax) * 10) / 10 : 0;
 
   return (
     <div className="max-w-4xl mx-auto space-y-6 pb-12">

@@ -18,14 +18,27 @@ public class GradeService(
 
     public async Task SubmitAsync(SubmitGradesRequest request, Guid gradedByUserId)
     {
+        //  VALIDATION BLOCK
+        foreach (var entry in request.Entries)
+        {
+            if (entry.MarksObtained < 0)
+                throw new InvalidOperationException(
+                    $"Marks cannot be negative. Got: {entry.MarksObtained}");
+
+            if (entry.MaxMarks <= 0)
+                throw new InvalidOperationException(
+                    $"Max marks must be greater than 0. Got: {entry.MaxMarks}");
+
+            if (entry.MarksObtained > entry.MaxMarks)
+                throw new InvalidOperationException(
+                    $"Marks ({entry.MarksObtained}) cannot exceed max marks ({entry.MaxMarks})");
+        }
+
         var entries = request.Entries
             .Select(e => (e.EnrollmentId, e.MarksObtained, e.MaxMarks, e.Remarks))
             .ToList();
 
-        // 1. Persist first. If the upsert fails, no notification goes out.
         await repository.UpsertRangeAsync(request.SubjectId, entries, gradedByUserId);
-
-        // 2. Then notify each student whose grade was touched.
         await NotifyGradeTargetsAsync(entries, request.SubjectId);
     }
 
