@@ -3,6 +3,14 @@
   "WorkspaceRootPath": "G:\\C sharp\\Day30\\Form(backend)\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\hubs\\notificationhub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:hubs\\notificationhub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\form.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:form.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\migrations\\20260928072704_fixenrollmentisactivevalues.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:migrations\\20260928072704_fixenrollmentisactivevalues.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -156,20 +164,12 @@
       "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:services\\tokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\hubs\\notificationhub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:hubs\\notificationhub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\controllers\\gradescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:controllers\\gradescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\interface\\ireportcardpdfservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:interface\\ireportcardpdfservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\form.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:form.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\dtos\\submissiondtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -235,7 +235,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 7,
           "Children": [
             {
               "$type": "Bookmark",
@@ -247,7 +247,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "20260928072704_FixEnrollmentIsActiveValues.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Migrations\\20260928072704_FixEnrollmentIsActiveValues.cs",
               "RelativeDocumentMoniker": "Migrations\\20260928072704_FixEnrollmentIsActiveValues.cs",
@@ -260,33 +260,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Enrollment.cs",
-              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Entities\\Enrollment.cs",
-              "RelativeDocumentMoniker": "Entities\\Enrollment.cs",
-              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Entities\\Enrollment.cs",
-              "RelativeToolTip": "Entities\\Enrollment.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAYwAoAAAAwAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-28T06:49:12.482Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "AppDbContext.cs",
-              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Persistence\\AppDbContext.cs",
-              "RelativeDocumentMoniker": "Persistence\\AppDbContext.cs",
-              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Persistence\\AppDbContext.cs",
-              "RelativeToolTip": "Persistence\\AppDbContext.cs",
-              "ViewState": "AgIAAIwAAAAAAAAAAAAswJYAAAAlAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-17T07:27:03.114Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "20260928065445_AddIsActiveToEnrollment.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Migrations\\20260928065445_AddIsActiveToEnrollment.cs",
               "RelativeDocumentMoniker": "Migrations\\20260928065445_AddIsActiveToEnrollment.cs",
@@ -299,7 +273,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 6,
               "Title": "BulkImportService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\BulkImportService.cs",
               "RelativeDocumentMoniker": "Services\\BulkImportService.cs",
@@ -312,7 +286,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
               "Title": "GradeService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\GradeService.cs",
               "RelativeDocumentMoniker": "Services\\GradeService.cs",
@@ -325,7 +299,59 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 1,
+              "Title": "Form.csproj",
+              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Form.csproj",
+              "RelativeDocumentMoniker": "Form.csproj",
+              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Form.csproj*",
+              "RelativeToolTip": "Form.csproj*",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABUAAAA9AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-09-22T08:49:21.337Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "NotificationHub.cs",
+              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Hubs\\NotificationHub.cs",
+              "RelativeDocumentMoniker": "Hubs\\NotificationHub.cs",
+              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Hubs\\NotificationHub.cs",
+              "RelativeToolTip": "Hubs\\NotificationHub.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-23T05:15:25.638Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AppDbContext.cs",
+              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Persistence\\AppDbContext.cs",
+              "RelativeDocumentMoniker": "Persistence\\AppDbContext.cs",
+              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Persistence\\AppDbContext.cs",
+              "RelativeToolTip": "Persistence\\AppDbContext.cs",
+              "ViewState": "AgIAAIwAAAAAAAAAAAAswJYAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-17T07:27:03.114Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Enrollment.cs",
+              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Entities\\Enrollment.cs",
+              "RelativeDocumentMoniker": "Entities\\Enrollment.cs",
+              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Entities\\Enrollment.cs",
+              "RelativeToolTip": "Entities\\Enrollment.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAYwAoAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-28T06:49:12.482Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
               "Title": "EnrollmentService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\EnrollmentService.cs",
               "RelativeDocumentMoniker": "Services\\EnrollmentService.cs",
@@ -338,7 +364,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "UserProfileService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\UserProfileService.cs",
               "RelativeDocumentMoniker": "Services\\UserProfileService.cs",
@@ -351,7 +377,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 10,
               "Title": "EnrollmentRepository.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Persistence\\Repositories\\EnrollmentRepository.cs",
               "RelativeDocumentMoniker": "Persistence\\Repositories\\EnrollmentRepository.cs",
@@ -364,7 +390,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 11,
               "Title": "UserRepository.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Persistence\\Repositories\\UserRepository.cs",
               "RelativeDocumentMoniker": "Persistence\\Repositories\\UserRepository.cs",
@@ -377,7 +403,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 12,
               "Title": "IEntrollmentRepository.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Interface\\IEntrollmentRepository.cs",
               "RelativeDocumentMoniker": "Interface\\IEntrollmentRepository.cs",
@@ -390,7 +416,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 13,
               "Title": "ReportCardPdfService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\ReportCardPdfService.cs",
               "RelativeDocumentMoniker": "Services\\ReportCardPdfService.cs",
@@ -403,7 +429,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 16,
               "Title": "SubmissionServiceTests.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form.Tests\\SubmissionServiceTests.cs",
               "RelativeDocumentMoniker": "..\\Form.Tests\\SubmissionServiceTests.cs",
@@ -416,7 +442,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 23,
               "Title": "IBulkImportService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Interface\\IBulkImportService.cs",
               "RelativeDocumentMoniker": "Interface\\IBulkImportService.cs",
@@ -428,7 +454,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 15,
               "Title": "NotificationService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\NotificationService.cs",
               "RelativeDocumentMoniker": "Services\\NotificationService.cs",
@@ -441,7 +467,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 17,
               "Title": "AuthServiceTests.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form.Tests\\AuthServiceTests.cs",
               "RelativeDocumentMoniker": "..\\Form.Tests\\AuthServiceTests.cs",
@@ -454,7 +480,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 20,
               "Title": "NotificationsController.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Controllers\\NotificationsController.cs",
               "RelativeDocumentMoniker": "Controllers\\NotificationsController.cs",
@@ -466,7 +492,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 14,
               "Title": "Notification.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Entities\\Notification.cs",
               "RelativeDocumentMoniker": "Entities\\Notification.cs",
@@ -479,7 +505,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 18,
               "Title": "NotificationDto.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\DTOs\\NotificationDto.cs",
               "RelativeDocumentMoniker": "DTOs\\NotificationDto.cs",
@@ -491,7 +517,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 19,
               "Title": "RefreshTokenServiceTests.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form.Tests\\RefreshTokenServiceTests.cs",
               "RelativeDocumentMoniker": "..\\Form.Tests\\RefreshTokenServiceTests.cs",
@@ -503,7 +529,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
+              "DocumentIndex": 30,
               "Title": "DashBoardService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\DashBoardService.cs",
               "RelativeDocumentMoniker": "Services\\DashBoardService.cs",
@@ -515,7 +541,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 26,
               "Title": "UserRole.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Entities\\UserRole.cs",
               "RelativeDocumentMoniker": "Entities\\UserRole.cs",
@@ -527,7 +553,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 25,
               "Title": "UserProfile.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Entities\\UserProfile.cs",
               "RelativeDocumentMoniker": "Entities\\UserProfile.cs",
@@ -539,7 +565,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 22,
               "Title": "Program.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
@@ -551,7 +577,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 24,
               "Title": "BulkImportDtos.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\DTOs\\BulkImportDtos.cs",
               "RelativeDocumentMoniker": "DTOs\\BulkImportDtos.cs",
@@ -563,7 +589,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 21,
               "Title": "BulkImportController.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Controllers\\BulkImportController.cs",
               "RelativeDocumentMoniker": "Controllers\\BulkImportController.cs",
@@ -575,7 +601,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 28,
               "Title": "IUserRepository.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Interface\\IUserRepository.cs",
               "RelativeDocumentMoniker": "Interface\\IUserRepository.cs",
@@ -587,7 +613,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 29,
+              "DocumentIndex": 31,
               "Title": "ClassRoomService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\ClassRoomService.cs",
               "RelativeDocumentMoniker": "Services\\ClassRoomService.cs",
@@ -599,7 +625,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 27,
               "Title": "ClassTeacherAuthorizationHandler.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Authorization\\ClassTeacherAuthorizationHandler.cs",
               "RelativeDocumentMoniker": "Authorization\\ClassTeacherAuthorizationHandler.cs",
@@ -611,7 +637,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
+              "DocumentIndex": 29,
               "Title": "UserProfileRepository.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Persistence\\Repositories\\UserProfileRepository.cs",
               "RelativeDocumentMoniker": "Persistence\\Repositories\\UserProfileRepository.cs",
@@ -623,7 +649,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 30,
+              "DocumentIndex": 32,
               "Title": "AuthService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\AuthService.cs",
               "RelativeDocumentMoniker": "Services\\AuthService.cs",
@@ -635,7 +661,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 31,
+              "DocumentIndex": 33,
               "Title": "IFileStorageService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Interface\\IFileStorageService.cs",
               "RelativeDocumentMoniker": "Interface\\IFileStorageService.cs",
@@ -647,7 +673,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 32,
+              "DocumentIndex": 34,
               "Title": "INotificationService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Interface\\INotificationService.cs",
               "RelativeDocumentMoniker": "Interface\\INotificationService.cs",
@@ -659,7 +685,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 34,
+              "DocumentIndex": 36,
               "Title": "ClassRoomRepository.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Persistence\\Repositories\\ClassRoomRepository.cs",
               "RelativeDocumentMoniker": "Persistence\\Repositories\\ClassRoomRepository.cs",
@@ -671,7 +697,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 33,
+              "DocumentIndex": 35,
               "Title": "SubmissionService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\SubmissionService.cs",
               "RelativeDocumentMoniker": "Services\\SubmissionService.cs",
@@ -683,7 +709,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 35,
+              "DocumentIndex": 37,
               "Title": "IClassRoomRepository.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Interface\\IClassRoomRepository.cs",
               "RelativeDocumentMoniker": "Interface\\IClassRoomRepository.cs",
@@ -695,7 +721,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 36,
+              "DocumentIndex": 38,
               "Title": "ISubmissionRepository.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Interface\\ISubmissionRepository.cs",
               "RelativeDocumentMoniker": "Interface\\ISubmissionRepository.cs",
@@ -707,7 +733,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 37,
+              "DocumentIndex": 39,
               "Title": "UserDtos.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\DTOs\\UserDtos.cs",
               "RelativeDocumentMoniker": "DTOs\\UserDtos.cs",
@@ -719,7 +745,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 38,
+              "DocumentIndex": 40,
               "Title": "TokenService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\TokenService.cs",
               "RelativeDocumentMoniker": "Services\\TokenService.cs",
@@ -731,19 +757,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 39,
-              "Title": "NotificationHub.cs",
-              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Hubs\\NotificationHub.cs",
-              "RelativeDocumentMoniker": "Hubs\\NotificationHub.cs",
-              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Hubs\\NotificationHub.cs",
-              "RelativeToolTip": "Hubs\\NotificationHub.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB4AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-23T05:15:25.638Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 40,
+              "DocumentIndex": 41,
               "Title": "GradesController.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Controllers\\GradesController.cs",
               "RelativeDocumentMoniker": "Controllers\\GradesController.cs",
@@ -755,7 +769,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 41,
+              "DocumentIndex": 42,
               "Title": "IReportCardPdfService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Interface\\IReportCardPdfService.cs",
               "RelativeDocumentMoniker": "Interface\\IReportCardPdfService.cs",
@@ -764,18 +778,6 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-09-22T08:53:27.668Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 42,
-              "Title": "Form.csproj",
-              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Form.csproj",
-              "RelativeDocumentMoniker": "Form.csproj",
-              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Form.csproj",
-              "RelativeToolTip": "Form.csproj",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAA+AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2026-09-22T08:49:21.337Z"
             },
             {
               "$type": "Document",
