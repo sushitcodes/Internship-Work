@@ -1,10 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useAppSelector } from "../../infrastructure/store/hooks";
+import { useAppSelector } from "@/infrastructure/store/hooks";
 import {
   useGetDashboardSummaryQuery,
   useGetMyDashboardQuery,
-} from "../../infrastructure/api/dashboardApi";
+} from "@/infrastructure/api/dashboardApi";
 import {
   BarChart,
   Bar,
@@ -27,9 +27,11 @@ import {
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { useGetMyClassQuery } from "../../infrastructure/api/enrollmentApi";
+import { useGetMyClassQuery } from "@/infrastructure/api/enrollmentApi";
 import { getModuleUrls } from "@/routes/getModuleUrls";
-import { Paths } from "../../routes/paths";
+import { Paths } from "@/routes/paths";
+import { StatusBadge } from "@/presentation/components/StatusBadges";
+import { useStaffOrAdmin } from "@/presentation/hooks/useStaffOrAdmin";
 import {
   Users,
   GraduationCap,
@@ -44,35 +46,11 @@ import {
   Inbox,
 } from "lucide-react";
 
-// Color mapping for attendance statuses
-const STATUS_CONFIG: Record<
-  string,
-  { fill: string; badgeClass: string; label: string }
-> = {
-  Present: {
-    fill: "#10b981",
-    badgeClass:
-      "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20",
-    label: "Present",
-  },
-  Absent: {
-    fill: "#f43f5e",
-    badgeClass:
-      "bg-rose-500/10 text-rose-700 dark:text-rose-400 border-rose-500/20",
-    label: "Absent",
-  },
-  Late: {
-    fill: "#f59e0b",
-    badgeClass:
-      "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20",
-    label: "Late",
-  },
-  Excused: {
-    fill: "#6366f1",
-    badgeClass:
-      "bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 border-indigo-500/20",
-    label: "Excused",
-  },
+const STATUS_FILL: Record<string, string> = {
+  Present: "#10b981",
+  Absent: "#f43f5e",
+  Late: "#f59e0b",
+  Excused: "#6366f1",
 };
 
 // Reusable Metric Stat Card
@@ -115,21 +93,6 @@ const StatCard: React.FC<StatCardProps> = ({
   </Card>
 );
 
-// Attendance Status Pill Badge
-const StatusBadge: React.FC<{ status: string }> = ({ status }) => {
-  const config = STATUS_CONFIG[status] || {
-    badgeClass: "bg-muted text-muted-foreground border-border",
-    label: status,
-  };
-  return (
-    <span
-      className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border ${config.badgeClass}`}
-    >
-      {config.label}
-    </span>
-  );
-};
-
 // Minimalist Empty State Component
 const EmptyState: React.FC<{ message: string; submessage?: string }> = ({
   message,
@@ -149,7 +112,7 @@ const EmptyState: React.FC<{ message: string; submessage?: string }> = ({
 const DashboardPage: React.FC = () => {
   const roles = useAppSelector((state) => state.auth.roles);
   const email = useAppSelector((state) => state.auth.email);
-  const isStaffOrAdmin = roles.includes("Staff") || roles.includes("Admin");
+  const isStaffOrAdmin = useStaffOrAdmin();
 
   const { data: summary, isLoading: isLoadingSummary } =
     useGetDashboardSummaryQuery(undefined, {
@@ -365,7 +328,7 @@ const DashboardPage: React.FC = () => {
                       {summary.todayAttendanceBreakdown.map((entry) => (
                         <Cell
                           key={entry.status}
-                          fill={STATUS_CONFIG[entry.status]?.fill ?? "#94a3b8"}
+                          fill={STATUS_FILL[entry.status] ?? "#94a3b8"}
                           stroke="none"
                         />
                       ))}

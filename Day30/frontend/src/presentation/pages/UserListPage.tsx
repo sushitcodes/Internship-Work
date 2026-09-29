@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   useSearchUsersInfiniteQuery,
   useUpdateUserNameMutation,
   useSetUserActiveStatusMutation,
-} from "../../infrastructure/api/userApi";
+} from "@/infrastructure/api/userApi";
 import {
   Table,
   TableHeader,
@@ -14,19 +14,7 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { getInitials } from "../../application/utils/getInitials";
-import { resolveFileUrl } from "../../lib/resolveFileUrl";
 import { Button } from "@/components/ui/button";
 import { Plus, Check, X, Pencil } from "lucide-react";
 import { useAppSelector } from "@/infrastructure/store/hooks";
@@ -37,27 +25,23 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
-import { displayRoleName } from "../../lib/roleDisplay";
+import { displayRoleName } from "@/lib/roleDisplay";
 import { toast } from "sonner";
 import { Paths } from "@/routes/paths";
-import { PageHeader } from "../components/PageHeader";
-import { useDebounce } from "../hooks/useDebounce";
-import { BulkImportModal } from "../components/BulkImport";
+import { PageHeader } from "@/presentation/components/PageHeader";
+import { useDebounce } from "@/presentation/hooks/useDebounce";
+import { useInfiniteCachedPages } from "@/presentation/hooks/useInfiniteCachedPages";
+import { BulkImportModal } from "@/presentation/components/BulkImport";
+import { UserAvatar } from "@/presentation/components/UserAvatar";
+import { TableSkeleton } from "@/presentation/components/TableSkeleton";
+import { ConfirmDialog } from "@/presentation/components/ConfirmDialog";
+import { InfinitePagination } from "@/presentation/components/InfinitePagination";
+import { SearchInput } from "@/presentation/components/SearchInput";
+
 const ROLE_OPTIONS = ["Student", "Staff", "Admin"] as const;
 
-function UsersListPage() {
+function UserListPage() {
   const roles = useAppSelector((state) => state.auth.roles);
   const [searchInput, setSearchInput] = useState("");
   const [rollNoInput, setRollNoInput] = useState("");
@@ -67,11 +51,6 @@ function UsersListPage() {
   const debouncedRollNo = debouncedRollRaw
     ? parseInt(debouncedRollRaw, 10)
     : undefined;
-  const [pageIndex, setPageIndex] = useState(0);
-  useEffect(
-    () => setPageIndex(0),
-    [debouncedSearch, debouncedRollNo, roleFilter],
-  );
 
   const { data, fetchNextPage, isLoading, isError, isFetchingNextPage } =
     useSearchUsersInfiniteQuery({
@@ -84,9 +63,7 @@ function UsersListPage() {
   const [updateName, { isLoading: isSavingName }] = useUpdateUserNameMutation();
   const [setActiveStatus] = useSetUserActiveStatusMutation();
 
-  // Inline-edit state — which row (by userId) is currently being edited,
-  // and the in-progress value. Only ONE row editable at a time by design;
-  // starting a new edit implicitly cancels any other in-flight one.
+  // Only one row editable at a time; starting a new edit cancels the previous.
   const [editingUserId, setEditingUserId] = useState<string | null>(null);
   const [editValue, setEditValue] = useState("");
 
@@ -132,29 +109,23 @@ function UsersListPage() {
   };
 
   const pages = data?.pages ?? [];
-  const currentPage = pages[pageIndex];
+  const {
+    pageIndex,
+    setPageIndex,
+    currentPage,
+    handleNext,
+    handlePrev,
+    canGoNext,
+    canGoPrev,
+  } = useInfiniteCachedPages(
+    pages,
+    fetchNextPage,
+    `${debouncedSearch}|${debouncedRollNo ?? ""}|${roleFilter ?? ""}`,
+  );
   const users = currentPage?.items ?? [];
-
-  const handleNext = async () => {
-    if (pageIndex < pages.length - 1) {
-      setPageIndex((i) => i + 1);
-      return;
-    }
-    if (currentPage?.hasNextPage) {
-      await fetchNextPage();
-      setPageIndex((i) => i + 1);
-    }
-  };
-  const handlePrev = () => {
-    if (pageIndex > 0) setPageIndex((i) => i - 1);
-  };
-  const canGoNext =
-    pageIndex < pages.length - 1 || Boolean(currentPage?.hasNextPage);
-  const canGoPrev = pageIndex > 0;
 
   return (
     <div className="max-w-5xl mx-auto space-y-6">
-      {/* 1. Page Header with Title & Action Button */}
       <PageHeader
         title="Users Management"
         description="View, search, and manage student, staff, and admin accounts."
@@ -176,13 +147,12 @@ function UsersListPage() {
         )}
       </PageHeader>
 
-      {/* 2. Card with Filters & Table */}
       <Card className="border-border/70 overflow-hidden shadow-xs">
         <CardHeader className="border-b bg-muted/20 p-4">
           <div className="flex flex-wrap gap-3">
-            <Input
+            <SearchInput
               value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
+              onChange={setSearchInput}
               placeholder="Search by name or email..."
               className="flex-1 min-w-55"
             />
@@ -215,13 +185,7 @@ function UsersListPage() {
         </CardHeader>
 
         <CardContent className="p-0">
-          {isLoading && (
-            <div className="space-y-3">
-              {[...Array(5)].map((_, i) => (
-                <Skeleton key={i} className="h-12 w-full" />
-              ))}
-            </div>
-          )}
+          {isLoading && <TableSkeleton />}
           {!isLoading && isError && (
             <p className="text-red-500 text-center">Could not load users.</p>
           )}
@@ -279,15 +243,7 @@ function UsersListPage() {
                             </div>
                           ) : (
                             <div className="flex items-center gap-3">
-                              <Avatar className="h-8 w-8">
-                                <AvatarImage
-                                  src={resolveFileUrl(u.avatarUrl)}
-                                  alt={u.fullName}
-                                />
-                                <AvatarFallback className="text-xs">
-                                  {getInitials(u.fullName)}
-                                </AvatarFallback>
-                              </Avatar>
+                              <UserAvatar name={u.fullName} src={u.avatarUrl} />
                               <span className="font-medium">{u.fullName}</span>
                             </div>
                           )}
@@ -322,70 +278,55 @@ function UsersListPage() {
                             )}
 
                             {roles.includes("Admin") && (
-                              <AlertDialog>
-                                <AlertDialogTrigger
-                                  render={
-                                    <Button
-                                      variant="outline"
-                                      size="sm"
-                                      className={
-                                        u.isActive
-                                          ? "text-red-500 hover:text-red-700 hover:bg-red-50"
-                                          : "text-green-600 hover:text-green-700 hover:bg-green-50"
-                                      }
-                                    >
-                                      {u.isActive ? "Deactivate" : "Activate"}
-                                    </Button>
-                                  }
-                                />
-                                <AlertDialogContent>
-                                  <AlertDialogHeader>
-                                    <AlertDialogTitle>
-                                      {u.isActive
-                                        ? "Deactivate this user?"
-                                        : "Reactivate this user?"}
-                                    </AlertDialogTitle>
-                                    <AlertDialogDescription>
-                                      {u.isActive ? (
-                                        <>
-                                          <span className="font-semibold">
-                                            {u.fullName}
-                                          </span>{" "}
-                                          will be blocked from logging in and
-                                          signed out of any active session.
-                                          Their submissions and attendance
-                                          history stay intact and can be
-                                          restored anytime.
-                                        </>
-                                      ) : (
-                                        <>
-                                          <span className="font-semibold">
-                                            {u.fullName}
-                                          </span>{" "}
-                                          will be able to log in again.
-                                        </>
-                                      )}
-                                    </AlertDialogDescription>
-                                  </AlertDialogHeader>
-                                  <AlertDialogFooter>
-                                    <AlertDialogCancel>
-                                      Cancel
-                                    </AlertDialogCancel>
-                                    <AlertDialogAction
-                                      onClick={() =>
-                                        handleToggleActive(u.userId, u.isActive)
-                                      }
-                                      className={
-                                        u.isActive
-                                          ? "bg-red-500 hover:bg-red-600"
-                                          : ""
-                                      }
-                                    >
-                                      {u.isActive ? "Deactivate" : "Activate"}
-                                    </AlertDialogAction>
-                                  </AlertDialogFooter>
-                                </AlertDialogContent>
-                              </AlertDialog>
+                              <ConfirmDialog
+                                trigger={
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className={
+                                      u.isActive
+                                        ? "text-red-500 hover:text-red-700 hover:bg-red-50"
+                                        : "text-green-600 hover:text-green-700 hover:bg-green-50"
+                                    }
+                                  >
+                                    {u.isActive ? "Deactivate" : "Activate"}
+                                  </Button>
+                                }
+                                title={
+                                  u.isActive
+                                    ? "Deactivate this user?"
+                                    : "Reactivate this user?"
+                                }
+                                description={
+                                  u.isActive ? (
+                                    <>
+                                      <span className="font-semibold">
+                                        {u.fullName}
+                                      </span>{" "}
+                                      will be blocked from logging in and signed
+                                      out of any active session. Their
+                                      submissions and attendance history stay
+                                      intact and can be restored anytime.
+                                    </>
+                                  ) : (
+                                    <>
+                                      <span className="font-semibold">
+                                        {u.fullName}
+                                      </span>{" "}
+                                      will be able to log in again.
+                                    </>
+                                  )
+                                }
+                                confirmLabel={
+                                  u.isActive ? "Deactivate" : "Activate"
+                                }
+                                confirmClassName={
+                                  u.isActive ? "bg-red-500 hover:bg-red-600" : ""
+                                }
+                                onConfirm={() =>
+                                  handleToggleActive(u.userId, u.isActive)
+                                }
+                              />
                             )}
                           </div>
                         </TableCell>
@@ -397,44 +338,20 @@ function UsersListPage() {
             </div>
           )}
 
-          <Pagination className="mt-4">
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious
-                  onClick={handlePrev}
-                  className={
-                    !canGoPrev
-                      ? "pointer-events-none opacity-50"
-                      : "cursor-pointer"
-                  }
-                />
-              </PaginationItem>
-              {pages.map((_, i) => (
-                <PaginationItem key={i}>
-                  <PaginationLink
-                    isActive={i === pageIndex}
-                    onClick={() => setPageIndex(i)}
-                  >
-                    {i + 1}
-                  </PaginationLink>
-                </PaginationItem>
-              ))}
-              <PaginationItem>
-                <PaginationNext
-                  onClick={handleNext}
-                  className={
-                    !canGoNext || isFetchingNextPage
-                      ? "pointer-events-none opacity-50"
-                      : "cursor-pointer"
-                  }
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
+          <InfinitePagination
+            pageCount={pages.length}
+            pageIndex={pageIndex}
+            onPageIndexChange={setPageIndex}
+            onNext={handleNext}
+            onPrev={handlePrev}
+            canGoNext={canGoNext}
+            canGoPrev={canGoPrev}
+            isFetchingNextPage={isFetchingNextPage}
+          />
         </CardContent>
       </Card>
     </div>
   );
 }
 
-export default UsersListPage;
+export default UserListPage;

@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   useGetSubmissionsInfiniteQuery,
   useDeleteSubmissionMutation,
-} from "../../infrastructure/api/submissionApi";
+} from "@/infrastructure/api/submissionApi";
 import {
   Table,
   TableHeader,
@@ -12,57 +12,34 @@ import {
   TableRow,
   TableCell,
 } from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import { Plus } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { getInitials } from "../../application/utils/getInitials";
-import { useAppSelector } from "../../infrastructure/store/hooks";
+import { useAppSelector } from "@/infrastructure/store/hooks";
 import {
   HIDE_ACTIONS_WHEN_LOGGED_OUT,
   canEdit,
   canDelete,
-} from "../config/authUiConfig";
-import { resolveFileUrl } from "@/lib/resolveFileUrl";
+} from "@/presentation/config/authUiConfig";
+import { extractErrorMessage } from "@/lib/apiError";
 import { Paths } from "@/routes/paths";
 import { getModuleUrls } from "@/routes/getModuleUrls";
-import { PageHeader } from "../components/PageHeader";
+import { PageHeader } from "@/presentation/components/PageHeader";
+import { UserAvatar } from "@/presentation/components/UserAvatar";
+import { TableSkeleton } from "@/presentation/components/TableSkeleton";
+import { ConfirmDialog } from "@/presentation/components/ConfirmDialog";
+import { InfinitePagination } from "@/presentation/components/InfinitePagination";
+import { SearchInput } from "@/presentation/components/SearchInput";
+import { useDebounce } from "@/presentation/hooks/useDebounce";
+import { useInfiniteCachedPages } from "@/presentation/hooks/useInfiniteCachedPages";
+import { toast } from "sonner";
 
 const SubmissionsListPage: React.FC = () => {
   const [searchInput, setSearchInput] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
-  useEffect(() => {
-    const timer = setTimeout(() => setDebouncedSearch(searchInput), 400);
-    return () => clearTimeout(timer);
-  }, [searchInput]);
+  const debouncedSearch = useDebounce(searchInput, 400);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [deleteName, setDeleteName] = useState<string>("");
-  const [pageIndex, setPageIndex] = useState(0);
 
-  useEffect(() => {
-    setPageIndex(0);
-  }, [debouncedSearch]);
   const { data, fetchNextPage, isLoading, isError, isFetchingNextPage } =
     useGetSubmissionsInfiniteQuery({ search: debouncedSearch, pageSize: 10 });
   const [deleteSubmission, { isLoading: isDeleting }] =
@@ -73,30 +50,16 @@ const SubmissionsListPage: React.FC = () => {
   );
   const navigate = useNavigate();
   const pages = data?.pages ?? [];
-  const currentPage = pages[pageIndex];
+  const {
+    pageIndex,
+    setPageIndex,
+    currentPage,
+    handleNext,
+    handlePrev,
+    canGoNext,
+    canGoPrev,
+  } = useInfiniteCachedPages(pages, fetchNextPage, debouncedSearch);
   const submissions = currentPage?.items ?? [];
-  // const submissions = pages.flatMap((page) => page.items);
-
-  const handleNext = async () => {
-    if (pageIndex < pages.length - 1) {
-      setPageIndex((i) => i + 1);
-      return;
-    }
-    if (currentPage?.hasNextPage) {
-      await fetchNextPage();
-      setPageIndex((i) => i + 1);
-    }
-  };
-
-  const handlePrev = () => {
-    // Always safe with zero network cost: reaching pageIndex N always
-    // means pages 0..N-1 were already fetched to get here.
-    if (pageIndex > 0) setPageIndex((i) => i - 1);
-  };
-
-  const canGoNext =
-    pageIndex < pages.length - 1 || Boolean(currentPage?.hasNextPage);
-  const canGoPrev = pageIndex > 0;
 
   const handleDelete = async () => {
     if (!deleteId) return;
@@ -106,7 +69,9 @@ const SubmissionsListPage: React.FC = () => {
       setDeleteName("");
     } catch (err) {
       console.error("Failed to delete submission:", err);
-      alert("Could not delete this submission. Please try again.");
+      toast.error(
+        extractErrorMessage(err, "Could not delete this submission. Please try again."),
+      );
     }
   };
 
@@ -126,32 +91,13 @@ const SubmissionsListPage: React.FC = () => {
 
       <Card className="border-border/70 overflow-hidden shadow-xs">
         <CardContent className="pt-6">
-          <Input
-            type="text"
+          <SearchInput
             value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
+            onChange={setSearchInput}
             placeholder="Search by name or email..."
             className="mb-6 placeholder:text-gray-350 placeholder:opacity-40"
           />
-          {isLoading && (
-            <div className="space-y-3">
-              <div className="flex items-center space-x-4">
-                <Skeleton className="h-12 w-full" />
-              </div>
-              <div className="flex items-center space-x-4">
-                <Skeleton className="h-12 w-full" />
-              </div>
-              <div className="flex items-center space-x-4">
-                <Skeleton className="h-12 w-full" />
-              </div>
-              <div className="flex items-center space-x-4">
-                <Skeleton className="h-12 w-full" />
-              </div>
-              <div className="flex items-center space-x-4">
-                <Skeleton className="h-12 w-full" />
-              </div>
-            </div>
-          )}
+          {isLoading && <TableSkeleton />}
           {!isLoading && isError && (
             <p className="text-red-500 text-center">
               Could not load submissions.
@@ -168,10 +114,6 @@ const SubmissionsListPage: React.FC = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {/* Pending uploads render FIRST, above real rows — this
-                    is the actual feature: a live row that fills in as
-                    the file goes out over the wire, then disappears
-                    once invalidateTags brings in the real saved row. */}
                   {pendingUploads.map((u) => (
                     <TableRow key={u.id} className="bg-muted/40">
                       <TableCell className="py-3 pr-4">
@@ -199,23 +141,15 @@ const SubmissionsListPage: React.FC = () => {
                       </TableCell>
                     </TableRow>
                   ))}
-                  {/* // ...unchanged — everything below this stays exactly as it was */}
                   {submissions.map((s) => (
                     <TableRow key={s.id}>
                       <TableCell className="py-3 pr-4">
                         <div className="flex items-center gap-3">
-                          <Avatar className="h-8 w-8">
-                            <AvatarImage
-                              src={
-                                resolveFileUrl(s.submitterAvatarUrl) ??
-                                undefined
-                              }
-                              alt={s.fullName}
-                            />
-                            <AvatarFallback className="bg-blue-100 text-blue-800 text-xs">
-                              {getInitials(s.fullName)}
-                            </AvatarFallback>
-                          </Avatar>
+                          <UserAvatar
+                            name={s.fullName}
+                            src={s.submitterAvatarUrl}
+                            fallbackClassName="bg-blue-100 text-blue-800"
+                          />
                           <span className="font-medium">{s.fullName}</span>
                         </div>
                       </TableCell>
@@ -253,55 +187,42 @@ const SubmissionsListPage: React.FC = () => {
                           {(canDelete(roles) ||
                             !HIDE_ACTIONS_WHEN_LOGGED_OUT) &&
                             (canDelete(roles) ? (
-                              <AlertDialog>
-                                <AlertDialogTrigger
-                                  render={
-                                    <Button
-                                      variant="outline"
-                                      size="sm"
-                                      className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                                      onClick={() => {
-                                        setDeleteId(s.id);
-                                        setDeleteName(s.fullName);
-                                      }}
-                                    >
-                                      Delete
-                                    </Button>
-                                  }
-                                />
-                                <AlertDialogContent>
-                                  <AlertDialogHeader>
-                                    <AlertDialogTitle>
-                                      Are you sure?
-                                    </AlertDialogTitle>
-                                    <AlertDialogDescription>
-                                      This will permanently delete the
-                                      submission from{" "}
-                                      <span className="font-semibold">
-                                        {deleteName}
-                                      </span>
-                                      . This action cannot be undone.
-                                    </AlertDialogDescription>
-                                  </AlertDialogHeader>
-                                  <AlertDialogFooter>
-                                    <AlertDialogCancel
-                                      onClick={() => {
-                                        setDeleteId(null);
-                                        setDeleteName("");
-                                      }}
-                                    >
-                                      Cancel
-                                    </AlertDialogCancel>
-                                    <AlertDialogAction
-                                      onClick={handleDelete}
-                                      disabled={isDeleting}
-                                      className="bg-red-500 hover:bg-red-600"
-                                    >
-                                      {isDeleting ? "Deleting..." : "Delete"}
-                                    </AlertDialogAction>
-                                  </AlertDialogFooter>
-                                </AlertDialogContent>
-                              </AlertDialog>
+                              <ConfirmDialog
+                                trigger={
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                                    onClick={() => {
+                                      setDeleteId(s.id);
+                                      setDeleteName(s.fullName);
+                                    }}
+                                  >
+                                    Delete
+                                  </Button>
+                                }
+                                title="Are you sure?"
+                                description={
+                                  <>
+                                    This will permanently delete the submission
+                                    from{" "}
+                                    <span className="font-semibold">
+                                      {deleteName}
+                                    </span>
+                                    . This action cannot be undone.
+                                  </>
+                                }
+                                confirmLabel={
+                                  isDeleting ? "Deleting..." : "Delete"
+                                }
+                                confirmDisabled={isDeleting}
+                                confirmClassName="bg-red-500 hover:bg-red-600"
+                                onConfirm={handleDelete}
+                                onCancel={() => {
+                                  setDeleteId(null);
+                                  setDeleteName("");
+                                }}
+                              />
                             ) : (
                               <Button
                                 variant="outline"
@@ -320,42 +241,16 @@ const SubmissionsListPage: React.FC = () => {
               </Table>
             </div>
           )}
-          <Pagination className="mt-4">
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious
-                  onClick={handlePrev}
-                  className={
-                    !canGoPrev
-                      ? "pointer-events-none opacity-50"
-                      : "cursor-pointer"
-                  }
-                />
-              </PaginationItem>
-
-              {Array.from({ length: pages.length }, (_, i) => (
-                <PaginationItem key={i}>
-                  <PaginationLink
-                    isActive={i === pageIndex}
-                    onClick={() => setPageIndex(i)}
-                  >
-                    {i + 1}
-                  </PaginationLink>
-                </PaginationItem>
-              ))}
-
-              <PaginationItem>
-                <PaginationNext
-                  onClick={handleNext}
-                  className={
-                    !canGoNext || isFetchingNextPage
-                      ? "pointer-events-none opacity-50"
-                      : "cursor-pointer"
-                  }
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
+          <InfinitePagination
+            pageCount={pages.length}
+            pageIndex={pageIndex}
+            onPageIndexChange={setPageIndex}
+            onNext={handleNext}
+            onPrev={handlePrev}
+            canGoNext={canGoNext}
+            canGoPrev={canGoPrev}
+            isFetchingNextPage={isFetchingNextPage}
+          />
         </CardContent>
       </Card>
     </div>

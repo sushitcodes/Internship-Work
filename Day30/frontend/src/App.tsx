@@ -11,14 +11,14 @@ import ResetPasswordPage from "./presentation/pages/ResetPasswordPage";
 import ClassRoomsPage from "./presentation/pages/ClassRoomsPage";
 import EnrollmentPage from "./presentation/pages/EnrollmentPage";
 import MarkAttendancePage from "./presentation/pages/MarkAttendancePage";
-import UsersListPage from "./presentation/pages/UserListPage";
+import UserListPage from "./presentation/pages/UserListPage";
 import MyProfilePage from "./presentation/pages/MyProfilePage";
 import { Toaster } from "@/components/ui/sonner";
 import CreateUserPage from "./presentation/pages/CreateUserPage";
 import DashboardPage from "./presentation/pages/DashboardPage";
 import UserDetailPage from "./presentation/pages/UserDetailPage";
 import AttendanceSheetPage from "./presentation/pages/AttendanceSheetPage";
-import { Paths } from "../src/routes/paths";
+import { Paths } from "@/routes/paths";
 import ClassSubjectPage from "./presentation/pages/ClassSubjectPage";
 import EnterGradesPage from "./presentation/pages/EnterGradesPage";
 import ReportCardPage from "./presentation/pages/ReportCardPage";
@@ -61,7 +61,7 @@ function App() {
               path={Paths.attendanceSheet}
               element={<AttendanceSheetPage />}
             />
-            <Route path={Paths.users} element={<UsersListPage />} />
+            <Route path={Paths.users} element={<UserListPage />} />
             <Route path={Paths.userDetail} element={<UserDetailPage />} />
 
             <Route path={Paths.classSubjects} element={<ClassSubjectPage />} />

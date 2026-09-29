@@ -235,7 +235,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -247,19 +247,6 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "20260928072704_FixEnrollmentIsActiveValues.cs",
-              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Migrations\\20260928072704_FixEnrollmentIsActiveValues.cs",
-              "RelativeDocumentMoniker": "Migrations\\20260928072704_FixEnrollmentIsActiveValues.cs",
-              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Migrations\\20260928072704_FixEnrollmentIsActiveValues.cs",
-              "RelativeToolTip": "Migrations\\20260928072704_FixEnrollmentIsActiveValues.cs",
-              "ViewState": "AgIAAAoAAAAAAAAAAAA2wA8AAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-28T07:27:12.417Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 5,
               "Title": "20260928065445_AddIsActiveToEnrollment.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Migrations\\20260928065445_AddIsActiveToEnrollment.cs",
@@ -268,47 +255,7 @@
               "RelativeToolTip": "Migrations\\20260928065445_AddIsActiveToEnrollment.cs",
               "ViewState": "AgIAAAgAAAAAAAAAAAAuwAsAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-28T07:19:12.506Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "BulkImportService.cs",
-              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\BulkImportService.cs",
-              "RelativeDocumentMoniker": "Services\\BulkImportService.cs",
-              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Services\\BulkImportService.cs",
-              "RelativeToolTip": "Services\\BulkImportService.cs",
-              "ViewState": "AgIAAIYAAAAAAAAAAAAswJMAAAAkAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-24T05:48:06.529Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "GradeService.cs",
-              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\GradeService.cs",
-              "RelativeDocumentMoniker": "Services\\GradeService.cs",
-              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Services\\GradeService.cs",
-              "RelativeToolTip": "Services\\GradeService.cs",
-              "ViewState": "AgIAAD4AAAAAAAAAAAAgwBQAAAALAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-23T09:12:20.018Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Form.csproj",
-              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Form.csproj",
-              "RelativeDocumentMoniker": "Form.csproj",
-              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Form.csproj*",
-              "RelativeToolTip": "Form.csproj*",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAABUAAAA9AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2026-09-22T08:49:21.337Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-28T07:19:12.506Z"
             },
             {
               "$type": "Document",
@@ -325,6 +272,54 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "20260928072704_FixEnrollmentIsActiveValues.cs",
+              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Migrations\\20260928072704_FixEnrollmentIsActiveValues.cs",
+              "RelativeDocumentMoniker": "Migrations\\20260928072704_FixEnrollmentIsActiveValues.cs",
+              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Migrations\\20260928072704_FixEnrollmentIsActiveValues.cs",
+              "RelativeToolTip": "Migrations\\20260928072704_FixEnrollmentIsActiveValues.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAA2wA8AAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-28T07:27:12.417Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "BulkImportService.cs",
+              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\BulkImportService.cs",
+              "RelativeDocumentMoniker": "Services\\BulkImportService.cs",
+              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Services\\BulkImportService.cs",
+              "RelativeToolTip": "Services\\BulkImportService.cs",
+              "ViewState": "AgIAAIYAAAAAAAAAAAAswJMAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-24T05:48:06.529Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "GradeService.cs",
+              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\GradeService.cs",
+              "RelativeDocumentMoniker": "Services\\GradeService.cs",
+              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Services\\GradeService.cs",
+              "RelativeToolTip": "Services\\GradeService.cs",
+              "ViewState": "AgIAAD4AAAAAAAAAAAAgwBQAAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-23T09:12:20.018Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Form.csproj",
+              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Form.csproj",
+              "RelativeDocumentMoniker": "Form.csproj",
+              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Form.csproj",
+              "RelativeToolTip": "Form.csproj",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABUAAAA9AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-09-22T08:49:21.337Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 3,
               "Title": "AppDbContext.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Persistence\\AppDbContext.cs",
@@ -333,8 +328,7 @@
               "RelativeToolTip": "Persistence\\AppDbContext.cs",
               "ViewState": "AgIAAIwAAAAAAAAAAAAswJYAAAAlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-17T07:27:03.114Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-17T07:27:03.114Z"
             },
             {
               "$type": "Document",
@@ -346,8 +340,7 @@
               "RelativeToolTip": "Entities\\Enrollment.cs",
               "ViewState": "AgIAAAYAAAAAAAAAAAAYwAoAAAAwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-28T06:49:12.482Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-28T06:49:12.482Z"
             },
             {
               "$type": "Document",
@@ -359,8 +352,7 @@
               "RelativeToolTip": "Services\\EnrollmentService.cs",
               "ViewState": "AgIAAAsAAAAAAAAAAAAgwAQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-28T07:07:55.974Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-28T07:07:55.974Z"
             },
             {
               "$type": "Document",
@@ -372,8 +364,7 @@
               "RelativeToolTip": "Services\\UserProfileService.cs",
               "ViewState": "AgIAAI8AAAAAAAAAAAAmwAkAAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-28T07:02:53.889Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-28T07:02:53.889Z"
             },
             {
               "$type": "Document",
@@ -385,8 +376,7 @@
               "RelativeToolTip": "Persistence\\Repositories\\EnrollmentRepository.cs",
               "ViewState": "AgIAAE8AAAAAAAAAAAAMwFgAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-17T07:07:23.481Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-17T07:07:23.481Z"
             },
             {
               "$type": "Document",
@@ -398,8 +388,7 @@
               "RelativeToolTip": "Persistence\\Repositories\\UserRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAuwAoAAAAHAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-17T07:12:31.147Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-17T07:12:31.147Z"
             },
             {
               "$type": "Document",
@@ -411,8 +400,7 @@
               "RelativeToolTip": "Interface\\IEntrollmentRepository.cs",
               "ViewState": "AgIAAAUAAAAAAAAAAAAAwA8AAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-23T09:11:22.173Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-23T09:11:22.173Z"
             },
             {
               "$type": "Document",
@@ -424,8 +412,7 @@
               "RelativeToolTip": "Services\\ReportCardPdfService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAA5AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-22T08:58:26.829Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-22T08:58:26.829Z"
             },
             {
               "$type": "Document",
@@ -437,8 +424,7 @@
               "RelativeToolTip": "..\\Form.Tests\\SubmissionServiceTests.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-18T11:06:04.301Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-18T11:06:04.301Z"
             },
             {
               "$type": "Document",
@@ -462,8 +448,7 @@
               "RelativeToolTip": "Services\\NotificationService.cs",
               "ViewState": "AgIAADUAAAAAAAAAAAAgwIUAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-23T06:27:47.41Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-23T06:27:47.41Z"
             },
             {
               "$type": "Document",
@@ -475,8 +460,7 @@
               "RelativeToolTip": "..\\Form.Tests\\AuthServiceTests.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAADUAAAA8AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-18T07:14:11.004Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-18T07:14:11.004Z"
             },
             {
               "$type": "Document",
@@ -500,8 +484,7 @@
               "RelativeToolTip": "Entities\\Notification.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-23T06:46:44.892Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-23T06:46:44.892Z"
             },
             {
               "$type": "Document",

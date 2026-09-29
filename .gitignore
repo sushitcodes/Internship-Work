@@ -5,6 +5,11 @@ node_modules/
 dist/
 dist-ssr/
 *.local
+.vs/
+uploads/
+wwwroot/
+bin/
+obj/
 
 # Vite
 .vite/

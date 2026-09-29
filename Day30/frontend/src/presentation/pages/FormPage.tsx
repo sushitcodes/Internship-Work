@@ -4,10 +4,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import {
   nameValidation,
   fileValidation,
-} from "../../application/validators/formValidators";
-import { useGetSubmissionByIdQuery } from "../../infrastructure/api/submissionApi";
-import { useGetOwnProfileQuery } from "../../infrastructure/api/userApi";
-import { useAppSelector } from "../../infrastructure/store/hooks";
+} from "@/application/validators/formValidators";
+import { useGetSubmissionByIdQuery } from "@/infrastructure/api/submissionApi";
+import { useGetOwnProfileQuery } from "@/infrastructure/api/userApi";
+import { useAppSelector } from "@/infrastructure/store/hooks";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,10 +15,13 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Label } from "@/components/ui/label";
 import { useGetClassRoomsQuery } from "@/infrastructure/api/classRoomApi";
 import { toast } from "sonner";
-import { IdSelect } from "../components/IdSelect";
-import { useGetMyClassQuery } from "../../infrastructure/api/enrollmentApi";
+import { IdSelect } from "@/presentation/components/IdSelect";
+import { useGetMyClassQuery } from "@/infrastructure/api/enrollmentApi";
 import { getModuleUrls } from "@/routes/getModuleUrls";
-import { useUploadSubmission } from "../../infrastructure/api/useUploadSubmission";
+import { useUploadSubmission } from "@/infrastructure/api/useUploadSubmission";
+import { extractErrorMessage } from "@/lib/apiError";
+import { resolveFileUrl } from "@/lib/resolveFileUrl";
+import { useStaffOrAdmin } from "@/presentation/hooks/useStaffOrAdmin";
 
 interface FormValues {
   fullName: string;
@@ -27,40 +30,12 @@ interface FormValues {
   file?: FileList;
 }
 
-// Extract a readable message from an RTK Query error object.
-// The backend returns either a plain string body or a { message } / { title } JSON object.
-function extractErrorMessage(err: unknown): string {
-  if (!err || typeof err !== "object")
-    return "Could not save. Please try again.";
-  const e = err as Record<string, unknown>;
-
-  if ("data" in e && e.data && typeof e.data === "object") {
-    const d = e.data as Record<string, unknown>;
-
-    // Unpack ASP.NET validation error dictionary if present
-    if (d.errors && typeof d.errors === "object") {
-      const errorEntries = Object.entries(d.errors as Record<string, string[]>);
-      if (errorEntries.length > 0) {
-        return errorEntries
-          .map(([field, msgs]) => `${field}: ${msgs.join(", ")}`)
-          .join(" | ");
-      }
-    }
-
-    if (typeof d.message === "string") return d.message;
-    if (typeof d.title === "string") return d.title;
-  }
-  if (typeof e.message === "string") return e.message;
-  return "Could not save. Please try again.";
-}
-
 const FormPage: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
   const isEditMode = Boolean(id);
   const navigate = useNavigate();
 
-  const roles = useAppSelector((state) => state.auth.roles);
-  const isStaffOrAdmin = roles.includes("Staff") || roles.includes("Admin");
+  const isStaffOrAdmin = useStaffOrAdmin();
 
   const { data: classRooms } = useGetClassRoomsQuery();
   const { data: ownProfile } = useGetOwnProfileQuery();
@@ -77,14 +52,7 @@ const FormPage: React.FC = () => {
     activeUploadId ? state.uploadProgress.byId[activeUploadId] : undefined,
   );
   const { uploadCreate, uploadUpdate } = useUploadSubmission();
-  const [isCreating, setIsCreating] = useState(false);
-
-  // You can now delete the useUpdateSubmissionMutation import and its
-  // destructured hook entirely from this file — nothing in FormPage
-  // calls it anymore. (Leave the endpoint itself in submissionApi.ts;
-  // it's harmless to keep even if unused here.)  const [isCreating, setIsCreating] = useState(false);
-
-  const isSaving = isCreating || isCreating;
+  const [isSaving, setIsSaving] = useState(false);
 
   const {
     register,
@@ -142,7 +110,7 @@ const FormPage: React.FC = () => {
     const fileName = data.file?.[0]?.name ?? "file";
 
     try {
-      setIsCreating(true);
+      setIsSaving(true);
       if (isEditMode) {
         const result = await uploadUpdate(
           id!,
@@ -167,7 +135,7 @@ const FormPage: React.FC = () => {
       toast.error(message);
       console.error("Failed to save submission:", err);
     } finally {
-      setIsCreating(false);
+      setIsSaving(false);
       setActiveUploadId(null); // detach — the slice entry itself was
       // already removed on success by the hook; on failure it's left
       // in "error" status so the message stays visible until they retry
@@ -192,20 +160,7 @@ const FormPage: React.FC = () => {
     );
   }
 
-  const getFileUrl = () => {
-    if (!existingSubmission?.fileUrl) return null;
-    const apiOrigin = (import.meta.env.VITE_API_URL ?? "").replace(
-      /\/api\/?$/,
-      "",
-    );
-    if (existingSubmission.fileUrl.startsWith("http"))
-      return existingSubmission.fileUrl;
-    if (existingSubmission.fileUrl.startsWith("/"))
-      return `${apiOrigin}${existingSubmission.fileUrl}`;
-    return `${apiOrigin}/${existingSubmission.fileUrl}`;
-  };
-
-  const fileUrl = getFileUrl();
+  const fileUrl = resolveFileUrl(existingSubmission?.fileUrl);
 
   // If the student has no profile yet, warn them before they try to submit
   // and hit the backend validation.
