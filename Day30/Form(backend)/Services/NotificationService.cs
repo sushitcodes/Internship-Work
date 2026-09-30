@@ -41,7 +41,7 @@ public class NotificationService(
             new[] { studentUserId },
             title: "New Grade Published",
             body: $"Your grade for {subjectName} has been recorded: {marks}/{maxMarks} ({pct:0.#}%).",
-            link: "/grades",
+            link: "/grades/report-card",
             kind: "grade",
             cancellationToken);
     }

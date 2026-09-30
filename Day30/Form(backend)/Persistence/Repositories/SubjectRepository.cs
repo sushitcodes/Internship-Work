@@ -36,4 +36,4 @@ namespace Form.Persistence.Repositories
 
         public Task SaveChangesAsync() => context.SaveChangesAsync();
     }
-    }
+}

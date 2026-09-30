@@ -30,7 +30,7 @@ var isPassed = overallPercentage >= 40
                 page.Size(PageSizes.A4);
                 page.Margin(35);
                 page.PageColor(Colors.White);
-                page.DefaultTextStyle(x => x.FontSize(10).FontFamily("Arial").FontColor(Colors.Grey.Darken3));
+                page.DefaultTextStyle(x => x.FontSize(10).FontFamily("Lato").FontColor(Colors.Grey.Darken3));
 
                 // ----------------------------------------------------
                 // HEADER: School Letterhead & Official Title
@@ -140,7 +140,10 @@ var isPassed = overallPercentage >= 40
 
                             table.Cell().Background(rowBg).BorderBottom(0.5f).BorderColor(Colors.Grey.Lighten2).Padding(6).Text(index.ToString());
                             table.Cell().Background(rowBg).BorderBottom(0.5f).BorderColor(Colors.Grey.Lighten2).Padding(6).Text(subject.SubjectName).Bold();
-                            table.Cell().Background(rowBg).BorderBottom(0.5f).BorderColor(Colors.Grey.Lighten2).Padding(6).Text(subject.MarksObtained.HasValue ? $"{subject.MarksObtained} / {subject.MaxMarks}" : "Pending");
+                            table.Cell().Background(rowBg).BorderBottom(0.5f).BorderColor(Colors.Grey.Lighten2).Padding(6)
+                                .Text(subject.MarksObtained.HasValue
+                                    ? $"{subject.MarksObtained.Value:0.##} / {subject.MaxMarks:0.##}"
+                                    : "Pending");
                             table.Cell().Background(rowBg).BorderBottom(0.5f).BorderColor(Colors.Grey.Lighten2).Padding(6).Text(pct.HasValue ? $"{pct}%" : "—");
                             table.Cell().Background(rowBg).BorderBottom(0.5f).BorderColor(Colors.Grey.Lighten2).Padding(6).Text(pct.HasValue ? letterGrade : "—").Bold().FontColor(letterGrade == "F" ? Colors.Red.Medium : Colors.Blue.Darken2);
                             table.Cell().Background(rowBg).BorderBottom(0.5f).BorderColor(Colors.Grey.Lighten2).Padding(6).Text(subject.Remarks ?? "—").Italic().FontSize(8.5f);
@@ -157,7 +160,7 @@ var isPassed = overallPercentage >= 40
                         row.RelativeItem().Column(c =>
                         {
                             c.Item().Text("TOTAL MARKS").FontSize(8).FontColor(Colors.Grey.Darken1).Bold();
-                            c.Item().Text($"{totalObtained} / {totalMax}").FontSize(14).Bold();
+                            c.Item().Text($"{totalObtained:0.##} / {totalMax:0.##}").FontSize(14).Bold();
                         });
 
                         row.RelativeItem().Column(c =>
