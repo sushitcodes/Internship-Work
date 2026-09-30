@@ -191,4 +191,10 @@ Desktop.ini
 
 #File
 Day30/Form(backend)/wwwroot/uploads/*
-
+Form(backend)\.vs
+.vs/
+*.cache
+*.dtbcache.*
+*.futdcache.*
+DocumentLayout.json
+DocumentLayout.backup.json
