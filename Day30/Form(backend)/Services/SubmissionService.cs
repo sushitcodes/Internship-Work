@@ -5,63 +5,73 @@ using Form.Interfaces;
 namespace Form.Services;
 
 public class SubmissionService(
-    ISubmissionRepository _repository, 
-    IFileStorageService _fileStorage, 
-    IUserProfileRepository _profileRepository,  
+    ISubmissionRepository _repository,
+    IFileStorageService _fileStorage,
+    IUserProfileRepository _profileRepository,
     IEnrollmentService _enrollmentService,
-INotificationService _notificationService,
-IClassRoomRepository _classRoomRepository)   : ISubmissionService
-
+    INotificationService _notificationService,
+    IClassRoomRepository _classRoomRepository,
+    ILogger<SubmissionService> _logger) : ISubmissionService
 {
     public async Task<SubmissionDto> CreateSubmissionAsync(CreateSubmissionRequest request)
     {
+        // 1. Cheap checks first: nothing is written yet.
         ValidateFile(request.File);
-        var fileUrl = await _fileStorage.SaveFileAsync(request.File);
-        // Roll number must correspond to a REAL person's MemberNumber — if
-        // it doesn't, this is almost certainly a typo, and letting the
-        // submission through silently would create an orphaned record
-        // nothing can ever link back to a real student. Fail loudly instead.
-        var profile = await _profileRepository.GetByMemberNumberAsync(request.RollNo);
-        if (profile is null)
-            throw new InvalidOperationException($"No student found with roll number {request.RollNo}.");
-        var submission = new Submission
-        {
-            FullName = request.FullName,
-            ClassRoomId = request.ClassRoomId,
-            RollNo = request.RollNo,
-            FileUrl = fileUrl,
-            CreatedByUserId = request.CreatedByUserId,
-        };
 
-        // TODO — enrollment linking: look up UserProfile where MemberNumber ==
-        // request.RollNo, get its UserId, then ensure an Enrollment exists for
-        // (UserId, request.ClassRoomId) — creating one if it doesn't. Holding
-        // off writing this until I see your Enrollment repository/service, so
-        // I don't guess a shape that conflicts with what already exists.
+        var classRoomName = await _classRoomRepository.GetNameAsync(request.ClassRoomId)
+            ?? throw new InvalidOperationException("Selected class was not found.");
 
-        var saved = await _repository.AddAsync(submission);
+        var profile = await _profileRepository.GetByMemberNumberAsync(request.RollNo)
+            ?? throw new InvalidOperationException($"No student found with roll number {request.RollNo}.");
 
+        // A student may only submit for THEMSELVES. Staff and admins may submit for anyone.
+        if (!request.CreatedByStaff && profile.UserId != request.CreatedByUserId)
+            throw new InvalidOperationException("You can only submit using your own roll number.");
+
+        // 2. Enrollment BEFORE the file and the row exist, so a failure leaves nothing behind.
         await _enrollmentService.EnsureEnrolledAsync(profile.UserId, request.ClassRoomId);
-        var teacherUserIds = await _classRoomRepository
-                    .GetTeacherUserIdsAsync(request.ClassRoomId);
 
-        if (teacherUserIds.Count > 0)
+        // 3. File, then row. If the row fails, remove the file again.
+        var fileUrl = await _fileStorage.SaveFileAsync(request.File);
+        Submission saved;
+        try
         {
-            var classRoomName = await _classRoomRepository
-                .GetNameAsync(request.ClassRoomId) ?? "the class assignment";
-
-            await _notificationService.NotifyNewSubmissionAsync(
-                recipientUserIds: teacherUserIds,
-                studentName: request.FullName,
-                assignmentTitle: classRoomName,
-                submissionId: saved.Id);
+            saved = await _repository.AddAsync(new Submission
+            {
+                FullName = request.FullName,
+                ClassRoomId = request.ClassRoomId,
+                RollNo = request.RollNo,
+                FileUrl = fileUrl,
+                CreatedByUserId = request.CreatedByUserId,
+            });
+        }
+        catch
+        {
+            await _fileStorage.DeleteFileAsync(fileUrl);
+            throw;
         }
 
+        // 4. Notifications are best effort: the submission is already saved.
+        try
+        {
+            var teacherUserIds = await _classRoomRepository.GetTeacherUserIdsAsync(request.ClassRoomId);
+            if (teacherUserIds.Count > 0)
+            {
+                await _notificationService.NotifyNewSubmissionAsync(
+                    recipientUserIds: teacherUserIds,
+                    studentName: request.FullName,
+                    assignmentTitle: classRoomName,
+                    submissionId: saved.Id);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Submission {SubmissionId} saved but notifying teachers failed", saved.Id);
+        }
 
-
-        return MapToDto(saved);
-
-
+        var dto = MapToDto(saved);
+        dto.ClassRoomName = classRoomName;   // AddAsync does not load the ClassRoom navigation
+        return dto;
     }
 
     private static SubmissionDto MapToDto(Submission s,string? avatarUrl = null) => new()
@@ -74,6 +84,7 @@ IClassRoomRepository _classRoomRepository)   : ISubmissionService
         FileUrl = s.FileUrl,
         CreatedAt = s.CreatedAt,
         SubmitterAvatarUrl=avatarUrl,
+        CreatedByUserId =s.CreatedByUserId,
     };
 
     public async Task<SubmissionDto?> GetByIdAsync(Guid id)
@@ -89,13 +100,13 @@ IClassRoomRepository _classRoomRepository)   : ISubmissionService
         return MapToDto(submission,avatar);
     }
 
-    public async Task<int> GetCountAsync() => await _repository.GetCountAsync();
+    public async Task<int> GetCountAsync(Guid? createdByUserId = null) => await _repository.GetCountAsync(createdByUserId);
 
     public async Task<bool> DeleteAsync(Guid id) => await _repository.DeleteAsync(id);
 
-    public async Task<PagedResult<SubmissionDto>> GetPagedAsync(int page, int pageSize, string? search)
+    public async Task<PagedResult<SubmissionDto>> GetPagedAsync(int page, int pageSize, string? search, Guid? createdByUserId = null)
     {
-        var (items, totalCount) = await _repository.GetPagedAsync(page, pageSize, search);
+        var (items, totalCount) = await _repository.GetPagedAsync(page, pageSize, search, createdByUserId);
 
         var userIds = items
             .Where(s => s.CreatedByUserId.HasValue)

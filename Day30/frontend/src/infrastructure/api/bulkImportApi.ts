@@ -1,4 +1,5 @@
 import { api } from "./api";
+import { authFetch } from "./authFetch";
 
 export interface BulkImportResult {
   success: boolean;
@@ -38,9 +39,7 @@ export const { useBulkImportStudentsMutation } = bulkImportApi;
  */
 export async function downloadImportTemplate() {
   const apiOrigin = import.meta.env.VITE_API_URL ?? "";
-  const res = await fetch(`${apiOrigin}/bulkimport/template`, {
-    credentials: "include",
-  });
+  const res = await authFetch(`${apiOrigin}/bulkimport/template`);
   if (!res.ok) throw new Error("Could not download template.");
 
   const blob = await res.blob();

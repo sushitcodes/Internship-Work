@@ -9,6 +9,7 @@
 
         public Guid? ClassTeacherUserId { get; set; }
         public string? ClassTeacherName { get; set; }
+        public bool WasRestored { get; set; }   // true when "create" brought back a deleted class
     }
 
     public class CreateClassRoomRequest

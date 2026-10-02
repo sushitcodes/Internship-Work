@@ -20,9 +20,12 @@ public class EnrollmentService : IEnrollmentService
     }
 
     // ── The single source of truth for "one class at a time" ──
+    // The single source of truth for "one class at a time".
+    // Uses the version that also sees inactive enrollments, because the
+    // unique index on StudentUserId counts them.
     private async Task EnsureStudentNotInAnotherClassAsync(Guid studentUserId, Guid classRoomId)
     {
-        var existing = await _repository.GetByStudentUserIdAsync(studentUserId);
+        var existing = await _repository.GetByStudentUserIdIncludingInactiveAsync(studentUserId);
         if (existing is not null && existing.ClassRoomId != classRoomId)
             throw new InvalidOperationException(
                 $"Student is already enrolled in class '{existing.ClassRoom.Name}'. " +
@@ -31,13 +34,21 @@ public class EnrollmentService : IEnrollmentService
 
     public async Task<EnrollmentDto> EnrollAsync(CreateEnrollmentRequest request)
     {
+        var student = await _userRepository.GetByIdAsync(request.StudentUserId)
+            ?? throw new InvalidOperationException("Student not found.");
+
+        if (!student.RoleAssignments.Any(r => r.Role == UserRole.Student))
+            throw new InvalidOperationException("Only users with the Student role can be enrolled.");
+
+        // This line alone prevents the 500 you saw in the logs.
+        if (!student.IsActive)
+            throw new InvalidOperationException(
+                "This account is deactivated. Reactivate it before enrolling.");
+
         if (await _repository.ExistsAsync(request.StudentUserId, request.ClassRoomId))
             throw new InvalidOperationException("This student is already enrolled in this class.");
 
         await EnsureStudentNotInAnotherClassAsync(request.StudentUserId, request.ClassRoomId);
-
-        var student = await _userRepository.GetByIdAsync(request.StudentUserId)
-            ?? throw new InvalidOperationException("Student not found.");
 
         var saved = await _repository.AddAsync(new Enrollment
         {
@@ -55,7 +66,7 @@ public class EnrollmentService : IEnrollmentService
             StudentFullName = profile?.FullName ?? student.Email,
             RollNo = profile?.MemberNumber ?? 0,
             ClassRoomId = saved.ClassRoomId,
-            ClassRoomName = string.Empty,   // caller doesn't need it on success
+            ClassRoomName = string.Empty,
             EnrolledAt = saved.EnrolledAt,
         };
     }

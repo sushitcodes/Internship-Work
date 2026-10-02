@@ -54,13 +54,7 @@ public class UserProfileService : IUserProfileService
 
     public async Task<UserProfileDto?> UpdateOwnProfileAsync(Guid userId, UpdateOwnProfileRequest request)
     {
-        string? avatarUrl = null;
-        if (request.Avatar is not null)
-        {
-            ValidateAvatar(request.Avatar);
-            avatarUrl = await _fileStorage.SaveFileAsync(request.Avatar);
-        }
-
+        // 1. Validate everything first. Nothing is written yet.
         Gender? parsedGender = null;
         if (!string.IsNullOrWhiteSpace(request.Gender))
         {
@@ -69,18 +63,38 @@ public class UserProfileService : IUserProfileService
             parsedGender = g;
         }
 
+        if (request.Avatar is not null)
+            ValidateAvatar(request.Avatar);
+
+        // 2. Remember the old avatar, then save the new file.
+        string? avatarUrl = null;
+        string? oldAvatarUrl = null;
+        if (request.Avatar is not null)
+        {
+            oldAvatarUrl = (await _repository.GetByUserIdAsync(userId))?.AvatarUrl;
+            avatarUrl = await _fileStorage.SaveFileAsync(request.Avatar);
+        }
+
         var updated = await _repository.UpdateAsync(userId, new UserProfile
         {
             Address = request.Address,
             Gender = parsedGender,
             PhoneNumbers = request.PhoneNumbers,
             AvatarUrl = avatarUrl ?? string.Empty,
-            // FullName intentionally absent — self-edit can never touch it.
         });
 
-        return updated is null ? null : MapToDto(updated);
-    }
+        if (updated is null)
+        {
+            if (avatarUrl is not null) await _fileStorage.DeleteFileAsync(avatarUrl);   // no profile: undo
+            return null;
+        }
 
+        // 3. Only after the database accepted the change, remove the replaced file.
+        if (avatarUrl is not null && !string.IsNullOrEmpty(oldAvatarUrl))
+            await _fileStorage.DeleteFileAsync(oldAvatarUrl);
+
+        return MapToDto(updated);
+    }
     public async Task<UserProfileDto?> GetByUserIdAsync(Guid userId)
     {
         var profile = await _repository.GetByUserIdAsync(userId);

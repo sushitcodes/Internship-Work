@@ -64,7 +64,12 @@ public class AttendanceController(IAttendanceService _attendanceService, IAuthor
     public async Task<ActionResult<AttendanceSheetDto>> GetSheet(
     Guid classRoomId, [FromQuery] DateOnly startDate, [FromQuery] DateOnly endDate)
     {
-        if (startDate > endDate) return BadRequest("Start date must be before end date.");
+        if (startDate > endDate)
+            return BadRequest("Start date must be on or before end date.");
+
+        if (endDate.DayNumber - startDate.DayNumber > 366)
+            return BadRequest("Date range cannot exceed 366 days.");
+
         return Ok(await _attendanceService.GetSheetAsync(classRoomId, startDate, endDate));
     }
 
@@ -73,7 +78,12 @@ public class AttendanceController(IAttendanceService _attendanceService, IAuthor
     public async Task<IActionResult> ExportSheet(
         Guid classRoomId, [FromQuery] DateOnly startDate, [FromQuery] DateOnly endDate)
     {
-        if (startDate > endDate) return BadRequest("Start date must be before end date.");
+        if (startDate > endDate)
+            return BadRequest("Start date must be on or before end date.");
+
+        if (endDate.DayNumber - startDate.DayNumber > 366)
+            return BadRequest("Date range cannot exceed 366 days.");
+
         var bytes = await _attendanceService.ExportSheetAsync(classRoomId, startDate, endDate);
         return File(bytes,
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",

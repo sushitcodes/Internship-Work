@@ -37,7 +37,9 @@ const FormPage: React.FC = () => {
 
   const isStaffOrAdmin = useStaffOrAdmin();
 
-  const { data: classRooms } = useGetClassRoomsQuery();
+  const { data: classRooms } = useGetClassRoomsQuery(undefined, {
+    skip: !isStaffOrAdmin,
+  });
   const { data: ownProfile } = useGetOwnProfileQuery();
   const { data: myClass, isLoading: isLoadingMyClass } = useGetMyClassQuery(
     undefined,

@@ -1,14 +1,11 @@
 ﻿namespace Form.DTOs
 {
-    public class RegisterRequest
+   public class LoginRequest
     {
+        [System.ComponentModel.DataAnnotations.Required]
         public string Email { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
-    }
 
-    public class LoginRequest
-    {
-        public string Email { get; set; } = string.Empty;
+        [System.ComponentModel.DataAnnotations.Required]
         public string Password { get; set; } = string.Empty;
     }
 

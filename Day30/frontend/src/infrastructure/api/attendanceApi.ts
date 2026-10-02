@@ -1,4 +1,5 @@
 import { api } from "./api";
+import { authFetch } from "./authFetch";
 export interface AttendanceRecordDto {
   id: string;
   enrollmentId: string;
@@ -72,9 +73,8 @@ export async function downloadAttendanceSheet(
   endDate: string,
 ) {
   const apiOrigin = import.meta.env.VITE_API_URL ?? "";
-  const res = await fetch(
+  const res = await authFetch(
     `${apiOrigin}/attendance/sheet/${classRoomId}/export?startDate=${startDate}&endDate=${endDate}`,
-    { credentials: "include" }, // same cookie-based auth as everything else
   );
   if (!res.ok) throw new Error("Export failed");
 

@@ -13,12 +13,6 @@ public class PasswordResetRepository(AppDbContext _context) : IPasswordResetRepo
         await _context.SaveChangesAsync();
         return token;
     }
-
-    public async Task<PasswordResetToken?> GetByHashAsync(string tokenHash) =>
-        await _context.PasswordResetTokens
-            .Include(t => t.User)
-            .FirstOrDefaultAsync(t => t.TokenHash == tokenHash);
-
     public async Task SaveChangesAsync() => await _context.SaveChangesAsync();
     public async Task<PasswordResetToken?> GetLatestForUserAsync(Guid userId) =>
     await _context.PasswordResetTokens

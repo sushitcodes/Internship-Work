@@ -1,4 +1,5 @@
-﻿namespace Form.Interfaces
+﻿using Form.Interfaces;
+namespace Form.Services
 {
     public class BCryptPasswordHasher:IPasswordHasher
     {

@@ -4,21 +4,27 @@ using Form.Interfaces;
 
 namespace Form.Services;
 
-public class DashboardService(IUserRepository userRepository, ISubmissionRepository submissionRepository,
-    IAttendanceRepository attendanceRepository
-    
-    ) : IDashboardService
+public class DashboardService(
+    IUserRepository userRepository,
+    ISubmissionRepository submissionRepository,
+    IAttendanceRepository attendanceRepository,
+    IConfiguration config) : IDashboardService
 {
+    // "Today" is the SCHOOL's today, not UTC's.
+    private DateOnly SchoolToday()
+    {
+        var tz = TimeZoneInfo.FindSystemTimeZoneById(config["School:TimeZone"] ?? "Asia/Kathmandu");
+        return DateOnly.FromDateTime(TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, tz));
+    }
+
     public async Task<DashboardSummaryDto> GetSummaryAsync()
     {
-        var today = DateOnly.FromDateTime(DateTime.UtcNow);
+        var today = SchoolToday();
 
         var totalStudents = await userRepository.CountByRoleAsync(UserRole.Student);
         var totalStaff = await userRepository.CountByRoleAsync(UserRole.Staff);
-        
         var totalSubmissions = await submissionRepository.GetCountAsync();
         var stats = await attendanceRepository.GetTodayStatsAsync(today);
-
         var recent = await submissionRepository.GetRecentAsync(5);
 
         return new DashboardSummaryDto
@@ -26,10 +32,9 @@ public class DashboardService(IUserRepository userRepository, ISubmissionReposit
             TotalStudents = totalStudents,
             TotalStaff = totalStaff,
             TotalSubmissions = totalSubmissions,
-            // Guard against divide-by-zero when nobody's marked attendance yet today.
             TodayAttendanceBreakdown = stats.Breakdown
-            .Select(b => new StatusCountDto { Status = b.Status, Count = b.Count })
-            .ToList(),
+                .Select(b => new StatusCountDto { Status = b.Status, Count = b.Count })
+                .ToList(),
             RecentSubmissions = recent.Select(MapSubmission).ToList(),
         };
     }
@@ -38,17 +43,19 @@ public class DashboardService(IUserRepository userRepository, ISubmissionReposit
     {
         var mySubmissionsCount = await submissionRepository.GetCountByUserAsync(userId);
         var myRecentSubmissions = await submissionRepository.GetRecentByUserAsync(userId, 5);
-        var myAttendance = await attendanceRepository.GetByStudentAsync(userId);
 
-        var presentCount = myAttendance.Count(a => a.Status == Entities.AttendanceStatus.Present);
-        var percentage = myAttendance.Count == 0 ? 0 : Math.Round(100.0 * presentCount / myAttendance.Count, 1);
+        // Counts happen in SQL; only the 5 rows we actually show are loaded.
+        var (presentCount, totalCount) = await attendanceRepository.GetStudentCountsAsync(userId);
+        var recentAttendance = await attendanceRepository.GetRecentByStudentAsync(userId, 5);
+
+        var percentage = totalCount == 0 ? 0 : Math.Round(100.0 * presentCount / totalCount, 1);
 
         return new MyDashboardDto
         {
             MySubmissionsCount = mySubmissionsCount,
             MyRecentSubmissions = myRecentSubmissions.Select(MapSubmission).ToList(),
             MyAttendancePercentage = percentage,
-            MyRecentAttendance = myAttendance.Take(5).Select(a => new AttendanceRecordDtos
+            MyRecentAttendance = recentAttendance.Select(a => new AttendanceRecordDtos
             {
                 Id = a.Id,
                 EnrollmentId = a.EnrollmentId,

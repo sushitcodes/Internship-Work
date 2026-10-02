@@ -3,6 +3,7 @@ import {
   useGetClassRoomsQuery,
   useCreateClassRoomMutation,
   useAssignClassTeacherMutation,
+  useDeleteClassRoomMutation,
 } from "../../infrastructure/api/classRoomApi";
 import { FormInput } from "../components/FormInput";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -21,6 +22,10 @@ import { toast } from "sonner";
 import { useSearchUsersInfiniteQuery } from "@/infrastructure/api/userApi";
 import { IdSelect } from "../components/IdSelect";
 import { PageHeader } from "../components/PageHeader";
+import { extractErrorMessage } from "@/lib/apiError";
+import { useState } from "react";
+import { ConfirmDialog } from "@/presentation/components/ConfirmDialog";
+
 interface ClassRoomFormValues {
   name: string;
   academicYear: number;
@@ -44,7 +49,10 @@ function ClassRoomsPage() {
     })) ?? []),
   ];
   const [assignClassTeacher] = useAssignClassTeacherMutation();
-
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [deleteName, setDeleteName] = useState("");
+  const [deleteClassRoom, { isLoading: isDeleting }] =
+    useDeleteClassRoomMutation();
   const handleAssign = async (classRoomId: string, selectedId: string) => {
     const teacherUserId = selectedId === UNASSIGNED ? null : selectedId;
     try {
@@ -56,8 +64,35 @@ function ClassRoomsPage() {
   };
 
   const onSubmit = async (data: ClassRoomFormValues) => {
-    await createClassRoom({ ...data, academicYear: Number(data.academicYear) });
-    reset();
+    try {
+      const created = await createClassRoom({
+        ...data,
+        academicYear: Number(data.academicYear),
+      }).unwrap();
+      toast.success(
+        created.wasRestored
+          ? `Class "${created.name}" was restored with its previous subjects.`
+          : "Class created",
+      );
+      reset();
+    } catch (err) {
+      const e = err as { data?: { message?: string } | string };
+      toast.error(
+        (typeof e.data === "object" ? e.data?.message : e.data) ??
+          "Could not create the class.",
+      );
+    }
+  };
+  const handleDelete = async () => {
+    if (!deleteId) return;
+    try {
+      await deleteClassRoom(deleteId).unwrap();
+      toast.success("Class deleted");
+      setDeleteId(null);
+      setDeleteName("");
+    } catch (err) {
+      toast.error(extractErrorMessage(err, "Could not delete the class."));
+    }
   };
 
   return (
@@ -141,6 +176,44 @@ function ClassRoomsPage() {
                         Manage Subjects
                       </Button>
                     </Link>
+                    <ConfirmDialog
+                      trigger={
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                          disabled={c.studentCount > 0}
+                          title={
+                            c.studentCount > 0
+                              ? "Remove all students first"
+                              : "Delete class"
+                          }
+                          onClick={() => {
+                            setDeleteId(c.id);
+                            setDeleteName(c.name);
+                          }}
+                        >
+                          Delete
+                        </Button>
+                      }
+                      title="Are you sure?"
+                      description={
+                        <>
+                          This will delete the class{" "}
+                          <span className="font-semibold">{deleteName}</span>.
+                          You can bring it back later by creating a class with
+                          the same name and year.
+                        </>
+                      }
+                      confirmLabel={isDeleting ? "Deleting..." : "Delete"}
+                      confirmDisabled={isDeleting}
+                      confirmClassName="bg-red-500 hover:bg-red-600"
+                      onConfirm={handleDelete}
+                      onCancel={() => {
+                        setDeleteId(null);
+                        setDeleteName("");
+                      }}
+                    />
                   </TableCell>
                 </TableRow>
               ))}

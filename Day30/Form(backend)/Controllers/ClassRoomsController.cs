@@ -26,6 +26,14 @@ public class ClassRoomsController(IClassRoomService classRoomService) : Controll
     public async Task<ActionResult<ClassRoomDto>> Create(CreateClassRoomRequest request) =>
         Ok(await classRoomService.CreateAsync(request));
 
+    [HttpDelete("{id:guid}")]
+    [Authorize(Policy = "AdminOnly")]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        await classRoomService.DeleteAsync(id);
+        return NoContent();
+    }
+
     [HttpPut("{id:guid}/class-teacher")]
     [Authorize(Policy = "AdminOnly")]  // appointing a head teacher is an admin decision, not a teacher's own
     public async Task<IActionResult> AssignClassTeacher(Guid id, AssignClassTeacherRequest request)
@@ -40,4 +48,6 @@ public class ClassRoomsController(IClassRoomService classRoomService) : Controll
             return BadRequest(ex.Message);
         }
     }
+
+
 }

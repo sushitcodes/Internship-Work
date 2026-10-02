@@ -8,6 +8,7 @@ public class RefreshTokenService : IRefreshTokenService
 {
     private readonly IRefreshTokenRepository _repository;
 
+
     public RefreshTokenService(IRefreshTokenRepository repository)
     {
         _repository = repository;
@@ -19,38 +20,40 @@ public class RefreshTokenService : IRefreshTokenService
         return (rawToken, entity.ExpiresAt);
     }
 
+    private const int RotationGraceSeconds = 30;
+
+
     public async Task<RefreshRotationResult> ValidateAndRotateAsync(string rawToken)
     {
         var hash = Hash(rawToken);
         var existing = await _repository.GetByHashAsync(hash);
+        var fail = new RefreshRotationResult(false, null, null, null);
 
-        // Unknown token — never issued, or already deleted. Reject.
         if (existing is null)
-            return new RefreshRotationResult(false, null, null, null);
+            return fail;
 
         if (existing.IsRevoked)
         {
-        
-            // Revoked can mean two very different things:
-            //  1. Normal logout — ReplacedByTokenId is still null.
-            //  2. This token was already rotated once (has a replacement)
-            //     and is now being presented AGAIN. That only happens if
-            //     someone captured an old token — the real user already
-            //     moved on to its replacement. Treat this as theft: kill
-            //     every active session this user has, not just this token.
             if (existing.ReplacedByTokenId is not null)
             {
-                await _repository.RevokeAllForUserAsync(existing.UserId);
+                // A rotated token came back. If its replacement was issued seconds ago this is
+                // almost certainly the same browser refreshing from two places, not a thief.
+                var replacement = await _repository.GetByIdAsync(existing.ReplacedByTokenId.Value);
+                var justRotated = replacement is not null
+                    && replacement.CreatedAt > DateTime.UtcNow.AddSeconds(-RotationGraceSeconds);
+
+                if (!justRotated)
+                    await _repository.RevokeAllForUserAsync(existing.UserId);
             }
-            return new RefreshRotationResult(false, null, null, null);
+            return fail;
         }
 
         if (existing.ExpiresAt < DateTime.UtcNow)
-            return new RefreshRotationResult(false, null, null, null);
+            return fail;
 
-        // Valid — rotate. Issue a fresh token, then revoke this one and
-        // link it forward, so any future reuse of THIS raw token is
-        // recognizable as theft (branch above).
+        if (!existing.User.IsActive)
+            return fail;
+
         var (newEntity, newRawToken) = await CreateTokenEntityAsync(existing.UserId);
 
         existing.IsRevoked = true;
@@ -59,7 +62,6 @@ public class RefreshTokenService : IRefreshTokenService
 
         return new RefreshRotationResult(true, existing.User, newRawToken, newEntity.ExpiresAt);
     }
-
     private async Task<(RefreshToken entity, string rawToken)> CreateTokenEntityAsync(Guid userId)
     {
         var rawToken = GenerateSecureRandomToken();

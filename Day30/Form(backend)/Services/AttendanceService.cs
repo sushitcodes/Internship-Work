@@ -23,15 +23,25 @@ public class AttendanceService : IAttendanceService
 
     public async Task MarkAsync(MarkAttendanceRequest request, Guid markedByUserId)
     {
-        // No more ExistsForDateAsync guard — marking today never blocks
-        // marking (or re-marking) today again. That guard was the whole bug.
-        var entries = request.Entries
-            .Select(e => (e.EnrollmentId, Enum.Parse<AttendanceStatus>(e.Status)))
-            .ToList();
+        if (request.Entries.Count == 0)
+            throw new InvalidOperationException("No attendance entries were sent.");
+
+        if (request.Entries.Select(e => e.EnrollmentId).Distinct().Count() != request.Entries.Count)
+            throw new InvalidOperationException("The same student appears more than once.");
+
+        var entries = new List<(Guid EnrollmentId, AttendanceStatus Status)>();
+        foreach (var e in request.Entries)
+        {
+            // TryParse + IsDefined: a typo or a number like "99" becomes a clean 400, not a 500.
+            if (!Enum.TryParse<AttendanceStatus>(e.Status, ignoreCase: true, out var status)
+                || !Enum.IsDefined(status))
+                throw new InvalidOperationException($"Unknown attendance status: '{e.Status}'.");
+
+            entries.Add((e.EnrollmentId, status));
+        }
 
         await _repository.UpsertRangeAsync(request.ClassRoomId, request.Date, entries, markedByUserId);
     }
-
     public async Task<List<AttendanceRecordDtos>> GetForClassAsync(Guid classRoomId, DateOnly date) =>
         (await _repository.GetByClassRoomAndDateAsync(classRoomId, date)).Select(MapToDto).ToList();
 

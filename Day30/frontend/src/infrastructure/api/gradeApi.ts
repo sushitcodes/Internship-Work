@@ -1,4 +1,5 @@
 import { api } from "./api";
+import { authFetch } from "./authFetch";
 export interface SubjectDto {
   id: string;
   classRoomId: string;
@@ -84,9 +85,8 @@ export async function downloadMyReportCardPdf(
   studentName?: string,
 ) {
   const apiOrigin = import.meta.env.VITE_API_URL ?? "";
-  const res = await fetch(
+  const res = await authFetch(
     `${apiOrigin}/grades/report-card/me/${classRoomId}/pdf`,
-    { credentials: "include" },
   );
 
   if (!res.ok) throw new Error("Could not download report card PDF.");

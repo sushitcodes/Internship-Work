@@ -16,27 +16,27 @@ export const emailValidation = {
   },
 };
 
-export const phoneValidation = {
-  required: "Phone number is required",
-  pattern: {
-    value: /^[0-9]{10}$/,
-    message: "Phone number must be 10 digits",
-  },
-};
+// export const phoneValidation = {
+//   required: "Phone number is required",
+//   pattern: {
+//     value: /^[0-9]{10}$/,
+//     message: "Phone number must be 10 digits",
+//   },
+// };
 
-export const institutionValidation = {
-  required: "Institution name is required",
-};
+// export const institutionValidation = {
+//   required: "Institution name is required",
+// };
 
-export const degreeValidation = {
-  required: "Degree is required",
-};
+// export const degreeValidation = {
+//   required: "Degree is required",
+// };
 
-export const yearValidation = {
-  required: "Year is required",
-  min: { value: 1950, message: "Enter a valid year" },
-  max: { value: 3000, message: "Year cannot be in the future" },
-};
+// export const yearValidation = {
+//   required: "Year is required",
+//   min: { value: 1950, message: "Enter a valid year" },
+//   max: { value: 3000, message: "Year cannot be in the future" },
+// };
 
 // Frontend file check is a UX nicety only — the REAL validation
 // (size, type, virus scan) happens on the backend. Never trust the browser.
@@ -46,7 +46,7 @@ export const fileValidation = {
 
 export const passwordValidation = {
   required: "Password is required",
-  minLength: { value: 6, message: "Password must be at least 6 characters" },
+  minLength: { value: 8, message: "Password must be at least 8 characters" },
 };
 
 export const loginPasswordValidation = {

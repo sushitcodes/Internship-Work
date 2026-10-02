@@ -40,4 +40,7 @@ public interface INotificationService
         string body,
         string? link = null,
         CancellationToken cancellationToken = default);
+
+    Task NotifyManyAsync(IEnumerable<NotificationDraft> drafts, CancellationToken cancellationToken = default);
 }
+public record NotificationDraft(Guid UserId, string Title, string Body, string? Link, string Kind);

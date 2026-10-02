@@ -16,6 +16,10 @@ public class SubjectService(ISubjectRepository repository) : ISubjectService
     {
         if (string.IsNullOrWhiteSpace(request.Name))
             throw new ValidateException("Subject name is Required");
+
+        if (request.Name.Trim().Length > 100)
+            throw new ValidateException("Subject name must be 100 characters or fewer.");
+
         var existing = await repository.GetByNameIncludingArchivedAsync(
             request.ClassRoomId, request.Name.Trim());
         if (existing is not null)
@@ -43,7 +47,6 @@ public class SubjectService(ISubjectRepository repository) : ISubjectService
             Name = request.Name.Trim(),
         };
         await repository.AddAsync(subject);
-        await repository.SaveChangesAsync();
 
         return new SubjectDto
         {

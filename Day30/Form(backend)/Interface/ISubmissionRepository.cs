@@ -5,8 +5,8 @@ namespace Form.Interfaces;
 public interface ISubmissionRepository
 {
     Task<Submission> AddAsync(Submission submission);
-    Task<int> GetCountAsync();
-    Task<(List<Submission>Items,int TotalCount)>GetPagedAsync(int page,int pageSize,string? search);
+    Task<int> GetCountAsync(Guid? createdByUserId = null);
+    Task<(List<Submission> Items, int TotalCount)> GetPagedAsync(int page, int pageSize, string? search, Guid? createdByUserId = null);
     Task<Submission?> GetByIdAsync(Guid id);
     Task<bool> DeleteAsync(Guid id);
     Task<Submission?> UpdateAsync(Guid id, Submission updated);

@@ -9,7 +9,6 @@
 
         public bool IsArchived { get; set; }
 
-        public DateTimeOffset? Archieved { get; set; }
         public DateTimeOffset? ArchivedAt { get; set; }
 
         public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;

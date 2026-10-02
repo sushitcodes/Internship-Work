@@ -7,5 +7,6 @@
         public int RollNo { get; set; }
         public Guid CreatedByUserId { get; set; }
         public IFormFile File { get; set; } = null!;
+        public bool CreatedByStaff { get; set; }
     }
 }

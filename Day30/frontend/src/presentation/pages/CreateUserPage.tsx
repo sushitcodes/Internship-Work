@@ -93,6 +93,10 @@ const CreateUserPage: React.FC = () => {
             type="text"
             registration={register("temporaryPassword", {
               required: "Required",
+              minLength: {
+                value: 8,
+                message: "Password must be at least 8 characters",
+              },
             })}
             error={errors.temporaryPassword}
           />

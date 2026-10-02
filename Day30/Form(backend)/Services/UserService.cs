@@ -37,6 +37,9 @@ public class UserService : IUserService
     {
         // Same duplicate-email guard as AuthService.RegisterAsync — one account
         // per email, whether it was self-registered or admin-created.
+        var students = (await _userRepository.GetByRoleAsync(UserRole.Student))
+    .Where(s => s.IsActive)
+    .ToList();
         var existing = await _userRepository.GetByEmailAsync(request.Email);
         if (existing is not null)
             throw new InvalidOperationException("An account with this email already exists.");
@@ -53,10 +56,11 @@ public class UserService : IUserService
                 throw new InvalidOperationException($"Unknown role: {roleName}");
             parsedRoles.Add(parsed);
         }
+        var email = request.Email.Trim();
 
         var user = new User
         {
-            Email = request.Email,
+            Email = email,
             PasswordHash = _passwordHasher.Hash(request.TemporaryPassword),
         };
 
@@ -65,8 +69,16 @@ public class UserService : IUserService
             user.RoleAssignments.Add(new UserRoleAssignment { Id = Guid.NewGuid(), Role = role });
         }
 
-        var saved = await _userRepository.AddAsync(user);
+        // Created in the SAME save as the user, so the roll number (MemberNumber, an identity
+        // column) exists from the first moment. EF fills UserId through the navigation.
+        user.Profile = new UserProfile
+        {
+            FullName = string.IsNullOrWhiteSpace(request.FullName) ? email.Split('@')[0] : request.FullName.Trim(),
+            Address = string.Empty,
+            PhoneNumbers = new List<string>(),
+        };
 
+        var saved = await _userRepository.AddAsync(user);
         // Deliberately NOT creating a UserProfile row here. UserProfileService
         // already handles this lazily via GetOrCreateOwnProfileAsync — the
         // first time this new user (or an Admin browsing their profile) hits

@@ -1,3 +1,20 @@
+# Backend
+bin/
+obj/
+.vs/
+*.user
+logs/
+App_Data/
+Form(backend)/wwwroot/uploads/
+appsettings.*.local.json
+
+# Frontend
+node_modules/
+dist/
+*.tsbuildinfo
+.env.local
+
+
 # ==============================
 # Node / React / Vite
 # ==============================

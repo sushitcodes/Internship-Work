@@ -8,7 +8,7 @@
         public DateTime ExpiresAt { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public bool IsUsed { get; set; } = false;
-
+        public int FailedAttempts { get; set; }
         public User User { get; set; } = null!;
     }
 }

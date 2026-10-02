@@ -30,6 +30,8 @@ public class BulkImportController(IBulkImportService bulkImportService) : Contro
     {
         if (file is null || file.Length == 0)
             return BadRequest("Please upload an Excel (.xlsx) file.");
+        if (classRoomId == Guid.Empty)
+            return BadRequest("Please select a class.");
 
         var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
         if (ext != ".xlsx")

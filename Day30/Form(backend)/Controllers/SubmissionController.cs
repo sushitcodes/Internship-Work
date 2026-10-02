@@ -1,7 +1,7 @@
 using Form.DTOs;
 using Form.Interfaces;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Form.Controllers;
 
@@ -10,15 +10,19 @@ namespace Form.Controllers;
 [Authorize]
 public class SubmissionsController(ISubmissionService _submissionService) : ControllerBase
 {
-   
+    private bool IsStaffOrAdmin => User.IsInRole("Staff") || User.IsInRole("Admin");
+
+    private Guid? CurrentUserId =>
+        Guid.TryParse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value, out var id) ? id : null;
+
+    // null means "no restriction" (staff). A student gets their own id, so the query filters to their rows.
+    private Guid? ScopeFilter => IsStaffOrAdmin ? null : CurrentUserId ?? Guid.Empty;
 
     [HttpPost]
     [RequestSizeLimit(10 * 1024 * 1024)]
     public async Task<ActionResult<SubmissionDto>> Create([FromForm] CreateSubmissionFormRequest form)
     {
-        // Get user ID from claims - must exist since [Authorize] is used
-        var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-        if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var createdByUserId))
+        if (CurrentUserId is not { } createdByUserId)
             return Unauthorized("User ID not found in token.");
 
         var request = new CreateSubmissionRequest
@@ -27,7 +31,8 @@ public class SubmissionsController(ISubmissionService _submissionService) : Cont
             ClassRoomId = form.ClassRoomId,
             RollNo = form.RollNo,
             File = form.File!,
-            CreatedByUserId = createdByUserId, // Non-nullable Guid
+            CreatedByUserId = createdByUserId,
+            CreatedByStaff = IsStaffOrAdmin,
         };
 
         try
@@ -50,24 +55,29 @@ public class SubmissionsController(ISubmissionService _submissionService) : Cont
         if (page < 1) page = 1;
         if (pageSize < 1 || pageSize > 50) pageSize = 10;
 
-        return Ok(await _submissionService.GetPagedAsync(page, pageSize, search));
+        return Ok(await _submissionService.GetPagedAsync(page, pageSize, search, ScopeFilter));
     }
 
     [HttpGet("count")]
-    public async Task<ActionResult<int>> GetCount()
-    {
-        return Ok(await _submissionService.GetCountAsync());
-    }
+    public async Task<ActionResult<int>> GetCount() =>
+        Ok(await _submissionService.GetCountAsync(ScopeFilter));
 
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<SubmissionDto>> GetById(Guid id)
     {
         var result = await _submissionService.GetByIdAsync(id);
-        return result is null ? NotFound() : Ok(result);
+        if (result is null) return NotFound();
+
+        // A student can only open their own submission. 404 (not 403) so the id is not confirmed to exist.
+        if (!IsStaffOrAdmin && result.CreatedByUserId != CurrentUserId)
+            return NotFound();
+
+        return Ok(result);
     }
 
     [HttpPut("{id:guid}")]
     [Authorize(Policy = "CanEdit")]
+    [RequestSizeLimit(10 * 1024 * 1024)]
     public async Task<ActionResult<SubmissionDto>> Update(Guid id, [FromForm] UpdateSubmissionFormRequest form)
     {
         var request = new UpdateSubmissionRequest
@@ -78,8 +88,15 @@ public class SubmissionsController(ISubmissionService _submissionService) : Cont
             File = form.File,
         };
 
-        var result = await _submissionService.UpdateAsync(id, request);
-        return result is null ? NotFound() : Ok(result);
+        try
+        {
+            var result = await _submissionService.UpdateAsync(id, request);
+            return result is null ? NotFound() : Ok(result);
+        }
+        catch (InvalidOperationException ex)   // was missing: a bad file type used to return 500
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpDelete("{id:guid}")]
@@ -90,4 +107,3 @@ public class SubmissionsController(ISubmissionService _submissionService) : Cont
         return deleted ? NoContent() : NotFound();
     }
 }
-

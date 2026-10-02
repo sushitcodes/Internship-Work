@@ -6,6 +6,7 @@ export interface ClassRoomDto {
   studentCount: number;
   classTeacherUserId: string | null;
   classTeacherName: string | null;
+  wasRestored?: boolean;
 }
 
 export interface CreateClassRoomRequest {
@@ -34,6 +35,10 @@ export const classRoomApi = api.injectEndpoints({
       }),
       invalidatesTags: ["ClassRoom"],
     }),
+    deleteClassRoom: builder.mutation<void, string>({
+      query: (id) => ({ url: `/classrooms/${id}`, method: "DELETE" }),
+      invalidatesTags: ["ClassRoom"],
+    }),
   }),
 });
 
@@ -41,4 +46,5 @@ export const {
   useGetClassRoomsQuery,
   useCreateClassRoomMutation,
   useAssignClassTeacherMutation,
+  useDeleteClassRoomMutation,
 } = classRoomApi;

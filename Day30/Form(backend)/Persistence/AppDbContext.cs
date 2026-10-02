@@ -1,11 +1,7 @@
-﻿using DocumentFormat.OpenXml.Drawing.Charts;
-using DocumentFormat.OpenXml.Spreadsheet;
-using DocumentFormat.OpenXml.Wordprocessing;
-using Form.Domain.Entities;
+﻿using Form.Domain.Entities;
 using Form.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Serilog.Filters;
 using System.Text.Json;
 
 namespace Form.Persistence;
@@ -69,9 +65,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                   .OnDelete(DeleteBehavior.NoAction);
 
             // Index
-            entity.HasIndex(a => new { a.EnrollmentId, a.Date });
+            entity.HasIndex(a => new { a.EnrollmentId, a.Date }).IsUnique();
             //Matching query filter
-    entity.HasQueryFilter(a => a.Enrollment.IsActive);
+            entity.HasQueryFilter(a => a.Enrollment.IsActive);
 
             // TODO: If AttendanceRecord implements ISoftDelete, uncomment the
             // line below. Without it, soft-deleted attendance rows are never
@@ -228,10 +224,30 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
              .WithMany()
              .HasForeignKey(c => c.ClassTeacherUserId)
              .OnDelete(DeleteBehavior.SetNull);
-            // teacher account deleted → class just loses its head teacher,
-            // not itself.
+
+            b.Property(c => c.Name).HasMaxLength(100).IsRequired();
+
+            // Includes soft deleted rows ON PURPOSE: a deleted class still "owns" its name.
+            b.HasIndex(c => new { c.Name, c.AcademicYear }).IsUnique();
+        });
+        modelBuilder.Entity<User>(b =>
+        {
+            // nvarchar(max) cannot be indexed, so give it a real length first.
+            b.Property(u => u.Email).HasMaxLength(256).IsRequired();
+            b.HasIndex(u => u.Email).IsUnique();
         });
 
+        modelBuilder.Entity<RefreshToken>(b =>
+        {
+            // SHA256 in Base64 is 44 characters. 64 leaves room.
+            b.Property(t => t.TokenHash).HasMaxLength(64).IsRequired();
+            b.HasIndex(t => t.TokenHash).IsUnique();
+        });
+
+        modelBuilder.Entity<PasswordResetToken>(b =>
+        {
+            b.Property(t => t.TokenHash).HasMaxLength(64).IsRequired();
+        });
 
         // for the notification
         base.OnModelCreating(modelBuilder);

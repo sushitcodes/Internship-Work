@@ -6,9 +6,14 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { Paths } from "@/routes/paths";
 import { getModuleUrls } from "@/routes/getModuleUrls";
-
+import { useAppSelector } from "@/infrastructure/store/hooks";
+import { canEdit } from "@/presentation/config/authUiConfig";
+import { resolveFileUrl } from "@/lib/resolveFileUrl";
 const SubmissionPage: React.FC = () => {
+  // ALL hooks first, before any early return.
+
   const { id } = useParams<{ id: string }>();
+  const roles = useAppSelector((state) => state.auth.roles);
   const {
     data: submission,
     isLoading,
@@ -47,12 +52,7 @@ const SubmissionPage: React.FC = () => {
       </Card>
     );
   }
-
-  const apiOrigin = (import.meta.env.VITE_API_URL ?? "").replace(
-    /\/api\/?$/,
-    "",
-  );
-  const fileHref = `${apiOrigin}${submission.fileUrl}`;
+  const fileHref = resolveFileUrl(submission.fileUrl);
 
   return (
     <Card className="max-w-2xl mx-auto mt-10">
@@ -110,9 +110,11 @@ const SubmissionPage: React.FC = () => {
           <Button onClick={() => window.open(fileHref, "_blank")}>
             View / Download File
           </Button>
-          <Link to={getModuleUrls("submissionEdit", { id: submission.id })}>
-            <Button variant="outline">Edit</Button>
-          </Link>
+          {canEdit(roles) && (
+            <Link to={getModuleUrls("submissionEdit", { id: submission.id })}>
+              <Button variant="outline">Edit</Button>
+            </Link>
+          )}
         </div>
 
         {/* Back Link */}

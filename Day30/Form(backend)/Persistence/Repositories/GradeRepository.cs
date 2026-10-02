@@ -3,6 +3,7 @@ using Form.Entities;
 using Form.Interfaces;
 using Form.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Form.Exceptions;
 namespace Form.Repositories;
 
 public class GradeRepository(AppDbContext context) : IGradeRepository
@@ -37,14 +38,21 @@ public class GradeRepository(AppDbContext context) : IGradeRepository
     }
 
     public async Task UpsertRangeAsync(
-        Guid subjectId,
-        List<(Guid EnrollmentId, decimal MarksObtained, decimal MaxMarks, string? Remarks)> entries,
-        Guid gradedByUserId)
+      Guid subjectId,
+      List<(Guid EnrollmentId, decimal MarksObtained, decimal MaxMarks, string? Remarks)> entries,
+      Guid gradedByUserId)
     {
-        var enrollmentIds = entries.Select(e => e.EnrollmentId).ToList();
+        var subject = await context.Subjects.AsNoTracking().FirstOrDefaultAsync(s => s.Id == subjectId)
+            ?? throw new NotFoundException("Subject not found.");
 
-        // Same batch-lookup as attendance's UpsertRangeAsync — one query for
-        // every existing grade in this batch, not one exists-check per student.
+        var enrollmentIds = entries.Select(e => e.EnrollmentId).Distinct().ToList();
+
+        // Every student must be enrolled in THIS subject's class.
+        var validCount = await context.Enrollments
+            .CountAsync(e => e.ClassRoomId == subject.ClassRoomId && enrollmentIds.Contains(e.Id));
+        if (validCount != enrollmentIds.Count)
+            throw new ValidateException("One or more students are not enrolled in this subject's class.");
+
         var existing = await context.Grades
             .Where(g => enrollmentIds.Contains(g.EnrollmentId) && g.SubjectId == subjectId)
             .ToDictionaryAsync(g => g.EnrollmentId);
@@ -57,7 +65,6 @@ public class GradeRepository(AppDbContext context) : IGradeRepository
                 grade.MaxMarks = maxMarks;
                 grade.Remarks = remarks;
                 grade.GradedByUserId = gradedByUserId;
-                // UpdatedAt gets stamped automatically — IAuditable + your SaveChangesAsync override
             }
             else
             {
@@ -95,12 +102,16 @@ public class GradeRepository(AppDbContext context) : IGradeRepository
         {
             StudentUserId = studentUserId,
             StudentName = enrollment.StudentUser.Email, // real name filled in by GradeService
-            Subjects = subjects.Select(s => new SubjectGradeDto
+            Subjects = subjects.Select(s =>
             {
-                SubjectName = s.Name,
-                MarksObtained = gradeBySubject.TryGetValue(s.Id, out var g) ? g.MarksObtained : (decimal?)null,
-                MaxMarks = gradeBySubject.TryGetValue(s.Id, out var g2) ? g2.MaxMarks : 100,
-                Remarks = gradeBySubject.TryGetValue(s.Id, out var g3) ? g3.Remarks : null,
+                gradeBySubject.TryGetValue(s.Id, out var g);
+                return new SubjectGradeDto
+                {
+                    SubjectName = s.Name,
+                    MarksObtained = g?.MarksObtained,
+                    MaxMarks = g?.MaxMarks ?? 100,
+                    Remarks = g?.Remarks,
+                };
             }).ToList(),
         };
     }

@@ -1,4 +1,5 @@
 ﻿using Form.Entities;
+using Form.Exceptions;
 using Form.Interfaces;
 using Microsoft.EntityFrameworkCore;
 namespace Form.Persistence.Repositories
@@ -29,8 +30,20 @@ namespace Form.Persistence.Repositories
         public async Task AddAsync(Subject subject)
         {
             context.Subjects.Add(subject);
-            await context.SaveChangesAsync();
-
+            try
+            {
+                await context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex) when (ex.IsUniqueViolation())
+            {
+                context.ChangeTracker.Clear();
+                throw new ConflictException("A subject with this name already exists in this classroom.");
+            }
+            catch (DbUpdateException ex) when (ex.IsForeignKeyViolation())
+            {
+                context.ChangeTracker.Clear();
+                throw new NotFoundException("Classroom not found.");
+            }
         }
         // The service calls this after making changes.
 

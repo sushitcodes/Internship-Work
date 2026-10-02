@@ -1,7 +1,6 @@
 ﻿using Form.DTOs;
 using Form.Interface;
 using Form.Interfaces;
-using Form.Persistence.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 namespace Form.Controllers;
@@ -49,35 +48,32 @@ public class GradesController(IGradeService _gradeService, IClassRoomRepository 
         var card = await _gradeService.GetReportCardAsync(studentUserId, classRoomId);
         return card is null ? NotFound() : Ok(card);
     }
-    // it helps to get the student report by verifying with the jwt cookie claim
+    // Student downloads their OWN card (id from the token, never from the URL).
     [HttpGet("report-card/me/{classRoomId:guid}/pdf")]
     public async Task<IActionResult> DownloadMyReportCardPdf(Guid classRoomId)
     {
         var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
         if (!Guid.TryParse(userIdClaim, out var studentUserId))
             return Unauthorized();
-        var card = await _gradeService.GetReportCardAsync(studentUserId, classRoomId);
-        if (card is null) return NotFound("Report card data not found.");
-        var classrooms = await classRoomRepository.GetAllAsync();
-        var className = classrooms.FirstOrDefault(c => c.Id == classRoomId)?.Name ?? "Classroom";
-        var pdfBytes = pdfService.GenerateReportCardPdf(card, className);
-        var fileName = $"ReportCard_{card.StudentName.Replace(" ", "_")}.pdf";
-        return File(pdfBytes, "application/pdf", fileName);
+        return await BuildPdfAsync(studentUserId, classRoomId);
     }
-    //allow to generate report cards for the student.
+
     [HttpGet("report-card/{studentUserId:guid}/{classRoomId:guid}/pdf")]
     [Authorize(Policy = "StaffOrAdmin")]
-    public async Task<IActionResult> DownloadReportCardPdf(Guid studentUserId, Guid classRoomId)
+    public Task<IActionResult> DownloadReportCardPdf(Guid studentUserId, Guid classRoomId) =>
+        BuildPdfAsync(studentUserId, classRoomId);
+
+    private async Task<IActionResult> BuildPdfAsync(Guid studentUserId, Guid classRoomId)
     {
         var card = await _gradeService.GetReportCardAsync(studentUserId, classRoomId);
         if (card is null) return NotFound("Report card data not found.");
-        var classrooms = await classRoomRepository.GetAllAsync();
-        var className = classrooms.FirstOrDefault(c => c.Id == classRoomId)?.Name ?? "Classroom";
+
+        var className = await classRoomRepository.GetNameAsync(classRoomId) ?? "Classroom";   // one tiny query
         var pdfBytes = pdfService.GenerateReportCardPdf(card, className);
-        var fileName = $"ReportCard_{card.StudentName.Replace(" ", "_")}.pdf";
-        return File(pdfBytes, "application/pdf", fileName);
+
+        // Keep only safe characters in the download name (names can contain slashes, quotes, etc.).
+        var safe = new string(card.StudentName.Where(ch => char.IsLetterOrDigit(ch) || ch is ' ' or '-').ToArray())
+            .Trim().Replace(' ', '_');
+        return File(pdfBytes, "application/pdf", $"ReportCard_{(safe.Length == 0 ? "Student" : safe)}.pdf");
     }
-
-
-
 }

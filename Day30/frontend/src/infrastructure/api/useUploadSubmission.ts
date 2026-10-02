@@ -8,7 +8,7 @@ import {
   removeUpload,
 } from "../store/uploadProgressSlice";
 import type { Submission } from "../../domain/entities/Submission";
-
+import { refreshSession } from "./baseQueryWithAuth";
 export function useUploadSubmission() {
   const dispatch = useAppDispatch();
 
@@ -28,8 +28,8 @@ export function useUploadSubmission() {
       dispatch(startUpload({ id: tempId, fileName }));
       onStart?.(tempId);
 
-      return axios
-        .request<Submission>({
+      const send = () =>
+        axios.request<Submission>({
           method,
           url: `${import.meta.env.VITE_API_URL ?? ""}${url}`,
           data: formData,
@@ -38,22 +38,32 @@ export function useUploadSubmission() {
             const percent = Math.round((progressEvent.progress ?? 0) * 100);
             dispatch(updateUploadProgress({ id: tempId, progress: percent }));
           },
-        })
-        .then((response) => {
-          dispatch(api.util.invalidateTags(["Submission", "Dashboard"]));
-          dispatch(removeUpload({ id: tempId }));
-          return response.data;
-        })
-        .catch((err: AxiosError<{ message?: string; title?: string }>) => {
-          const message =
-            err.response?.data?.message ??
-            err.response?.data?.title ??
-            (typeof err.response?.data === "string"
-              ? err.response.data
-              : null) ??
-            "Upload failed put file less than 10mb. Please try again.";
-          throw new Error(message);
         });
+
+      return (
+        send()
+          // Access token expired while the user was filling the form: refresh once, then retry.
+          .catch(async (err: AxiosError) => {
+            if (err.response?.status === 401 && (await refreshSession()))
+              return send();
+            throw err;
+          })
+          .then((response) => {
+            dispatch(api.util.invalidateTags(["Submission", "Dashboard"]));
+            dispatch(removeUpload({ id: tempId }));
+            return response.data;
+          })
+          .catch((err: AxiosError<{ message?: string; title?: string }>) => {
+            const message =
+              err.response?.data?.message ??
+              err.response?.data?.title ??
+              (typeof err.response?.data === "string"
+                ? err.response.data
+                : null) ??
+              "Upload failed. Use a PDF, JPG or PNG under 5 MB and try again.";
+            throw new Error(message);
+          })
+      );
     },
     [dispatch],
   );

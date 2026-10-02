@@ -1,5 +1,14 @@
 import { useState } from "react";
-import { format, startOfMonth, endOfMonth, subMonths } from "date-fns";
+import {
+  format,
+  parseISO,
+  startOfMonth,
+  endOfMonth,
+  subMonths,
+  isSameDay,
+  differenceInCalendarDays,
+} from "date-fns";
+import type { DateRange } from "react-day-picker";
 import { useGetClassRoomsQuery } from "../../infrastructure/api/classRoomApi";
 import {
   useGetAttendanceSheetQuery,
@@ -7,8 +16,12 @@ import {
 } from "../../infrastructure/api/attendanceApi";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Popover, PopoverTrigger } from "@/components/ui/popover";
-
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
 import {
   Table,
   TableHeader,
@@ -21,6 +34,7 @@ import { CalendarIcon, Download } from "lucide-react";
 import { toast } from "sonner";
 import { IdSelect } from "../components/IdSelect";
 import { PageHeader } from "../components/PageHeader";
+
 const STATUS_BADGE: Record<string, string> = {
   Present: "bg-green-100 text-green-800",
   Absent: "bg-red-100 text-red-800",
@@ -28,6 +42,8 @@ const STATUS_BADGE: Record<string, string> = {
   Excused: "bg-indigo-100 text-indigo-800",
   Unmarked: "bg-gray-100 text-gray-500",
 };
+
+const MAX_RANGE_DAYS = 366; // the server rejects longer ranges
 
 const AttendanceSheetPage: React.FC = () => {
   const { data: classRooms } = useGetClassRoomsQuery();
@@ -40,6 +56,34 @@ const AttendanceSheetPage: React.FC = () => {
   });
   const startDate = format(range.from, "yyyy-MM-dd");
   const endDate = format(range.to, "yyyy-MM-dd");
+
+  // Calendar state. "draft" is what the user is picking right now;
+  // "range" is the last complete range that the sheet actually uses.
+  const [calendarOpen, setCalendarOpen] = useState(false);
+  const [draft, setDraft] = useState<DateRange | undefined>();
+
+  const handleCalendarOpenChange = (open: boolean) => {
+    setCalendarOpen(open);
+    // Every time it opens, start a fresh pick. Otherwise a click on an
+    // already complete range would only stretch it instead of starting over.
+    if (open) setDraft(undefined);
+  };
+
+  const handleSelect = (picked: DateRange | undefined) => {
+    setDraft(picked);
+    // Only use the range once BOTH ends exist. (While the user has clicked
+    // just the first day, "to" is empty or equal to "from".)
+    if (!picked?.from || !picked?.to) return;
+
+    if (differenceInCalendarDays(picked.to, picked.from) > MAX_RANGE_DAYS) {
+      toast.error(`Please choose at most ${MAX_RANGE_DAYS} days.`);
+      return;
+    }
+
+    setRange({ from: picked.from, to: picked.to });
+    // A real multi day range is a finished pick, so close the calendar.
+    if (!isSameDay(picked.from, picked.to)) setCalendarOpen(false);
+  };
 
   const {
     data: sheet,
@@ -64,7 +108,7 @@ const AttendanceSheetPage: React.FC = () => {
       toast.error("Could not export the sheet. Please try again.");
     }
   };
-  // ✅ PUT THIS INSTEAD:
+
   return (
     <div className="max-w-5xl mx-auto space-y-6">
       <PageHeader
@@ -106,7 +150,10 @@ const AttendanceSheetPage: React.FC = () => {
 
           <div>
             <label className="text-sm font-medium mb-2 block">Date Range</label>
-            <Popover>
+            <Popover
+              open={calendarOpen}
+              onOpenChange={handleCalendarOpenChange}
+            >
               <PopoverTrigger
                 render={
                   <Button variant="outline" className="justify-start">
@@ -116,6 +163,16 @@ const AttendanceSheetPage: React.FC = () => {
                   </Button>
                 }
               />
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="range"
+                  selected={draft}
+                  onSelect={handleSelect}
+                  defaultMonth={range.from}
+                  numberOfMonths={2}
+                  disabled={{ after: new Date() }} // no attendance in the future
+                />
+              </PopoverContent>
             </Popover>
           </div>
         </CardContent>
@@ -139,7 +196,9 @@ const AttendanceSheetPage: React.FC = () => {
                       key={d}
                       className="text-center whitespace-nowrap"
                     >
-                      {format(new Date(d), "MMM d")}
+                      {/* parseISO reads "2026-09-30" as a LOCAL date.
+                          new Date("2026-09-30") reads it as UTC and can show the day before. */}
+                      {format(parseISO(d), "MMM d")}
                     </TableHead>
                   ))}
                 </TableRow>

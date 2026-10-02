@@ -20,17 +20,19 @@ import {
 import { toast } from "sonner";
 import { IdSelect } from "../components/IdSelect";
 import { PageHeader } from "../components/PageHeader";
+import { extractErrorMessage } from "@/lib/apiError";
+
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
 
 interface DraftGrade {
-  marksObtained: string; // string while typing — parsed to number on save
+  marksObtained: string; // string while typing, parsed to number on save
   maxMarks: string;
   remarks: string;
 }
 
-// — explicit type for the payload entries, so the filter predicate
+// Explicit type for the payload entries, so the filter predicate
 // can narrow correctly without the circular `typeof e`.
 interface SubmitGradeEntry {
   enrollmentId: string;
@@ -45,7 +47,26 @@ interface GradeRosterEditorProps {
 }
 
 // ---------------------------------------------------------------------------
-// Parent — EnterGradesPage
+// Validation
+// ---------------------------------------------------------------------------
+
+// Returns an error message for one row, or null when the row is fine.
+// A blank "Marks" field means "not graded yet", so that is allowed.
+function validateRow(draft?: DraftGrade): string | null {
+  if (!draft || draft.marksObtained.trim() === "") return null;
+
+  const marks = Number(draft.marksObtained);
+  const max = draft.maxMarks.trim() === "" ? 100 : Number(draft.maxMarks);
+
+  if (Number.isNaN(max) || max <= 0) return "“Out of” must be more than 0.";
+  if (Number.isNaN(marks)) return "Enter a valid number.";
+  if (marks < 0) return "Marks cannot be negative.";
+  if (marks > max) return `Marks cannot be more than ${max}.`;
+  return null;
+}
+
+// ---------------------------------------------------------------------------
+// Parent: EnterGradesPage
 // ---------------------------------------------------------------------------
 
 function EnterGradesPage() {
@@ -61,22 +82,6 @@ function EnterGradesPage() {
     subjectId,
     { skip: !subjectId },
   );
-  // this does that when i go back the roster is called and previous draft value is not saved
-  // // get deleted so i nee this new react method with key
-  //   const [drafts, setDrafts] = useState<Record<string, DraftGrade>>({});
-  //   useEffect(() => {
-  //     if (roster) {
-  //       const fromServer: Record<string, DraftGrade> = {};
-  //       roster.forEach((r) => {
-  //         fromServer[r.enrollmentId] = {
-  //           marksObtained: r.marksObtained?.toString() ?? "",
-  //           maxMarks: r.maxMarks.toString(),
-  //           remarks: r.remarks ?? "",
-  //         };
-  //       });
-  //       setDrafts(fromServer);
-  //     }
-  //   }, [roster]);
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
@@ -133,8 +138,8 @@ function EnterGradesPage() {
       {subjectId && roster && roster.length > 0 && (
         /*
           key={subjectId} is the whole trick:
-            - Same subject → React keeps the same editor → drafts preserved across refetches.
-            - Different subject → React unmounts + remounts → drafts reset from fresh roster.
+            - Same subject: React keeps the same editor, so drafts survive refetches.
+            - Different subject: React unmounts and remounts, so drafts reset from the fresh roster.
         */
         <GradeRosterEditor
           key={subjectId}
@@ -147,15 +152,15 @@ function EnterGradesPage() {
 }
 
 // ---------------------------------------------------------------------------
-// Child — GradeRosterEditor owns the drafts
+// Child: GradeRosterEditor owns the drafts
 // ---------------------------------------------------------------------------
 
 function GradeRosterEditor({ roster, subjectId }: GradeRosterEditorProps) {
   /*
     Lazy initializer runs ONCE when this component mounts.
-    Because of key={subjectId}, that "once" is per-subject:
-      - switching subjects remounts → fresh drafts
-      - refetches of the SAME subject do NOT remount → drafts survive
+    Because of key={subjectId}, that "once" is per subject:
+      - switching subjects remounts, so drafts are fresh
+      - refetches of the SAME subject do NOT remount, so drafts survive
   */
   const [drafts, setDrafts] = useState<Record<string, DraftGrade>>(() => {
     const initial: Record<string, DraftGrade> = {};
@@ -171,9 +176,12 @@ function GradeRosterEditor({ roster, subjectId }: GradeRosterEditorProps) {
 
   const [submitGrades, { isLoading: isSaving }] = useSubmitGradesMutation();
 
-  // single helper for all three inputs.
-  // Spread `prev[enrollmentId]` first (to keep any existing values), then
-  // the caller's patch on top. Defaults provide a valid shape for new rows.
+  // True when at least one row has a problem. Used to disable Save.
+  const hasErrors = roster.some(
+    (r) => validateRow(drafts[r.enrollmentId]) !== null,
+  );
+
+  // Single helper for all three inputs.
   const updateDraft = (enrollmentId: string, patch: Partial<DraftGrade>) => {
     setDrafts((prev) => {
       const existing = prev[enrollmentId];
@@ -192,7 +200,13 @@ function GradeRosterEditor({ roster, subjectId }: GradeRosterEditorProps) {
   const handleSubmit = async () => {
     if (!subjectId) return;
 
-    // Only send rows where marks were actually entered — a student left
+    // Same rule as the disabled button, in case it is triggered another way.
+    if (hasErrors) {
+      toast.error("Fix the marks highlighted in red before saving.");
+      return;
+    }
+
+    // Only send rows where marks were actually entered. A student left
     // blank stays ungraded instead of getting silently zeroed out.
     const entries: SubmitGradeEntry[] = roster
       .map((r): SubmitGradeEntry | null => {
@@ -218,7 +232,10 @@ function GradeRosterEditor({ roster, subjectId }: GradeRosterEditorProps) {
       toast.success("Grades saved.");
     } catch (err) {
       console.error("Failed to save grades:", err);
-      toast.error("Could not save grades. Please try again.");
+      // Shows the server's own message when there is one.
+      toast.error(
+        extractErrorMessage(err, "Could not save grades. Please try again."),
+      );
     }
   };
 
@@ -243,6 +260,7 @@ function GradeRosterEditor({ roster, subjectId }: GradeRosterEditorProps) {
             {roster.map((r) => {
               const draft = drafts[r.enrollmentId];
               const max = Number(draft?.maxMarks) || 100;
+              const error = validateRow(draft);
 
               return (
                 <TableRow key={r.enrollmentId}>
@@ -251,10 +269,11 @@ function GradeRosterEditor({ roster, subjectId }: GradeRosterEditorProps) {
                   <TableCell>
                     <Input
                       type="number"
-                      className="w-20"
-                      // FIX #7 — disable while saving
+                      className={`w-20 ${
+                        error ? "border-red-500 focus-visible:ring-red-500" : ""
+                      }`}
+                      aria-invalid={!!error}
                       disabled={isSaving}
-                      // FIX #4 — client-side cap (optional but helpful)
                       min={0}
                       max={max}
                       value={draft?.marksObtained ?? ""}
@@ -264,6 +283,9 @@ function GradeRosterEditor({ roster, subjectId }: GradeRosterEditorProps) {
                         })
                       }
                     />
+                    {error && (
+                      <p className="mt-1 text-xs text-red-500">{error}</p>
+                    )}
                   </TableCell>
 
                   <TableCell>
@@ -301,7 +323,7 @@ function GradeRosterEditor({ roster, subjectId }: GradeRosterEditorProps) {
 
         <Button
           onClick={handleSubmit}
-          disabled={isSaving}
+          disabled={isSaving || hasErrors}
           className="mt-4 w-full"
         >
           {isSaving ? "Saving..." : "Save Grades"}

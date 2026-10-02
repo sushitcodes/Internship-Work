@@ -25,8 +25,8 @@ public class SubmissionRepository(AppDbContext _context) : ISubmissionRepository
             .FirstOrDefaultAsync(s => s.Id == id);
     }
 
-    public async Task<int> GetCountAsync() => await _context.Submissions.CountAsync();
-
+    public async Task<int> GetCountAsync(Guid? createdByUserId = null) =>
+           await _context.Submissions.CountAsync(s => createdByUserId == null || s.CreatedByUserId == createdByUserId);
     public async Task<bool> DeleteAsync(Guid id)
     {
         var submission = await _context.Submissions
@@ -39,9 +39,13 @@ public class SubmissionRepository(AppDbContext _context) : ISubmissionRepository
         return true;
     }
 
-    public async Task<(List<Submission> Items, int TotalCount)> GetPagedAsync(int page, int pageSize, string? search)
+    public async Task<(List<Submission> Items, int TotalCount)> GetPagedAsync(
+        int page, int pageSize, string? search, Guid? createdByUserId = null)
     {
         var query = _context.Submissions.AsQueryable();
+
+        if (createdByUserId.HasValue)
+            query = query.Where(s => s.CreatedByUserId == createdByUserId);
 
         if (!string.IsNullOrWhiteSpace(search))
         {

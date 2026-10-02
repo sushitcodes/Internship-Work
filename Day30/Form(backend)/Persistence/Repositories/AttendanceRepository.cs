@@ -9,14 +9,8 @@ public class AttendanceRepository(AppDbContext Context) : IAttendanceRepository
 {
     public async Task<List<AttendanceRosterEntryDto>> GetRosterAsync(Guid classRoomId, DateOnly date)
     {
-        // Pre-filter attendance to just this date FIRST — this becomes the
-        // right-hand side of the LEFT JOIN below, not a filter applied after.
         var todaysAttendance = Context.AttendanceRecords.AsNoTracking().Where(a => a.Date == date);
 
-        // THE core fix: start from the roster (every enrolled student),
-        // LEFT JOIN to attendance. A student with no matching row on the
-        // right comes through with `a == null` — that's what makes
-        // "Unmarked" a real, honest third state instead of a guess.
         return await (
             from e in Context.Enrollments.AsNoTracking()
             where e.ClassRoomId == classRoomId
@@ -38,11 +32,15 @@ public class AttendanceRepository(AppDbContext Context) : IAttendanceRepository
         List<(Guid EnrollmentId, AttendanceStatus Status)> entries,
         Guid markedByUserId)
     {
-        var enrollmentIds = entries.Select(e => e.EnrollmentId).ToList();
+        var enrollmentIds = entries.Select(e => e.EnrollmentId).Distinct().ToList();
 
-        // ONE query to find whichever of these students already have a
-        // record today — not one exists-check per student, and no
-        // all-or-nothing guard blocking the whole batch.
+        // SECURITY: every enrollment in the request must belong to the class the caller
+        // was authorised for. The controller only authorised classRoomId, not these ids.
+        var validCount = await Context.Enrollments
+            .CountAsync(e => e.ClassRoomId == classRoomId && enrollmentIds.Contains(e.Id));
+        if (validCount != enrollmentIds.Count)
+            throw new InvalidOperationException("One or more students do not belong to this class.");
+
         var existing = await Context.AttendanceRecords
             .Where(a => enrollmentIds.Contains(a.EnrollmentId) && a.Date == date)
             .ToDictionaryAsync(a => a.EnrollmentId);
@@ -51,14 +49,11 @@ public class AttendanceRepository(AppDbContext Context) : IAttendanceRepository
         {
             if (existing.TryGetValue(enrollmentId, out var record))
             {
-                // UPDATE path — this is what was missing entirely before.
                 record.Status = status;
                 record.MarkedByUserId = markedByUserId;
             }
             else
             {
-                // CREATE path — only for students genuinely being marked
-                // for the first time today.
                 Context.AttendanceRecords.Add(new AttendanceRecord
                 {
                     EnrollmentId = enrollmentId,
@@ -69,21 +64,53 @@ public class AttendanceRepository(AppDbContext Context) : IAttendanceRepository
             }
         }
 
-        await Context.SaveChangesAsync();
+        try
+        {
+            await Context.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex) when (ex.IsUniqueViolation())
+        {
+            // Two teachers saved the same day at the same moment (unique index added in Part B).
+            Context.ChangeTracker.Clear();
+            throw new InvalidOperationException("Attendance was just saved by someone else. Reload and try again.");
+        }
     }
 
     public async Task<List<AttendanceRecord>> GetByClassRoomAndDateAsync(Guid classRoomId, DateOnly date) =>
         await Context.AttendanceRecords
+            .AsNoTracking()
             .Include(a => a.Enrollment).ThenInclude(e => e.StudentUser)
             .Where(a => a.Enrollment.ClassRoomId == classRoomId && a.Date == date)
             .ToListAsync();
 
     public async Task<List<AttendanceRecord>> GetByStudentAsync(Guid studentUserId) =>
         await Context.AttendanceRecords
+            .AsNoTracking()
             .Include(a => a.Enrollment).ThenInclude(e => e.StudentUser)
             .Where(a => a.Enrollment.StudentUserId == studentUserId)
             .OrderByDescending(a => a.Date)
             .ToListAsync();
+
+    // NEW (used by the dashboard, see item #18): counts in SQL instead of loading every row.
+    public async Task<(int Present, int Total)> GetStudentCountsAsync(Guid studentUserId)
+    {
+        var q = Context.AttendanceRecords.AsNoTracking()
+            .Where(a => a.Enrollment.StudentUserId == studentUserId);
+        var total = await q.CountAsync();
+        var present = await q.CountAsync(a => a.Status == AttendanceStatus.Present);
+        return (present, total);
+    }
+
+    // NEW: only the most recent N rows.
+    public async Task<List<AttendanceRecord>> GetRecentByStudentAsync(Guid studentUserId, int count) =>
+        await Context.AttendanceRecords
+            .AsNoTracking()
+            .Include(a => a.Enrollment).ThenInclude(e => e.StudentUser)
+            .Where(a => a.Enrollment.StudentUserId == studentUserId)
+            .OrderByDescending(a => a.Date)
+            .Take(count)
+            .ToListAsync();
+
     public async Task<(int Present, int TotalMarked, List<(string Status, int Count)> Breakdown)> GetTodayStatsAsync(DateOnly date)
     {
         var breakdown = await Context.AttendanceRecords
@@ -100,9 +127,10 @@ public class AttendanceRepository(AppDbContext Context) : IAttendanceRepository
         return (present, total, typed);
     }
 
+    // The Include was removed: the Where clause joins on its own and nothing reads the navigation.
     public async Task<List<AttendanceRecord>> GetByClassRoomAndDateRangeAsync(Guid classRoomId, DateOnly start, DateOnly end) =>
-    await Context.AttendanceRecords
-        .Include(a => a.Enrollment)
-        .Where(a => a.Enrollment.ClassRoomId == classRoomId && a.Date >= start && a.Date <= end)
-        .ToListAsync();
+        await Context.AttendanceRecords
+            .AsNoTracking()
+            .Where(a => a.Enrollment.ClassRoomId == classRoomId && a.Date >= start && a.Date <= end)
+            .ToListAsync();
 }

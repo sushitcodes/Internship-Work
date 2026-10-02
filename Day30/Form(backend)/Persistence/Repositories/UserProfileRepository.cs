@@ -10,6 +10,7 @@ public class UserProfileRepository(AppDbContext _context) : IUserProfileReposito
     public async Task<UserProfile?> GetByUserIdAsync(Guid userId)
     {
         return await _context.UserProfiles
+            .AsNoTracking()
             .Include(p => p.User)
             .FirstOrDefaultAsync(p => p.UserId == userId);
     }
@@ -17,7 +18,18 @@ public class UserProfileRepository(AppDbContext _context) : IUserProfileReposito
     public async Task<UserProfile> AddAsync(UserProfile profile)
     {
         _context.UserProfiles.Add(profile);
-        await _context.SaveChangesAsync();
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex) when (ex.IsUniqueViolation())
+        {
+            // Another request created this user's profile a moment ago (two tabs, StrictMode
+            // double fetch). Drop our failed insert and return theirs.
+            _context.ChangeTracker.Clear();
+            return await GetByUserIdAsync(profile.UserId)
+                ?? throw new InvalidOperationException("Profile could not be created.");
+        }
         return await GetByUserIdAsync(profile.UserId) ?? profile;
     }
 
@@ -47,14 +59,14 @@ public class UserProfileRepository(AppDbContext _context) : IUserProfileReposito
     }
 
     public async Task<UserProfile?> GetByMemberNumberAsync(int memberNumber) =>
-        await _context.UserProfiles.FirstOrDefaultAsync(p => p.MemberNumber == memberNumber);
+        await _context.UserProfiles.AsNoTracking().FirstOrDefaultAsync(p => p.MemberNumber == memberNumber);
 
     public async Task<(List<UserProfile> Items, int TotalCount)> SearchAsync(
         int page, int pageSize, string? search, int? rollNo, UserRole? role)
     {
         var query =
-            from u in _context.Users
-            join p in _context.UserProfiles on u.Id equals p.UserId into profileJoin
+            from u in _context.Users.AsNoTracking()
+            join p in _context.UserProfiles.AsNoTracking() on u.Id equals p.UserId into profileJoin
             from p in profileJoin.DefaultIfEmpty()
             select new { User = u, Profile = p };
 
@@ -80,22 +92,25 @@ public class UserProfileRepository(AppDbContext _context) : IUserProfileReposito
 
         // Placeholder now matches the CURRENT UserProfile shape — Phone is
         // gone, so Address/PhoneNumbers get sensible empty defaults instead.
-        var items = raw.Select(x => x.Profile ?? new UserProfile
+        // With AsNoTracking, EF does not link Profile.User for us, so we link it ourselves.
+        var items = raw.Select(x =>
         {
-            UserId = x.User.Id,
-            User = x.User,
-            FullName = x.User.Email,
-            Address = string.Empty,
-            PhoneNumbers = new List<string>(),
-            MemberNumber = 0,
-            //IsActive = x.User.IsActive
-
+            var profile = x.Profile ?? new UserProfile
+            {
+                UserId = x.User.Id,
+                FullName = x.User.Email,
+                Address = string.Empty,
+                PhoneNumbers = new List<string>(),
+                MemberNumber = 0,
+            };
+            profile.User = x.User;   // always set, for real profiles and for the placeholder
+            return profile;
         }).ToList();
 
         return (items, totalCount);
     }
     public async Task<List<UserProfile>> GetByUserIdsAsync(List<Guid> userIds) =>
-    await _context.UserProfiles.Where(p => userIds.Contains(p.UserId)).ToListAsync();
+    await _context.UserProfiles.AsNoTracking().Where(p => userIds.Contains(p.UserId)).ToListAsync();
 
     public async Task<UserProfile?> AdminUpdateNameAsync(Guid userId, string fullName)
     {

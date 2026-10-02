@@ -12,7 +12,8 @@ namespace Form.Services;
 public class NotificationService(
     IHubContext<NotificationHub> hubContext,
     AppDbContext db,
-    IUserRepository _userRepository
+    IUserRepository _userRepository,
+    ILogger<NotificationService> logger
     ) : INotificationService
 {
     public Task NotifyNewSubmissionAsync(
@@ -46,76 +47,74 @@ public class NotificationService(
             cancellationToken);
     }
 
-    /// One code path for all notifications: persist, then push.
-    /// Persistence and delivery stay in sync — no way to push something
-    /// that wasn't saved, no way to save something that wasn't pushed.
-    public async Task NotifyAsync(
+    // Same message to many people.
+    public Task NotifyAsync(
         IEnumerable<Guid> recipientUserIds,
         string title,
         string body,
         string? link = null,
         string kind = "generic",
         CancellationToken cancellationToken = default)
+        => NotifyManyAsync(
+            recipientUserIds.Distinct().Select(uid => new NotificationDraft(uid, title, body, link, kind)),
+            cancellationToken);
+
+    // One code path for everything: persist (ONE SaveChanges), then push.
+    public async Task NotifyManyAsync(
+        IEnumerable<NotificationDraft> drafts,
+        CancellationToken cancellationToken = default)
     {
-        var recipients = recipientUserIds.Distinct().ToList();
-        if (recipients.Count == 0) return;
-
         var now = DateTime.UtcNow;
-
-        // Persist one row per recipient (read-state is per-user)
-        var entities = recipients.Select(uid => new Notification
+        var entities = drafts.Select(d => new Notification
         {
-            UserId = uid,
-            Title = title,
-            Body = body,
-            Link = link,
-            Kind = kind,
+            UserId = d.UserId,
+            Title = d.Title,
+            Body = d.Body,
+            Link = d.Link,
+            Kind = d.Kind,
             IsRead = false,
             CreatedAt = now,
         }).ToList();
 
+        if (entities.Count == 0) return;
+
         db.Notifications.AddRange(entities);
         await db.SaveChangesAsync(cancellationToken);
 
-        //  Push over SignalR. Clients.User(userId) resolves to all
-        //    active connections for that user (multiple tabs = multiple).
-        foreach (var entity in entities)
+        // Push in parallel chunks. A dead connection must never fail a request whose data is
+        // already saved: the row exists, so the user sees it on their next fetch anyway.
+        foreach (var chunk in entities.Chunk(50))
         {
-            var dto = new NotificationDto(
-                entity.Id,
-                entity.Title,
-                entity.Body,
-                entity.Link,
-                entity.Kind,
-                entity.IsRead,
-                entity.CreatedAt);
-
-            await hubContext.Clients
-                .User(entity.UserId.ToString())
-                .SendAsync("ReceiveNotification", dto, cancellationToken);
+            await Task.WhenAll(chunk.Select(async n =>
+            {
+                try
+                {
+                    var dto = new NotificationDto(n.Id, n.Title, n.Body, n.Link, n.Kind, n.IsRead, n.CreatedAt);
+                    await hubContext.Clients.User(n.UserId.ToString())
+                        .SendAsync("ReceiveNotification", dto, cancellationToken);
+                }
+                catch (Exception ex)
+                {
+                    logger.LogWarning(ex, "SignalR push failed for user {UserId}", n.UserId);
+                }
+            }));
         }
     }
 
     public Task NotifyAllTeachersAsync(
-    string title, string body, string? link = null,
-    CancellationToken cancellationToken = default)
-    => NotifyAllByRolesAsync(
-        new[] { UserRole.Staff, UserRole.Admin },
-        title, body, link, cancellationToken);
+        string title, string body, string? link = null,
+        CancellationToken cancellationToken = default)
+        => NotifyAllByRolesAsync(new[] { UserRole.Staff, UserRole.Admin }, title, body, link, cancellationToken);
 
     public Task NotifyAllStudentsAsync(
         string title, string body, string? link = null,
         CancellationToken cancellationToken = default)
-        => NotifyAllByRolesAsync(
-            new[] { UserRole.Student },
-            title, body, link, cancellationToken);
+        => NotifyAllByRolesAsync(new[] { UserRole.Student }, title, body, link, cancellationToken);
 
     public Task NotifyEveryoneAsync(
         string title, string body, string? link = null,
         CancellationToken cancellationToken = default)
-        => NotifyAllByRolesAsync(
-            new[] { UserRole.Student, UserRole.Staff, UserRole.Admin },
-            title, body, link, cancellationToken);
+        => NotifyAllByRolesAsync(new[] { UserRole.Student, UserRole.Staff, UserRole.Admin }, title, body, link, cancellationToken);
 
     private async Task NotifyAllByRolesAsync(
         IEnumerable<UserRole> roles,
@@ -125,12 +124,6 @@ public class NotificationService(
         var userIds = await _userRepository.GetUserIdsByRolesAsync(roles);
         if (userIds.Count == 0) return;
 
-        await NotifyAsync(
-            userIds,
-            title,
-            body,
-            link,
-            kind: "broadcast",
-            cancellationToken);
+        await NotifyAsync(userIds, title, body, link, kind: "broadcast", cancellationToken);
     }
 }

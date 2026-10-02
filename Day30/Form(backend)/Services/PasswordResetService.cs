@@ -1,12 +1,15 @@
-﻿using System.Security.Cryptography;
-using Form.Entities;
+﻿using Form.Entities;
 using Form.Interfaces;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Form.Services;
 
 public class PasswordResetService : IPasswordResetService
 {
-    private const int ExpiryMinutes = 10;  // the ONE real source of truth for this number
+    private const int ExpiryMinutes = 10;
+    private const int MaxAttempts = 5;
+    // the ONE real source of truth for this number
 
     private readonly IPasswordResetRepository _repository;
 
@@ -55,11 +58,26 @@ public class PasswordResetService : IPasswordResetService
 
         if (existing is null) return false;
         if (existing.ExpiresAt < DateTime.UtcNow) return false;
-        if (existing.TokenHash != Hash(code)) return false;
 
-        existing.IsUsed = true;   // one-time use — consume it the moment it's validated
+        // Too many wrong guesses: burn this code. The user must request a new one.
+        if (existing.FailedAttempts >= MaxAttempts)
+        {
+            existing.IsUsed = true;
+            await _repository.SaveChangesAsync();
+            return false;
+        }
+
+        var supplied = Encoding.UTF8.GetBytes(Hash(code));
+        var stored = Encoding.UTF8.GetBytes(existing.TokenHash);
+        if (!CryptographicOperations.FixedTimeEquals(supplied, stored))
+        {
+            existing.FailedAttempts++;
+            await _repository.SaveChangesAsync();
+            return false;
+        }
+
+        existing.IsUsed = true;   // one time use
         await _repository.SaveChangesAsync();
-
         return true;
     }
 }

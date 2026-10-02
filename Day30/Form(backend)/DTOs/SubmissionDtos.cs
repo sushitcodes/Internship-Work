@@ -12,7 +12,10 @@ namespace Form.DTOs
         public string FileUrl { get; set; } = string.Empty;
         public DateTimeOffset CreatedAt { get; set; }
         public string? SubmitterAvatarUrl { get; set; }
+        public Guid? CreatedByUserId { get; set; }
     }
+
+
 
     // HTTP-boundary DTO for POST /submissions.
     // Attributes are enforced by MVC before the action runs.

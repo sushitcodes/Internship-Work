@@ -18,12 +18,12 @@ public class GmailSmtpEmailService(IConfiguration config) : IEmailService
             Credentials = new NetworkCredential(senderEmail, appPassword),
             EnableSsl = true,
         };
-
-        var message = new MailMessage
+        using var message = new MailMessage
         {
             From = new MailAddress(senderEmail, "Form App"),
-            Subject = "Reset your password",
-    Body = $"Put the OTP in the password section. This password expires in {expiryMinutes} minutes.\n\n{code}",
+            Subject = "Your password reset code",
+            Body = $"Your password reset code is: {code}\n\n" +
+                   $"It expires in {expiryMinutes} minutes. If you did not request this, ignore this email.",
             IsBodyHtml = false,
         };
         message.To.Add(toEmail);

@@ -29,6 +29,7 @@ public class UsersController(IUserService _userService, IUserProfileService _pro
     }
 
     [HttpPut("me/profile")]
+    [RequestSizeLimit(3 * 1024 * 1024)]
     public async Task<ActionResult<UserProfileDto>> UpdateOwnProfile([FromForm] UpdateOwnProfileRequest request)
     {
         try
@@ -104,6 +105,9 @@ public class UsersController(IUserService _userService, IUserProfileService _pro
     [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> SetActiveStatus(Guid id, SetUserActiveRequest request)
     {
+        if (!request.IsActive && id == CurrentUserId)
+            return BadRequest("You cannot deactivate your own account.");
+
         await _profileService.SetActiveStatusAsync(id, request.IsActive);
         return NoContent();
     }

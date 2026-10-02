@@ -8,26 +8,23 @@ using System.Text.RegularExpressions;
 
 namespace Form.Services;
 
-public class BulkImportService : IBulkImportService
+public class BulkImportService(
+    AppDbContext _context,
+    IPasswordHasher _passwordHasher,
+    ILogger<BulkImportService> _logger) : IBulkImportService
 {
-    // Serializes imports within this app instance. Stops the classic
-    // "double-click Start Import" race where two requests both pass the
-    // email-uniqueness check and one blows up at SaveChangesAsync.
-    // If you ever scale to multiple servers, this becomes advisory only —
-    // the real guard is a unique index on Users.Email (see notes below).
+    // Serialises imports inside this app instance (double-click protection).
+    // The unique index on Users.Email (Part B) is the guard that also works across servers.
     private static readonly SemaphoreSlim _importLock = new(1, 1);
 
-    private readonly AppDbContext _context;
-    private readonly IPasswordHasher _passwordHasher;
+    private const int MaxRows = 500;
+    private const int MinPasswordLength = 8;
 
-    public BulkImportService(AppDbContext context, IPasswordHasher passwordHasher)
-    {
-        _context = context;
-        _passwordHasher = passwordHasher;
-    }
+    // Compiled once, not rebuilt on every import.
+    private static readonly Regex EmailRegex =
+        new(@"^[^@\s]+@[^@\s]+\.[^@\s]+$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-    public async Task<BulkImportResultDto> ImportStudentsFromExcelAsync(
-        IFormFile file, Guid classRoomId)
+    public async Task<BulkImportResultDto> ImportStudentsFromExcelAsync(IFormFile file, Guid classRoomId)
     {
         await _importLock.WaitAsync();
         try
@@ -40,90 +37,79 @@ public class BulkImportService : IBulkImportService
         }
     }
 
-    private async Task<BulkImportResultDto> ImportInternalAsync(
-        IFormFile file, Guid classRoomId)
+    private async Task<BulkImportResultDto> ImportInternalAsync(IFormFile file, Guid classRoomId)
     {
         var result = new BulkImportResultDto();
 
-        // 1. Verify classroom exists
-        var classroom = await _context.ClassRooms.FindAsync(classRoomId);
-        if (classroom is null)
+        // 1. Classroom must exist (the query filters do not apply to ClassRooms).
+        if (!await _context.ClassRooms.AnyAsync(c => c.Id == classRoomId && !c.IsDeleted))
         {
             result.Errors.Add("Selected classroom was not found.");
             return result;
         }
 
-        // 2. Parse Excel into memory
-        var parsedRows = new List<ParsedStudentRow>();
-        using (var stream = new MemoryStream())
+        // 2. Parse the workbook. A corrupt file is the user's problem, not a server error.
+        List<ParsedStudentRow> parsedRows;
+        try
         {
-            await file.CopyToAsync(stream);
-
-            using var workbook = new XLWorkbook(stream);
-            var worksheet = workbook.Worksheet(1);
-
-            // Skip the header row. Now only 3 columns: Full Name, Email, Temp Password.
-            var rows = worksheet.RangeUsed()?.RowsUsed().Skip(1);
-            if (rows is null || !rows.Any())
-            {
-                result.Errors.Add("The uploaded Excel spreadsheet is empty.");
-                return result;
-            }
-
-            int rowNumber = 2; // header is row 1
-            foreach (var row in rows)
-            {
-                var fullName = row.Cell(1).GetString().Trim();
-                var email = row.Cell(2).GetString().Trim();
-                var tempPass = row.Cell(3).GetString().Trim();
-
-                parsedRows.Add(new ParsedStudentRow
-                {
-                    RowNumber = rowNumber++,
-                    FullName = fullName,
-                    Email = email,
-                    TemporaryPassword = string.IsNullOrWhiteSpace(tempPass)
-                        ? "Student@123"
-                        : tempPass,
-                });
-            }
+            parsedRows = await ParseWorkbookAsync(file);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Bulk import: workbook could not be read");
+            result.Errors.Add("The file could not be read. Use the downloaded template and save it as .xlsx.");
+            return result;
         }
 
-        // 3. Validation phase — everything checked before the transaction opens.
-        var emailRegex = new Regex(
-            @"^[^@\s]+@[^@\s]+\.[^@\s]+$",
-            RegexOptions.IgnoreCase);
+        if (parsedRows.Count == 0)
+        {
+            result.Errors.Add("The uploaded Excel spreadsheet is empty.");
+            return result;
+        }
+        if (parsedRows.Count > MaxRows)
+        {
+            result.Errors.Add($"Too many rows ({parsedRows.Count}). Import at most {MaxRows} students at a time.");
+            return result;
+        }
 
-        var seenEmailsInFile = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        // 3. Validate everything before touching the database.
+        //    Only look up the emails that are actually in the file (not the whole Users table).
+        var fileEmails = parsedRows.Select(r => r.Email).Where(e => e.Length > 0).Distinct().ToList();
+        var existingEmails = (await _context.Users
+                .AsNoTracking()
+                .Where(u => fileEmails.Contains(u.Email))
+                .Select(u => u.Email)
+                .ToListAsync())
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
-        // Stale-by-a-millisecond is fine — the SemaphoreSlim closes the
-        // obvious races, and a unique index on Users.Email would close the rest.
-        var existingDbEmails = await _context.Users
-            .Select(u => u.Email.ToLower())
-            .ToListAsync();
+        var seenInFile = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         foreach (var r in parsedRows)
         {
             if (string.IsNullOrWhiteSpace(r.FullName))
                 result.Errors.Add($"Row {r.RowNumber}: Full Name is required.");
+            else if (r.FullName.Length > 100)
+                result.Errors.Add($"Row {r.RowNumber}: Full Name is longer than 100 characters.");
 
-            if (string.IsNullOrWhiteSpace(r.Email) || !emailRegex.IsMatch(r.Email))
-                result.Errors.Add($"Row {r.RowNumber}: Invalid email address '{r.Email}'.");
-
-            if (existingDbEmails.Contains(r.Email.ToLower()))
-                result.Errors.Add(
-                    $"Row {r.RowNumber}: Email '{r.Email}' is already registered in the system.");
-
-            if (!seenEmailsInFile.Add(r.Email))
-                result.Errors.Add(
-                    $"Row {r.RowNumber}: Duplicate email '{r.Email}' found within the spreadsheet.");
-
-            if (existingDbEmails.Contains(r.Email.ToLower()))
+            if (string.IsNullOrWhiteSpace(r.Email) || r.Email.Length > 256 || !EmailRegex.IsMatch(r.Email))
             {
-                result.Errors.Add(
-                    $"Row {r.RowNumber}: Email '{r.Email}' is already registered in the system. " +
-                    $"If the account is deactivated, reactivate it first or use a different email.");
+                result.Errors.Add($"Row {r.RowNumber}: Invalid email address '{r.Email}'.");
             }
+            else
+            {
+                var firstTimeInFile = seenInFile.Add(r.Email);
+
+                if (existingEmails.Contains(r.Email))
+                    result.Errors.Add(
+                        $"Row {r.RowNumber}: Email '{r.Email}' is already registered. " +
+                        "If the account is deactivated, reactivate it first or use a different email.");
+                else if (!firstTimeInFile)
+                    result.Errors.Add($"Row {r.RowNumber}: Duplicate email '{r.Email}' found within the spreadsheet.");
+            }
+
+            if (r.TemporaryPassword.Length < MinPasswordLength || r.TemporaryPassword.Length > 72)
+                result.Errors.Add(
+                    $"Row {r.RowNumber}: temporary password must be {MinPasswordLength} to 72 characters.");
         }
 
         if (result.Errors.Count > 0)
@@ -132,70 +118,98 @@ public class BulkImportService : IBulkImportService
             return result;
         }
 
-        // 4. Execution phase — single transaction, all-or-nothing.
-        using var transaction = await _context.Database.BeginTransactionAsync();
+        // 4. Hash all passwords in parallel BEFORE writing (BCrypt is deliberately slow).
+        var hashes = new string[parsedRows.Count];
+        await Task.Run(() => Parallel.For(0, parsedRows.Count,
+            i => hashes[i] = _passwordHasher.Hash(parsedRows[i].TemporaryPassword)));
+
+        // 5. One SaveChangesAsync = one database transaction: all rows are saved or none are.
+        var now = DateTime.UtcNow;
+        for (var i = 0; i < parsedRows.Count; i++)
+        {
+            var r = parsedRows[i];
+
+            var user = new User
+            {
+                Id = Guid.NewGuid(),
+                Email = r.Email,
+                PasswordHash = hashes[i],
+                CreatedAt = now,
+                IsActive = true,
+            };
+            _context.Users.Add(user);
+
+            _context.UserRoleAssignments.Add(new UserRoleAssignment
+            {
+                Id = Guid.NewGuid(),
+                UserId = user.Id,
+                Role = UserRole.Student,
+            });
+
+            // MemberNumber is DELIBERATELY not set: it is an IDENTITY column.
+            _context.UserProfiles.Add(new UserProfile
+            {
+                Id = Guid.NewGuid(),
+                UserId = user.Id,
+                FullName = r.FullName,
+                Address = string.Empty,
+                PhoneNumbers = new List<string>(),
+                CreatedAt = now,
+                UpdatedAt = now,
+            });
+
+            _context.Enrollments.Add(new Enrollment
+            {
+                Id = Guid.NewGuid(),
+                StudentUserId = user.Id,
+                ClassRoomId = classRoomId,
+                EnrolledAt = now,
+            });
+        }
+
         try
         {
-            foreach (var r in parsedRows)
-            {
-                // A. User account
-                var user = new User
-                {
-                    Id = Guid.NewGuid(),
-                    Email = r.Email,
-                    PasswordHash = _passwordHasher.Hash(r.TemporaryPassword),
-                    CreatedAt = DateTime.UtcNow,
-                    IsActive = true,
-                };
-                _context.Users.Add(user);
-
-                // B. Student role
-                _context.UserRoleAssignments.Add(new UserRoleAssignment
-                {
-                    Id = Guid.NewGuid(),
-                    UserId = user.Id,
-                    Role = UserRole.Student,
-                });
-
-                // C. Profile — MemberNumber is DELIBERATELY not set.
-                //    It's an IDENTITY column; SQL Server assigns the next
-                //    sequential value on insert, exactly like every other
-                //    profile-creation path in this app.
-                _context.UserProfiles.Add(new UserProfile
-                {
-                    Id = Guid.NewGuid(),
-                    UserId = user.Id,
-                    FullName = r.FullName,
-                    Address = string.Empty,
-                    PhoneNumbers = new List<string>(),
-                    CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow,
-                });
-
-                // D. Classroom enrollment
-                _context.Enrollments.Add(new Enrollment
-                {
-                    Id = Guid.NewGuid(),
-                    StudentUserId = user.Id,
-                    ClassRoomId = classRoomId,
-                    EnrolledAt = DateTime.UtcNow,
-                });
-            }
-
             await _context.SaveChangesAsync();
-            await transaction.CommitAsync();
-
             result.Success = true;
             result.ImportedCount = parsedRows.Count;
             return result;
         }
-        catch (Exception ex)
+        catch (DbUpdateException ex) when (ex.IsUniqueViolation())
         {
-            await transaction.RollbackAsync();
-            result.Success = false;
-            result.Errors.Add($"Database error during import: {ex.Message}");
+            _context.ChangeTracker.Clear();
+            result.Errors.Add("One of these emails was registered while the import was running. Nothing was imported; please try again.");
             return result;
         }
+        catch (Exception ex)
+        {
+            _context.ChangeTracker.Clear();
+            _logger.LogError(ex, "Bulk import failed for classroom {ClassRoomId}", classRoomId);
+            result.Errors.Add("The import failed because of a server error. Nothing was imported.");   // no SQL text to the client
+            return result;
+        }
+    }
+
+    private static async Task<List<ParsedStudentRow>> ParseWorkbookAsync(IFormFile file)
+    {
+        await using var stream = new MemoryStream();
+        await file.CopyToAsync(stream);
+        stream.Position = 0;
+
+        using var workbook = new XLWorkbook(stream);
+        var worksheet = workbook.Worksheet(1);
+
+        // Row 1 is the header. RowNumber() is the REAL Excel row, so error messages point at the right line
+        // even when blank rows are skipped.
+        return worksheet.RowsUsed()
+            .Where(row => row.RowNumber() > 1)
+            .Select(row => new ParsedStudentRow
+            {
+                RowNumber = row.RowNumber(),
+                FullName = row.Cell(1).GetString().Trim(),
+                Email = row.Cell(2).GetString().Trim(),
+                TemporaryPassword = row.Cell(3).GetString().Trim(),
+            })
+            .ToList();
     }
 
     public byte[] GenerateSampleExcelTemplate()
@@ -203,7 +217,6 @@ public class BulkImportService : IBulkImportService
         using var workbook = new XLWorkbook();
         var worksheet = workbook.Worksheets.Add("Students");
 
-        // Three columns now — no Roll Number.
         worksheet.Cell(1, 1).Value = "Full Name";
         worksheet.Cell(1, 2).Value = "Email Address";
         worksheet.Cell(1, 3).Value = "Temporary Password";
@@ -215,11 +228,11 @@ public class BulkImportService : IBulkImportService
 
         worksheet.Cell(2, 1).Value = "Sushit Shrestha";
         worksheet.Cell(2, 2).Value = "sushit@example.com";
-        worksheet.Cell(2, 3).Value = "123456789";
+        worksheet.Cell(2, 3).Value = "ChangeMe-2026";   // 8+ characters; give every student a different one
 
         worksheet.Cell(3, 1).Value = "Asta";
         worksheet.Cell(3, 2).Value = "Asta.Clover@example.com";
-        worksheet.Cell(3, 3).Value = "123456789";
+        worksheet.Cell(3, 3).Value = "ChangeMe-2027";
 
         worksheet.Columns().AdjustToContents();
 

@@ -4,6 +4,7 @@ using Form.Interface;
 using Form.Interfaces;
 using Form.Services;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Moq;
 namespace Form.Tests.Services;
 
@@ -13,13 +14,13 @@ public class SubmissionServiceTests
     // it actually needs. Returns all six mocks — tests destructure with
     // underscore discards for the ones they don't care about.
     private static (
-        SubmissionService sut,
-        Mock<ISubmissionRepository> repo,
-        Mock<IFileStorageService> fileStorage,
-        Mock<IUserProfileRepository> profileRepo,
-        Mock<IEnrollmentService> enrollmentService,
-        Mock<INotificationService> notificationService,
-        Mock<IClassRoomRepository> classRoomRepo) CreateSut()
+    SubmissionService sut,
+    Mock<ISubmissionRepository> repo,
+    Mock<IFileStorageService> fileStorage,
+    Mock<IUserProfileRepository> profileRepo,
+    Mock<IEnrollmentService> enrollmentService,
+    Mock<INotificationService> notificationService,
+    Mock<IClassRoomRepository> classRoomRepo) CreateSut()
     {
         var repo = new Mock<ISubmissionRepository>();
         var fileStorage = new Mock<IFileStorageService>();
@@ -28,18 +29,22 @@ public class SubmissionServiceTests
         var notificationService = new Mock<INotificationService>();
         var classRoomRepo = new Mock<IClassRoomRepository>();
 
+        // The service logs "notification failed after save" as best-effort —
+        // the mock discards the calls, which is exactly what a test wants.
+        var logger = new Mock<ILogger<SubmissionService>>();
+
         var sut = new SubmissionService(
             repo.Object,
             fileStorage.Object,
             profileRepo.Object,
             enrollmentService.Object,
             notificationService.Object,
-            classRoomRepo.Object);
+            classRoomRepo.Object,
+            logger.Object);
 
         return (sut, repo, fileStorage, profileRepo, enrollmentService,
                 notificationService, classRoomRepo);
     }
-
     // A fake IFormFile — Moq can mock interfaces, and IFormFile is one,
     // so we don't need a real uploaded file to test validation logic.
     private static Mock<IFormFile> FakeFile(string fileName, long length)
@@ -59,8 +64,21 @@ public class SubmissionServiceTests
         // ARRANGE: a valid-looking file, but no UserProfile has this
         // RollNo — this is the "silent orphaned record" case the code
         // comment explicitly calls out as the reason for this check.
-        var (sut, repo, fileStorage, profileRepo, enrollmentService, _, _) =
+        var (sut, repo, fileStorage, profileRepo, enrollmentService, _, classRoomRepo) =
             CreateSut();
+
+        // Hoisted so the mock setup and the request use the SAME Guid.
+        // If the request built its own Guid.NewGuid() inline, the mock
+        // below would not match and GetNameAsync would return null.
+        var classRoomId = Guid.NewGuid();
+
+        // Step 2 of the rewrite resolves the class name BEFORE it looks
+        // at the roll number. Even though this test is about the roll
+        // number failing at step 3, step 2 has to be stubbed for the
+        // pipeline to reach step 3 at all.
+        classRoomRepo
+            .Setup(c => c.GetNameAsync(classRoomId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync("CS101");
 
         var file = FakeFile("resume.pdf", 1024);
         fileStorage.Setup(f => f.SaveFileAsync(file.Object))
@@ -71,7 +89,7 @@ public class SubmissionServiceTests
         var request = new CreateSubmissionRequest
         {
             FullName = "Nobody",
-            ClassRoomId = Guid.NewGuid(),
+            ClassRoomId = classRoomId,
             RollNo = 9999,
             File = file.Object,
             CreatedByUserId = Guid.NewGuid(),
@@ -108,6 +126,14 @@ public class SubmissionServiceTests
                    .ReturnsAsync("uploads/fake-guid.pdf");
         profileRepo.Setup(p => p.GetByMemberNumberAsync(42))
                    .ReturnsAsync(profile);
+
+        // Step 2 needs a non-null name, or the pipeline throws
+        // "Selected class was not found" before it ever looks at the
+        // roll number this test is about.
+        classRoomRepo
+            .Setup(c => c.GetNameAsync(classRoomId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync("CS101");
+
         repo.Setup(r => r.AddAsync(It.IsAny<Submission>()))
             .ReturnsAsync((Submission s) => s); // echo back, like EF after saving
 
@@ -123,7 +149,12 @@ public class SubmissionServiceTests
             ClassRoomId = classRoomId,
             RollNo = 42,
             File = file.Object,
-            CreatedByUserId = Guid.NewGuid(),
+            // Must equal profile.UserId. With CreatedByStaff = false
+            // (the default), the service enforces "you can only submit
+            // using your own roll number." Setting it to studentUserId
+            // makes this test exercise the student-submitting-for-
+            // themselves path, which is what the name promises.
+            CreatedByUserId = studentUserId,
         };
 
         // ACT
@@ -235,7 +266,13 @@ public class SubmissionServiceTests
             ClassRoomId = classRoomId,
             RollNo = 42,
             File = file.Object,
+            // Staff submission. A staff member can submit for any roll
+            // number, so the ownership check is skipped — that keeps this
+            // test focused on the notification wiring its name promises.
+            // (To test the student path instead, set this to studentUserId
+            // and drop CreatedByStaff.)
             CreatedByUserId = Guid.NewGuid(),
+            CreatedByStaff = true,
         };
 
         // ACT

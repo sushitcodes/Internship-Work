@@ -28,13 +28,14 @@ public class UserRepository(AppDbContext _context) : IUserRepository
     await _context.Users.Include(u => u.RoleAssignments).FirstOrDefaultAsync(u => u.Id == id);
     public async Task<List<User>> GetByRoleAsync(UserRole role) =>
     await _context.Users
+        .AsNoTracking()
         .Where(u => u.RoleAssignments.Any(ra => ra.Role == role))
         .ToListAsync();
     // COUNT, not GetByRoleAsync().Count — the difference matters: this becomes
     // a single SQL COUNT(*) query, never pulling full User rows (with their
     // RoleAssignments collections) into memory just to count them.
     public async Task<int> CountByRoleAsync(UserRole role) =>
-        await _context.Users.CountAsync(u => u.RoleAssignments.Any(ra => ra.Role == role));
+    await _context.Users.CountAsync(u => u.IsActive && u.RoleAssignments.Any(ra => ra.Role == role));
     public async Task SetActiveStatusAsync(Guid userId, bool isActive)
     {
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);

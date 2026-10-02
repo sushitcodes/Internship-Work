@@ -3,14 +3,43 @@ using Form.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using System.ComponentModel.DataAnnotations;
 
 namespace Form.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController(IAuthService _authService,IConfiguration _config) : ControllerBase
+public class AuthController(IAuthService _authService, IConfiguration _config) : ControllerBase
 {
-    
+    // One place decides cookie attributes. Set and Delete MUST use identical options,
+    // otherwise the browser treats them as different cookies and logout can silently fail.
+    private CookieOptions BuildCookieOptions(DateTimeOffset? expires, string path = "/")
+    {
+        var sameSite = Enum.TryParse<SameSiteMode>(_config["Cookies:SameSite"], true, out var parsed)
+            ? parsed
+            : SameSiteMode.Lax;
+
+        return new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = sameSite,
+            Expires = expires,
+            Path = path,
+        };
+    }
+
+    private void SetAuthCookie(string token, DateTime expiresAt) =>
+        Response.Cookies.Append("jwt", token, BuildCookieOptions(expiresAt));
+
+    private void SetRefreshCookie(string token, DateTime expiresAt) =>
+        Response.Cookies.Append("refreshToken", token, BuildCookieOptions(expiresAt, "/api/auth"));
+
+    private void ClearAuthCookies()
+    {
+        Response.Cookies.Delete("jwt", BuildCookieOptions(null));
+        Response.Cookies.Delete("refreshToken", BuildCookieOptions(null, "/api/auth"));
+    }
 
     [HttpPost("login")]
     [EnableRateLimiting("AuthPolicy")]
@@ -18,38 +47,32 @@ public class AuthController(IAuthService _authService,IConfiguration _config) : 
     {
         try
         {
-
             var result = await _authService.LoginAsync(request);
             if (result is null) return Unauthorized("Invalid email or password.");
 
             SetAuthCookie(result.Token, result.ExpiresAt);
             SetRefreshCookie(result.RefreshToken, result.RefreshTokenExpiresAt);
-            // No longer send the raw token in the body — only non-sensitive info
             return Ok(new { email = result.Email, expiresAt = result.ExpiresAt, roles = result.Roles });
         }
         catch (InvalidOperationException ex)
         {
-            return Unauthorized(ex.Message); // deactivated — a specific, readable message instead of the generic 401
+            return Unauthorized(ex.Message); // deactivated account: specific readable message
         }
-
     }
-    // logout
-    // now genuinely needs the server, since JS can't clear an HttpOnly cookie.
+
     [HttpPost("logout")]
-    public async Task<IActionResult> Logout()   // CHANGE — now async, since we're doing DB work
+    public async Task<IActionResult> Logout()
     {
         if (Request.Cookies.TryGetValue("refreshToken", out var rawRefreshToken)
             && !string.IsNullOrEmpty(rawRefreshToken))
         {
-            await _authService.LogoutAsync(rawRefreshToken);   // ADD — actually revoke in the DB
+            await _authService.LogoutAsync(rawRefreshToken);
         }
 
-        Response.Cookies.Delete("jwt");
-        Response.Cookies.Delete("refreshToken", new CookieOptions { Path = "/api/auth" });
+        ClearAuthCookies();
         return Ok();
     }
 
-    // logged in," it asks the server directly. Called once when the app loads.
     [Authorize]
     [HttpGet("me")]
     public ActionResult<object> Me()
@@ -59,31 +82,10 @@ public class AuthController(IAuthService _authService,IConfiguration _config) : 
         var roles = User.FindAll(System.Security.Claims.ClaimTypes.Role)
                 .Select(c => c.Value)
                 .ToList();
-        return Ok(new { email ,roles });
+        return Ok(new { email, roles });
     }
 
-    private void SetAuthCookie(string token, DateTime expiresAt)
-    {
-        Response.Cookies.Append("jwt", token, new CookieOptions
-        {
-            HttpOnly = true,
-            Secure = true,
-            SameSite = SameSiteMode.None,
-            Expires = expiresAt,
-        });
-    }
-    private void SetRefreshCookie(string token, DateTime expiresAt)
-    {
-        Response.Cookies.Append("refreshToken", token, new CookieOptions
-        {
-            HttpOnly = true,
-            Secure = true,
-            SameSite = SameSiteMode.None,
-            Expires = expiresAt,
-            Path = "/api/auth",  
-        });
-    }
-    [AllowAnonymous]  
+    [AllowAnonymous]
     [HttpPost("refresh")]
     public async Task<ActionResult<object>> Refresh()
     {
@@ -96,48 +98,50 @@ public class AuthController(IAuthService _authService,IConfiguration _config) : 
         var result = await _authService.RefreshAsync(rawRefreshToken);
         if (result is null)
         {
-            // Refresh failed (expired, revoked, or reuse-detected). Clear
-            // whatever cookies remain — there's no session left to recover.
-            Response.Cookies.Delete("jwt");
-            Response.Cookies.Delete("refreshToken", new CookieOptions { Path = "/api/auth" });
+            ClearAuthCookies();
             return Unauthorized();
         }
 
         SetAuthCookie(result.Token, result.ExpiresAt);
         SetRefreshCookie(result.RefreshToken, result.RefreshTokenExpiresAt);
 
-        return Ok(new { email = result.Email, expiresAt = result.ExpiresAt , role = result.Roles});
+        // "roles" (plural) to match /login and /me. Was "role" before.
+        return Ok(new { email = result.Email, expiresAt = result.ExpiresAt, roles = result.Roles });
     }
 
     public class ForgotPasswordRequest
     {
+        [Required, EmailAddress, StringLength(256)]
         public string Email { get; set; } = string.Empty;
     }
 
     [AllowAnonymous]
-
     [HttpPost("forgot-password")]
     [EnableRateLimiting("AuthPolicy")]
-
     public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest request)
     {
-        var frontendBaseUrl = _config["Frontend:BaseUrl"]!;
         await _authService.ForgotPasswordAsync(request.Email);
 
-        // ALWAYS the same generic response — see the reasoning above.
+        // ALWAYS the same generic response so this endpoint cannot be used to discover accounts.
         return Ok(new { message = "If an account with that email exists, a reset link has been sent." });
     }
+
     public class ResetPasswordRequest
     {
+        [Required, EmailAddress, StringLength(256)]
         public string Email { get; set; } = string.Empty;
+
+        [Required, StringLength(6, MinimumLength = 6)]
         public string Code { get; set; } = string.Empty;
+
+        // 72 because BCrypt ignores everything after 72 bytes.
+        [Required, StringLength(72, MinimumLength = 8)]
         public string NewPassword { get; set; } = string.Empty;
     }
 
     [AllowAnonymous]
     [HttpPost("reset-password")]
     [EnableRateLimiting("AuthPolicy")]
-
     public async Task<IActionResult> ResetPassword(ResetPasswordRequest request)
     {
         var success = await _authService.ResetPasswordAsync(request.Email, request.Code, request.NewPassword);
