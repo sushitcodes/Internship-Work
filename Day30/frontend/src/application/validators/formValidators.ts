@@ -16,32 +16,22 @@ export const emailValidation = {
   },
 };
 
-// export const phoneValidation = {
-//   required: "Phone number is required",
-//   pattern: {
-//     value: /^[0-9]{10}$/,
-//     message: "Phone number must be 10 digits",
-//   },
-// };
-
-// export const institutionValidation = {
-//   required: "Institution name is required",
-// };
-
-// export const degreeValidation = {
-//   required: "Degree is required",
-// };
-
-// export const yearValidation = {
-//   required: "Year is required",
-//   min: { value: 1950, message: "Enter a valid year" },
-//   max: { value: 3000, message: "Year cannot be in the future" },
-// };
-
-// Frontend file check is a UX nicety only — the REAL validation
+// Frontend file check is a UX nicety only. The REAL validation
 // (size, type, virus scan) happens on the backend. Never trust the browser.
+const ALLOWED_EXTENSIONS = ["pdf", "jpg", "jpeg", "png"];
+const MAX_FILE_BYTES = 5 * 1024 * 1024; // same 5 MB limit as the server
+
 export const fileValidation = {
   required: "Please attach a file",
+  validate: (files?: FileList) => {
+    const file = files?.[0];
+    if (!file) return true; // "required" already handles the empty case
+    const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
+    if (!ALLOWED_EXTENSIONS.includes(ext))
+      return "Only PDF, JPG or PNG files are allowed.";
+    if (file.size > MAX_FILE_BYTES) return "File must be 5 MB or smaller.";
+    return true;
+  },
 };
 
 export const passwordValidation = {

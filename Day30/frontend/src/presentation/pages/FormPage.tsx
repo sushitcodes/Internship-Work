@@ -323,7 +323,12 @@ const FormPage: React.FC = () => {
             <Input
               id="file"
               type="file"
-              {...register("file", isEditMode ? {} : fileValidation)}
+              {...register(
+                "file",
+                isEditMode
+                  ? { validate: fileValidation.validate }
+                  : fileValidation,
+              )}
             />
             {errors.file && (
               <p className="text-sm text-red-500">{errors.file.message}</p>

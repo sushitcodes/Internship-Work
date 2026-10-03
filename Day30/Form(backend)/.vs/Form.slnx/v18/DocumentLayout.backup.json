@@ -3,6 +3,34 @@
   "WorkspaceRootPath": "G:\\C sharp\\Day30\\Form(backend)\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\persistence\\repositories\\attendancerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:persistence\\repositories\\attendancerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\dtos\\attendancerecorddtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:dtos\\attendancerecorddtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\dtos\\enrollmentdtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:dtos\\enrollmentdtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\services\\gradeservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:services\\gradeservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\persistence\\repositories\\userprofilerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:persistence\\repositories\\userprofilerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\services\\userprofileservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:services\\userprofileservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{8F5EAB24-A914-4AFE-872B-C504BE149043}|..\\Form.Tests\\Form.Tests.csproj|g:\\c sharp\\day30\\form.tests\\submissionservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -121,10 +149,6 @@
       "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:persistence\\repositories\\subjectrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\persistence\\repositories\\userprofilerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:persistence\\repositories\\userprofilerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\controllers\\gradescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:controllers\\gradescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -141,20 +165,8 @@
       "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\persistence\\repositories\\attendancerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:persistence\\repositories\\attendancerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\controllers\\bulkimportcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:controllers\\bulkimportcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\services\\userprofileservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:services\\userprofileservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -203,10 +215,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\persistence\\repositories\\graderepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:persistence\\repositories\\graderepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\services\\gradeservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|solutionrelative:services\\gradeservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D648AE4D-3E6F-B926-6229-610A31592E1B}|Form.csproj|g:\\c sharp\\day30\\form(backend)\\services\\attendanceservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -284,11 +292,62 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "EnrollmentDtos.cs",
+              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\DTOs\\EnrollmentDtos.cs",
+              "RelativeDocumentMoniker": "DTOs\\EnrollmentDtos.cs",
+              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\DTOs\\EnrollmentDtos.cs",
+              "RelativeToolTip": "DTOs\\EnrollmentDtos.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-03T03:28:31.859Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AttendanceRecordDtos.cs",
+              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\DTOs\\AttendanceRecordDtos.cs",
+              "RelativeDocumentMoniker": "DTOs\\AttendanceRecordDtos.cs",
+              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\DTOs\\AttendanceRecordDtos.cs",
+              "RelativeToolTip": "DTOs\\AttendanceRecordDtos.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAUwB4AAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-03T03:27:19.675Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "AttendanceRepository.cs",
+              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Persistence\\Repositories\\AttendanceRepository.cs",
+              "RelativeDocumentMoniker": "Persistence\\Repositories\\AttendanceRepository.cs",
+              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Persistence\\Repositories\\AttendanceRepository.cs",
+              "RelativeToolTip": "Persistence\\Repositories\\AttendanceRepository.cs",
+              "ViewState": "AgIAAB0AAAAAAAAAAAAQwC8AAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-02T07:44:09.165Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "UserProfileRepository.cs",
+              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Persistence\\Repositories\\UserProfileRepository.cs",
+              "RelativeDocumentMoniker": "Persistence\\Repositories\\UserProfileRepository.cs",
+              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Persistence\\Repositories\\UserProfileRepository.cs",
+              "RelativeToolTip": "Persistence\\Repositories\\UserProfileRepository.cs",
+              "ViewState": "AgIAAFEAAAAAAAAAAAAowGUAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-02T08:53:43.915Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
               "Title": "SubmissionServiceTests.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form.Tests\\SubmissionServiceTests.cs",
               "RelativeDocumentMoniker": "..\\Form.Tests\\SubmissionServiceTests.cs",
@@ -296,12 +355,36 @@
               "RelativeToolTip": "..\\Form.Tests\\SubmissionServiceTests.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACMBAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T10:26:21.678Z",
+              "WhenOpened": "2026-10-02T10:26:21.678Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "GradeService.cs",
+              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\GradeService.cs",
+              "RelativeDocumentMoniker": "Services\\GradeService.cs",
+              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Services\\GradeService.cs",
+              "RelativeToolTip": "Services\\GradeService.cs",
+              "ViewState": "AgIAABcAAAAAAAAAAAAIwCkAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-02T08:24:47.436Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 6,
+              "Title": "UsersController.cs",
+              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Controllers\\UsersController.cs",
+              "RelativeDocumentMoniker": "Controllers\\UsersController.cs",
+              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Controllers\\UsersController.cs",
+              "RelativeToolTip": "Controllers\\UsersController.cs",
+              "ViewState": "AgIAAC0AAAAAAAAAAAAowHEAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-02T05:31:40.072Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
               "Title": "AuthServiceTests.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form.Tests\\AuthServiceTests.cs",
               "RelativeDocumentMoniker": "..\\Form.Tests\\AuthServiceTests.cs",
@@ -309,12 +392,11 @@
               "RelativeToolTip": "..\\Form.Tests\\AuthServiceTests.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAALcAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T10:26:50.912Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T10:26:50.912Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 11,
               "Title": "ClassRoomsController.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Controllers\\ClassRoomsController.cs",
               "RelativeDocumentMoniker": "Controllers\\ClassRoomsController.cs",
@@ -322,12 +404,11 @@
               "RelativeToolTip": "Controllers\\ClassRoomsController.cs",
               "ViewState": "AgIAAA8AAAAAAAAAAAAswCAAAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T10:22:39.792Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T10:22:39.792Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 10,
               "Title": "EnrollmentRepository.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Persistence\\Repositories\\EnrollmentRepository.cs",
               "RelativeDocumentMoniker": "Persistence\\Repositories\\EnrollmentRepository.cs",
@@ -335,12 +416,11 @@
               "RelativeToolTip": "Persistence\\Repositories\\EnrollmentRepository.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T05:55:11.102Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T05:55:11.102Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 9,
               "Title": "BulkImportService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\BulkImportService.cs",
               "RelativeDocumentMoniker": "Services\\BulkImportService.cs",
@@ -348,12 +428,23 @@
               "RelativeToolTip": "Services\\BulkImportService.cs",
               "ViewState": "AgIAACEAAAAAAAAAAAAowC0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T08:57:13.762Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T08:57:13.762Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 5,
+              "Title": "UserProfileService.cs",
+              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\UserProfileService.cs",
+              "RelativeDocumentMoniker": "Services\\UserProfileService.cs",
+              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Services\\UserProfileService.cs",
+              "RelativeToolTip": "Services\\UserProfileService.cs",
+              "ViewState": "AgIAAJcAAAAAAAAAAAAuwJ4AAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-02T08:54:54.276Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
               "Title": "IClassRoomService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Interface\\IClassRoomService.cs",
               "RelativeDocumentMoniker": "Interface\\IClassRoomService.cs",
@@ -361,12 +452,11 @@
               "RelativeToolTip": "Interface\\IClassRoomService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAABIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T10:20:44.821Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T10:20:44.821Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 15,
               "Title": "IClassRoomRepository.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Interface\\IClassRoomRepository.cs",
               "RelativeDocumentMoniker": "Interface\\IClassRoomRepository.cs",
@@ -374,12 +464,11 @@
               "RelativeToolTip": "Interface\\IClassRoomRepository.cs",
               "ViewState": "AgIAAAoAAAAAAAAAAAAkwBMAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T09:09:40.415Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T09:09:40.415Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 12,
               "Title": "ClassRoomService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\ClassRoomService.cs",
               "RelativeDocumentMoniker": "Services\\ClassRoomService.cs",
@@ -387,12 +476,11 @@
               "RelativeToolTip": "Services\\ClassRoomService.cs",
               "ViewState": "AgIAAFYAAAAAAAAAAAAgwCUAAAAOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T09:12:02.323Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T09:12:02.323Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 16,
               "Title": "ClassRoomDtos.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\DTOs\\ClassRoomDtos.cs",
               "RelativeDocumentMoniker": "DTOs\\ClassRoomDtos.cs",
@@ -400,12 +488,11 @@
               "RelativeToolTip": "DTOs\\ClassRoomDtos.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAABiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T10:19:19.819Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T10:19:19.819Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 14,
               "Title": "ClassRoomRepository.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Persistence\\Repositories\\ClassRoomRepository.cs",
               "RelativeDocumentMoniker": "Persistence\\Repositories\\ClassRoomRepository.cs",
@@ -413,12 +500,11 @@
               "RelativeToolTip": "Persistence\\Repositories\\ClassRoomRepository.cs",
               "ViewState": "AgIAAAYAAAAAAAAAAAAAAA0AAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T09:11:13.469Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T09:11:13.469Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 17,
               "Title": "ClassRoom.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Entities\\ClassRoom.cs",
               "RelativeDocumentMoniker": "Entities\\ClassRoom.cs",
@@ -426,12 +512,11 @@
               "RelativeToolTip": "Entities\\ClassRoom.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T10:17:36.837Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T10:17:36.837Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 18,
               "Title": "AppDbContext.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Persistence\\AppDbContext.cs",
               "RelativeDocumentMoniker": "Persistence\\AppDbContext.cs",
@@ -439,12 +524,11 @@
               "RelativeToolTip": "Persistence\\AppDbContext.cs",
               "ViewState": "AgIAANcAAAAAAAAAAAAmwOgAAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T05:35:25.41Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T05:35:25.41Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 19,
               "Title": "NotificationService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\NotificationService.cs",
               "RelativeDocumentMoniker": "Services\\NotificationService.cs",
@@ -452,12 +536,11 @@
               "RelativeToolTip": "Services\\NotificationService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T08:23:28.216Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T08:23:28.216Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 21,
               "Title": "INotificationService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Interface\\INotificationService.cs",
               "RelativeDocumentMoniker": "Interface\\INotificationService.cs",
@@ -465,12 +548,11 @@
               "RelativeToolTip": "Interface\\INotificationService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACsAAABvAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T08:22:43.432Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T08:22:43.432Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 20,
               "Title": "DashboardService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\DashboardService.cs",
               "RelativeDocumentMoniker": "Services\\DashboardService.cs",
@@ -478,12 +560,11 @@
               "RelativeToolTip": "Services\\DashboardService.cs",
               "ViewState": "AgIAAA0AAAAAAAAAAIA/wBwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T09:01:27.865Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T09:01:27.865Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 22,
               "Title": "Program.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
@@ -491,12 +572,11 @@
               "RelativeToolTip": "Program.cs",
               "ViewState": "AgIAAEcAAAAAAAAAAAD4v1QAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T04:50:08.758Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T04:50:08.758Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 23,
               "Title": "ReportCardPdfService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\ReportCardPdfService.cs",
               "RelativeDocumentMoniker": "Services\\ReportCardPdfService.cs",
@@ -504,12 +584,11 @@
               "RelativeToolTip": "Services\\ReportCardPdfService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAuwAoAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T09:32:45.027Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T09:32:45.027Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 24,
               "Title": "BCryptPasswordHasher.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\BCryptPasswordHasher.cs",
               "RelativeDocumentMoniker": "Services\\BCryptPasswordHasher.cs",
@@ -517,12 +596,11 @@
               "RelativeToolTip": "Services\\BCryptPasswordHasher.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T09:29:00.06Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T09:29:00.06Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 25,
               "Title": "IPasswordHasher.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Interface\\IPasswordHasher.cs",
               "RelativeDocumentMoniker": "Interface\\IPasswordHasher.cs",
@@ -530,12 +608,11 @@
               "RelativeToolTip": "Interface\\IPasswordHasher.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T09:31:27.297Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T09:31:27.297Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 27,
               "Title": "IPasswordResetRepository.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Interface\\IPasswordResetRepository.cs",
               "RelativeDocumentMoniker": "Interface\\IPasswordResetRepository.cs",
@@ -543,12 +620,11 @@
               "RelativeToolTip": "Interface\\IPasswordResetRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T09:27:15.121Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T09:27:15.121Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 28,
               "Title": "IPasswordResetService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Interface\\IPasswordResetService.cs",
               "RelativeDocumentMoniker": "Interface\\IPasswordResetService.cs",
@@ -556,12 +632,11 @@
               "RelativeToolTip": "Interface\\IPasswordResetService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T09:27:16.48Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T09:27:16.48Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 26,
               "Title": "PasswordResetService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\PasswordResetService.cs",
               "RelativeDocumentMoniker": "Services\\PasswordResetService.cs",
@@ -569,12 +644,11 @@
               "RelativeToolTip": "Services\\PasswordResetService.cs",
               "ViewState": "AgIAABgAAAAAAAAAAAAowB0AAABCAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T08:31:45.048Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T08:31:45.048Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 29,
               "Title": "PasswordResetRepository.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Persistence\\Repositories\\PasswordResetRepository.cs",
               "RelativeDocumentMoniker": "Persistence\\Repositories\\PasswordResetRepository.cs",
@@ -582,12 +656,11 @@
               "RelativeToolTip": "Persistence\\Repositories\\PasswordResetRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T09:26:43.477Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T09:26:43.477Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 31,
               "Title": "NotificationHub.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Hubs\\NotificationHub.cs",
               "RelativeDocumentMoniker": "Hubs\\NotificationHub.cs",
@@ -595,12 +668,11 @@
               "RelativeToolTip": "Hubs\\NotificationHub.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAyAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T09:25:06.21Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T09:25:06.21Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 33,
               "Title": "FilesController.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Controllers\\FilesController.cs",
               "RelativeDocumentMoniker": "Controllers\\FilesController.cs",
@@ -608,12 +680,11 @@
               "RelativeToolTip": "Controllers\\FilesController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T09:21:39.802Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T09:21:39.802Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 30,
               "Title": "AuthDtos.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\DTOs\\AuthDtos.cs",
               "RelativeDocumentMoniker": "DTOs\\AuthDtos.cs",
@@ -621,12 +692,11 @@
               "RelativeToolTip": "DTOs\\AuthDtos.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T05:09:04.328Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T05:09:04.328Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
+              "DocumentIndex": 34,
               "Title": "LocalFileStorage.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\FileStorage\\LocalFileStorage.cs",
               "RelativeDocumentMoniker": "FileStorage\\LocalFileStorage.cs",
@@ -634,12 +704,11 @@
               "RelativeToolTip": "FileStorage\\LocalFileStorage.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAAA0AAABgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T05:16:57.4Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T05:16:57.4Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 32,
               "Title": "Subject.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Entities\\Subject.cs",
               "RelativeDocumentMoniker": "Entities\\Subject.cs",
@@ -647,12 +716,11 @@
               "RelativeToolTip": "Entities\\Subject.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T05:38:08.522Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T05:38:08.522Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
+              "DocumentIndex": 35,
               "Title": "SubjectService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\SubjectService.cs",
               "RelativeDocumentMoniker": "Services\\SubjectService.cs",
@@ -660,12 +728,11 @@
               "RelativeToolTip": "Services\\SubjectService.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAABUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T09:19:04.436Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T09:19:04.436Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 29,
+              "DocumentIndex": 36,
               "Title": "SubjectRepository.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Persistence\\Repositories\\SubjectRepository.cs",
               "RelativeDocumentMoniker": "Persistence\\Repositories\\SubjectRepository.cs",
@@ -673,12 +740,11 @@
               "RelativeToolTip": "Persistence\\Repositories\\SubjectRepository.cs",
               "ViewState": "AgIAAB0AAAAAAAAAAAAwwC4AAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T09:18:22.542Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T09:18:22.542Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 31,
+              "DocumentIndex": 37,
               "Title": "GradesController.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Controllers\\GradesController.cs",
               "RelativeDocumentMoniker": "Controllers\\GradesController.cs",
@@ -686,25 +752,11 @@
               "RelativeToolTip": "Controllers\\GradesController.cs",
               "ViewState": "AgIAADAAAAAAAAAAAADwv00AAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T08:30:40.396Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T08:30:40.396Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 30,
-              "Title": "UserProfileRepository.cs",
-              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Persistence\\Repositories\\UserProfileRepository.cs",
-              "RelativeDocumentMoniker": "Persistence\\Repositories\\UserProfileRepository.cs",
-              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Persistence\\Repositories\\UserProfileRepository.cs",
-              "RelativeToolTip": "Persistence\\Repositories\\UserProfileRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAG8AAAAtAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T08:53:43.915Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 33,
+              "DocumentIndex": 39,
               "Title": "UserRepository.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Persistence\\Repositories\\UserRepository.cs",
               "RelativeDocumentMoniker": "Persistence\\Repositories\\UserRepository.cs",
@@ -712,12 +764,11 @@
               "RelativeToolTip": "Persistence\\Repositories\\UserRepository.cs",
               "ViewState": "AgIAABUAAAAAAAAAAAAYwB4AAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T09:04:12.408Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T09:04:12.408Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 32,
+              "DocumentIndex": 38,
               "Title": "IAttendanceRepository.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Interface\\IAttendanceRepository.cs",
               "RelativeDocumentMoniker": "Interface\\IAttendanceRepository.cs",
@@ -725,25 +776,11 @@
               "RelativeToolTip": "Interface\\IAttendanceRepository.cs",
               "ViewState": "AgIAAAUAAAAAAAAAAAAAwBIAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T07:46:00.432Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T07:46:00.432Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 35,
-              "Title": "AttendanceRepository.cs",
-              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Persistence\\Repositories\\AttendanceRepository.cs",
-              "RelativeDocumentMoniker": "Persistence\\Repositories\\AttendanceRepository.cs",
-              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Persistence\\Repositories\\AttendanceRepository.cs",
-              "RelativeToolTip": "Persistence\\Repositories\\AttendanceRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAcAAAA6AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T07:44:09.165Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 34,
+              "DocumentIndex": 40,
               "Title": "appsettings.json",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\appsettings.json",
               "RelativeDocumentMoniker": "appsettings.json",
@@ -751,12 +788,11 @@
               "RelativeToolTip": "appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-10-02T04:48:30.514Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T04:48:30.514Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 36,
+              "DocumentIndex": 41,
               "Title": "BulkImportController.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Controllers\\BulkImportController.cs",
               "RelativeDocumentMoniker": "Controllers\\BulkImportController.cs",
@@ -764,38 +800,11 @@
               "RelativeToolTip": "Controllers\\BulkImportController.cs",
               "ViewState": "AgIAABUAAAAAAAAAAAAYwCEAAAA4AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T08:57:55.134Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T08:57:55.134Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 38,
-              "Title": "UserProfileService.cs",
-              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\UserProfileService.cs",
-              "RelativeDocumentMoniker": "Services\\UserProfileService.cs",
-              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Services\\UserProfileService.cs",
-              "RelativeToolTip": "Services\\UserProfileService.cs",
-              "ViewState": "AgIAAEsAAAAAAAAAAAAgwGAAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T08:54:54.276Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 37,
-              "Title": "UsersController.cs",
-              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Controllers\\UsersController.cs",
-              "RelativeDocumentMoniker": "Controllers\\UsersController.cs",
-              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Controllers\\UsersController.cs",
-              "RelativeToolTip": "Controllers\\UsersController.cs",
-              "ViewState": "AgIAAFcAAAAAAAAAAAAqwHAAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T05:31:40.072Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 39,
+              "DocumentIndex": 42,
               "Title": "UserService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\UserService.cs",
               "RelativeDocumentMoniker": "Services\\UserService.cs",
@@ -803,12 +812,11 @@
               "RelativeToolTip": "Services\\UserService.cs",
               "ViewState": "AgIAAB0AAAAAAAAAAAAlwCkAAAAOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T08:48:54.124Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T08:48:54.124Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 40,
+              "DocumentIndex": 43,
               "Title": "UserDtos.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\DTOs\\UserDtos.cs",
               "RelativeDocumentMoniker": "DTOs\\UserDtos.cs",
@@ -816,12 +824,11 @@
               "RelativeToolTip": "DTOs\\UserDtos.cs",
               "ViewState": "AgIAABAAAAAAAAAAAAAywB0AAAA4AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T08:45:38.15Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T08:45:38.15Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 41,
+              "DocumentIndex": 44,
               "Title": "RefreshTokenRepository.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Persistence\\Repositories\\RefreshTokenRepository.cs",
               "RelativeDocumentMoniker": "Persistence\\Repositories\\RefreshTokenRepository.cs",
@@ -829,12 +836,11 @@
               "RelativeToolTip": "Persistence\\Repositories\\RefreshTokenRepository.cs",
               "ViewState": "AgIAABoAAAAAAAAAAAAgwB4AAABMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T08:43:27.341Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T08:43:27.341Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 42,
+              "DocumentIndex": 45,
               "Title": "IRefreshTokenRepository.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Interface\\IRefreshTokenRepository.cs",
               "RelativeDocumentMoniker": "Interface\\IRefreshTokenRepository.cs",
@@ -842,12 +848,11 @@
               "RelativeToolTip": "Interface\\IRefreshTokenRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T08:42:43.67Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T08:42:43.67Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 43,
+              "DocumentIndex": 46,
               "Title": "IRefreshTokenService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Interface\\IRefreshTokenService.cs",
               "RelativeDocumentMoniker": "Interface\\IRefreshTokenService.cs",
@@ -855,12 +860,11 @@
               "RelativeToolTip": "Interface\\IRefreshTokenService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T08:42:41.977Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T08:42:41.977Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 44,
+              "DocumentIndex": 47,
               "Title": "RefreshTokenService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\RefreshTokenService.cs",
               "RelativeDocumentMoniker": "Services\\RefreshTokenService.cs",
@@ -868,12 +872,11 @@
               "RelativeToolTip": "Services\\RefreshTokenService.cs",
               "ViewState": "AgIAAAgAAAAAAAAAAIAzwAkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T08:40:26.368Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T08:40:26.368Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 45,
+              "DocumentIndex": 48,
               "Title": "GmailSmtpEmailService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\GmailSmtpEmailService.cs",
               "RelativeDocumentMoniker": "Services\\GmailSmtpEmailService.cs",
@@ -881,12 +884,11 @@
               "RelativeToolTip": "Services\\GmailSmtpEmailService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T08:36:09.815Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T08:36:09.815Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 46,
+              "DocumentIndex": 49,
               "Title": "IAuthService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Interface\\IAuthService.cs",
               "RelativeDocumentMoniker": "Interface\\IAuthService.cs",
@@ -894,12 +896,11 @@
               "RelativeToolTip": "Interface\\IAuthService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T08:35:10.261Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T08:35:10.261Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 47,
+              "DocumentIndex": 50,
               "Title": "AuthService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\AuthService.cs",
               "RelativeDocumentMoniker": "Services\\AuthService.cs",
@@ -907,12 +908,11 @@
               "RelativeToolTip": "Services\\AuthService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T08:34:11.156Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T08:34:11.156Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 48,
+              "DocumentIndex": 51,
               "Title": "EmailQueue.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\EmailQueue.cs",
               "RelativeDocumentMoniker": "Services\\EmailQueue.cs",
@@ -920,12 +920,11 @@
               "RelativeToolTip": "Services\\EmailQueue.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T05:48:20.686Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T05:48:20.686Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 50,
+              "DocumentIndex": 53,
               "Title": "GradeRepository.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Persistence\\Repositories\\GradeRepository.cs",
               "RelativeDocumentMoniker": "Persistence\\Repositories\\GradeRepository.cs",
@@ -933,25 +932,11 @@
               "RelativeToolTip": "Persistence\\Repositories\\GradeRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAHMAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T08:26:21.454Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T08:26:21.454Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 51,
-              "Title": "GradeService.cs",
-              "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\GradeService.cs",
-              "RelativeDocumentMoniker": "Services\\GradeService.cs",
-              "ToolTip": "G:\\C sharp\\Day30\\Form(backend)\\Services\\GradeService.cs",
-              "RelativeToolTip": "Services\\GradeService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T08:24:47.436Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 49,
+              "DocumentIndex": 52,
               "Title": "AttendanceController.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Controllers\\AttendanceController.cs",
               "RelativeDocumentMoniker": "Controllers\\AttendanceController.cs",
@@ -959,12 +944,11 @@
               "RelativeToolTip": "Controllers\\AttendanceController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T07:48:39.906Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T07:48:39.906Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 52,
+              "DocumentIndex": 54,
               "Title": "AttendanceService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\AttendanceService.cs",
               "RelativeDocumentMoniker": "Services\\AttendanceService.cs",
@@ -972,12 +956,11 @@
               "RelativeToolTip": "Services\\AttendanceService.cs",
               "ViewState": "AgIAAA8AAAAAAAAAAAAQwCcAAAAyAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T07:47:39.872Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T07:47:39.872Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 53,
+              "DocumentIndex": 55,
               "Title": "SubmissionController.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Controllers\\SubmissionController.cs",
               "RelativeDocumentMoniker": "Controllers\\SubmissionController.cs",
@@ -985,12 +968,11 @@
               "RelativeToolTip": "Controllers\\SubmissionController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T07:42:58.749Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T07:42:58.749Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 55,
+              "DocumentIndex": 57,
               "Title": "ISubmissionService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Interface\\ISubmissionService.cs",
               "RelativeDocumentMoniker": "Interface\\ISubmissionService.cs",
@@ -998,12 +980,11 @@
               "RelativeToolTip": "Interface\\ISubmissionService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T07:36:41.253Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T07:36:41.253Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 56,
+              "DocumentIndex": 58,
               "Title": "SubmissionRepository.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Persistence\\Repositories\\SubmissionRepository.cs",
               "RelativeDocumentMoniker": "Persistence\\Repositories\\SubmissionRepository.cs",
@@ -1011,12 +992,11 @@
               "RelativeToolTip": "Persistence\\Repositories\\SubmissionRepository.cs",
               "ViewState": "AgIAACoAAAAAAAAAAAAowDIAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T07:34:33.666Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T07:34:33.666Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 54,
+              "DocumentIndex": 56,
               "Title": "SubmissionService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\SubmissionService.cs",
               "RelativeDocumentMoniker": "Services\\SubmissionService.cs",
@@ -1024,12 +1004,11 @@
               "RelativeToolTip": "Services\\SubmissionService.cs",
               "ViewState": "AgIAAHEAAAAAAAAAAAAQwHAAAAAyAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T06:00:53.478Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T06:00:53.478Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 57,
+              "DocumentIndex": 59,
               "Title": "ISubmissionRepository.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Interface\\ISubmissionRepository.cs",
               "RelativeDocumentMoniker": "Interface\\ISubmissionRepository.cs",
@@ -1037,12 +1016,11 @@
               "RelativeToolTip": "Interface\\ISubmissionRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAvAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T06:05:51.52Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T06:05:51.52Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 58,
+              "DocumentIndex": 60,
               "Title": "SubmissionDtos.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\DTOs\\SubmissionDtos.cs",
               "RelativeDocumentMoniker": "DTOs\\SubmissionDtos.cs",
@@ -1050,12 +1028,11 @@
               "RelativeToolTip": "DTOs\\SubmissionDtos.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAyAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T06:02:01.745Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T06:02:01.745Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 59,
+              "DocumentIndex": 61,
               "Title": "CreatedSubmissionDtos.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\DTOs\\CreatedSubmissionDtos.cs",
               "RelativeDocumentMoniker": "DTOs\\CreatedSubmissionDtos.cs",
@@ -1063,12 +1040,11 @@
               "RelativeToolTip": "DTOs\\CreatedSubmissionDtos.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T06:01:36.981Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T06:01:36.981Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 60,
+              "DocumentIndex": 62,
               "Title": "Submission.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Entities\\Submission.cs",
               "RelativeDocumentMoniker": "Entities\\Submission.cs",
@@ -1076,12 +1052,11 @@
               "RelativeToolTip": "Entities\\Submission.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T06:01:22.733Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T06:01:22.733Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 61,
+              "DocumentIndex": 63,
               "Title": "EnrollmentService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\EnrollmentService.cs",
               "RelativeDocumentMoniker": "Services\\EnrollmentService.cs",
@@ -1089,12 +1064,11 @@
               "RelativeToolTip": "Services\\EnrollmentService.cs",
               "ViewState": "AgIAADIAAAAAAAAAAAAcwEYAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T05:58:31.417Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T05:58:31.417Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 62,
+              "DocumentIndex": 64,
               "Title": "IEntrollmentRepository.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Interface\\IEntrollmentRepository.cs",
               "RelativeDocumentMoniker": "Interface\\IEntrollmentRepository.cs",
@@ -1102,12 +1076,11 @@
               "RelativeToolTip": "Interface\\IEntrollmentRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAABTAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T05:57:57.36Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T05:57:57.36Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 63,
+              "DocumentIndex": 65,
               "Title": "20261002055244_HardenSchema.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Migrations\\20261002055244_HardenSchema.cs",
               "RelativeDocumentMoniker": "Migrations\\20261002055244_HardenSchema.cs",
@@ -1115,12 +1088,11 @@
               "RelativeToolTip": "Migrations\\20261002055244_HardenSchema.cs",
               "ViewState": "AgIAAAsAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T05:53:47.4Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T05:53:47.4Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 64,
+              "DocumentIndex": 66,
               "Title": "TokenCleanupService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Services\\TokenCleanupService.cs",
               "RelativeDocumentMoniker": "Services\\TokenCleanupService.cs",
@@ -1128,12 +1100,11 @@
               "RelativeToolTip": "Services\\TokenCleanupService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAAA3AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T05:48:59.828Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T05:48:59.828Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 65,
+              "DocumentIndex": 67,
               "Title": "PasswordResetToken.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Entities\\PasswordResetToken.cs",
               "RelativeDocumentMoniker": "Entities\\PasswordResetToken.cs",
@@ -1141,12 +1112,11 @@
               "RelativeToolTip": "Entities\\PasswordResetToken.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAvAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T05:37:34.455Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T05:37:34.455Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 66,
+              "DocumentIndex": 68,
               "Title": "IFileStorageService.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Interface\\IFileStorageService.cs",
               "RelativeDocumentMoniker": "Interface\\IFileStorageService.cs",
@@ -1154,12 +1124,11 @@
               "RelativeToolTip": "Interface\\IFileStorageService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T05:14:56.179Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T05:14:56.179Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 67,
+              "DocumentIndex": 69,
               "Title": "DbUpdateExceptionsExtensions.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Persistence\\DbUpdateExceptionsExtensions.cs",
               "RelativeDocumentMoniker": "Persistence\\DbUpdateExceptionsExtensions.cs",
@@ -1167,12 +1136,11 @@
               "RelativeToolTip": "Persistence\\DbUpdateExceptionsExtensions.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T05:14:13.312Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T05:14:13.312Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 68,
+              "DocumentIndex": 70,
               "Title": "AuthController.cs",
               "DocumentMoniker": "G:\\C sharp\\Day30\\Form(backend)\\Controllers\\AuthController.cs",
               "RelativeDocumentMoniker": "Controllers\\AuthController.cs",
@@ -1180,8 +1148,7 @@
               "RelativeToolTip": "Controllers\\AuthController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-02T05:05:48.552Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-02T05:05:48.552Z"
             }
           ]
         }

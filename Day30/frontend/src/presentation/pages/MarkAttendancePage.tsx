@@ -148,14 +148,25 @@ const MarkAttendancePage: React.FC = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Email</TableHead>
+                  {/* CHANGED: Roll + Student replace the old Email column.
+                      Matches the class-enrollment page: roll first, then name. */}
+                  <TableHead className="w-16">Roll</TableHead>
+                  <TableHead>Student</TableHead>
                   <TableHead>Status</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {roster.map((r) => (
                   <TableRow key={r.enrollmentId}>
-                    <TableCell>{r.studentEmail}</TableCell>
+                    {/* CHANGED: roll number from the profile. 0 means the
+                        profile row was missing — show a dash, not a lying zero. */}
+                    <TableCell className="text-muted-foreground tabular-nums">
+                      {r.rollNo > 0 ? r.rollNo : "—"}
+                    </TableCell>
+                    {/* CHANGED: student full name instead of email. */}
+                    <TableCell className="font-medium">
+                      {r.studentName}
+                    </TableCell>
                     <TableCell>
                       <Select
                         value={statuses[r.enrollmentId] ?? "Unmarked"}

@@ -88,8 +88,6 @@ const SubmissionPage: React.FC = () => {
           </div>
         </div>
 
-        {/* REMOVED: Education section */}
-
         {/* File Information */}
         <div className="space-y-3">
           <h3 className="text-sm font-medium text-gray-500">

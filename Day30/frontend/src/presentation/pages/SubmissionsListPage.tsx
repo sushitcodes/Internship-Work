@@ -15,7 +15,8 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import { useAppSelector } from "@/infrastructure/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/infrastructure/store/hooks";
+import { removeUpload } from "@/infrastructure/store/uploadProgressSlice";
 import {
   HIDE_ACTIONS_WHEN_LOGGED_OUT,
   canEdit,
@@ -49,6 +50,7 @@ const SubmissionsListPage: React.FC = () => {
     Object.values(state.uploadProgress.byId),
   );
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const pages = data?.pages ?? [];
   const {
     pageIndex,
@@ -70,7 +72,10 @@ const SubmissionsListPage: React.FC = () => {
     } catch (err) {
       console.error("Failed to delete submission:", err);
       toast.error(
-        extractErrorMessage(err, "Could not delete this submission. Please try again."),
+        extractErrorMessage(
+          err,
+          "Could not delete this submission. Please try again.",
+        ),
       );
     }
   };
@@ -137,7 +142,22 @@ const SubmissionsListPage: React.FC = () => {
                         </div>
                       </TableCell>
                       <TableCell className="py-3 text-xs text-muted-foreground">
-                        {u.status === "uploading" ? `${u.progress}%` : "Failed"}
+                        {u.status === "uploading" ? (
+                          `${u.progress}%`
+                        ) : (
+                          <div className="flex items-center gap-2">
+                            <span className="text-red-500">Failed</span>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() =>
+                                dispatch(removeUpload({ id: u.id }))
+                              }
+                            >
+                              Dismiss
+                            </Button>
+                          </div>
+                        )}
                       </TableCell>
                     </TableRow>
                   ))}

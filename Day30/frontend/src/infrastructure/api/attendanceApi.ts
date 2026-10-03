@@ -5,6 +5,7 @@ export interface AttendanceRecordDto {
   enrollmentId: string;
   studentUserId: string;
   studentEmail: string;
+
   date: string;
   status: string;
 }
@@ -12,6 +13,8 @@ export interface AttendanceRosterEntry {
   enrollmentId: string;
   studentUserId: string;
   studentEmail: string;
+  studentName: string;
+  rollNo: number;
   attendanceRecordId: string | null;
   status: string; // "Present" | "Absent" | "Late" | "Excused" | "Unmarked"
 }

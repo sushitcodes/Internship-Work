@@ -27,6 +27,8 @@ public class AttendanceRosterEntryDto
     public Guid EnrollmentId { get; set; }
     public Guid StudentUserId { get; set; }
     public string StudentEmail { get; set; } = string.Empty;
+    public string StudentName { get; set; } = string.Empty;
+    public int RollNo { get; set; }
     public Guid? AttendanceRecordId { get; set; }
     public string Status { get; set; } = "Unmarked";
 }

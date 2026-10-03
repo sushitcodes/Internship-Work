@@ -5,6 +5,7 @@ import { api } from "./api";
 import {
   startUpload,
   updateUploadProgress,
+  uploadFailed,
   removeUpload,
 } from "../store/uploadProgressSlice";
 import type { Submission } from "../../domain/entities/Submission";
@@ -18,10 +19,6 @@ export function useUploadSubmission() {
       url: string,
       formData: FormData,
       fileName: string,
-      // NEW — called synchronously with the id, BEFORE the network
-      // request goes out. This is what lets a caller (FormPage) start
-      // watching this exact upload's progress from the same Redux
-      // slice the list page already reads, no second source of truth.
       onStart?: (id: string) => void,
     ): Promise<Submission> => {
       const tempId = crypto.randomUUID();
@@ -40,30 +37,33 @@ export function useUploadSubmission() {
           },
         });
 
-      return (
-        send()
-          // Access token expired while the user was filling the form: refresh once, then retry.
-          .catch(async (err: AxiosError) => {
-            if (err.response?.status === 401 && (await refreshSession()))
-              return send();
-            throw err;
-          })
-          .then((response) => {
-            dispatch(api.util.invalidateTags(["Submission", "Dashboard"]));
-            dispatch(removeUpload({ id: tempId }));
-            return response.data;
-          })
-          .catch((err: AxiosError<{ message?: string; title?: string }>) => {
-            const message =
-              err.response?.data?.message ??
-              err.response?.data?.title ??
-              (typeof err.response?.data === "string"
-                ? err.response.data
-                : null) ??
-              "Upload failed. Use a PDF, JPG or PNG under 5 MB and try again.";
-            throw new Error(message);
-          })
-      );
+      return send()
+        .catch(async (err: AxiosError) => {
+          if (err.response?.status === 401 && (await refreshSession()))
+            return send();
+          throw err;
+        })
+        .then((response) => {
+          dispatch(api.util.invalidateTags(["Submission", "Dashboard"]));
+          dispatch(removeUpload({ id: tempId }));
+          return response.data;
+        })
+        .catch((err: AxiosError<{ message?: string; title?: string }>) => {
+          const message =
+            err.response?.data?.message ??
+            err.response?.data?.title ??
+            (typeof err.response?.data === "string"
+              ? err.response.data
+              : null) ??
+            "Upload failed. Use a PDF, JPG or PNG under 5 MB and try again.";
+
+          // Mark the row as failed so the list shows "Failed" and the reason,
+          // then remove it by itself after a few seconds.
+          dispatch(uploadFailed({ id: tempId, errorMessage: message }));
+          setTimeout(() => dispatch(removeUpload({ id: tempId })), 8000);
+
+          throw new Error(message);
+        });
     },
     [dispatch],
   );

@@ -1,4 +1,5 @@
-﻿using Form.DTOs;
+﻿using DocumentFormat.OpenXml.Wordprocessing;
+using Form.DTOs;
 using Form.Entities;
 using Form.Interfaces;
 using Form.Persistence;
@@ -14,6 +15,13 @@ public class AttendanceRepository(AppDbContext Context) : IAttendanceRepository
         return await (
             from e in Context.Enrollments.AsNoTracking()
             where e.ClassRoomId == classRoomId
+            //  left join UserProfile so we can show FullName + MemberNumber.
+            // EF translates this to a LEFT JOIN, so an enrollment whose profile
+            // has not been created yet still appears in the roster (with a
+            // fallback to email + roll number 0) instead of vanishing.
+            join p in Context.UserProfiles.AsNoTracking()
+                on e.StudentUserId equals p.UserId into profileJoined
+            from p in profileJoined.DefaultIfEmpty()
             join a in todaysAttendance on e.Id equals a.EnrollmentId into joined
             from a in joined.DefaultIfEmpty()
             select new AttendanceRosterEntryDto
@@ -21,10 +29,23 @@ public class AttendanceRepository(AppDbContext Context) : IAttendanceRepository
                 EnrollmentId = e.Id,
                 StudentUserId = e.StudentUserId,
                 StudentEmail = e.StudentUser.Email,
+                //  fall back to the email prefix when the profile is missing,
+                // matching what UserService.CreateUserAsync does for FullName.
+                StudentName = p != null
+                    ? p.FullName
+                    : e.StudentUser.Email.Substring(0, e.StudentUser.Email.IndexOf('@')),
+                //: MemberNumber is the identity roll number. 0 means "profile
+                // missing" — the page can hide or label it if you want.
+                RollNo = p != null ? p.MemberNumber : 0,
                 AttendanceRecordId = a == null ? (Guid?)null : a.Id,
                 Status = a == null ? "Unmarked" : a.Status.ToString(),
             }
-        ).ToListAsync();
+        )
+         //smallest roll number first; name as a tiebreaker for the
+    // "profile missing" case where RollNo falls back to 0.
+    .OrderBy(r => r.RollNo)
+    .ThenBy(r => r.StudentName)
+     .ToListAsync();
     }
 
     public async Task UpsertRangeAsync(
