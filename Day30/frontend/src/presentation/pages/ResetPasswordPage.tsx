@@ -59,10 +59,10 @@ const ResetPasswordPage: React.FC = () => {
             error={errors.email}
           />
           <FormInput
-            label="8-digit code"
+            label="6-digit code"
             registration={register("code", {
               required: "Code is required",
-              pattern: { value: /^\d{8}$/, message: "Enter the 8-digit code" },
+              pattern: { value: /^\d{6}$/, message: "Enter the 6-digit code" },
             })}
             error={errors.code}
           />

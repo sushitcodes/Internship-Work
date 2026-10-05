@@ -8,11 +8,13 @@ App_Data/
 Form(backend)/wwwroot/uploads/
 appsettings.*.local.json
 
+
 # Frontend
 node_modules/
 dist/
 *.tsbuildinfo
 .env.local
+
 
 
 # ==============================
