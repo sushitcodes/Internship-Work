@@ -306,8 +306,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         return await base.SaveChangesAsync(cancellationToken);
     }
 
-    // --------------------------------------------------------------------
-    // Option 2A — keep Subject (IsArchived) and Grade (IsDeleted) filters
+    // keep Subject (IsArchived) and Grade (IsDeleted) filters
     // consistent at the service layer.
     //
     // Subject and Grade use different soft-delete flags, so EF has no way
