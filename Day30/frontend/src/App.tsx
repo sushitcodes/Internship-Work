@@ -23,9 +23,11 @@ import ClassSubjectPage from "./presentation/pages/ClassSubjectPage";
 import EnterGradesPage from "./presentation/pages/EnterGradesPage";
 import ReportCardPage from "./presentation/pages/ReportCardPage";
 import AdminBroadcastPage from "./presentation/pages/AdminBroadcastPage";
+import { useProactiveTokenRefresh } from "./infrastructure/api/useProactiveTokenRefresh";
 
 function App() {
   useGetMeQuery();
+  useProactiveTokenRefresh();
 
   return (
     <>

@@ -42,7 +42,7 @@ export const authApi = api.injectEndpoints({
         const { data } = await queryFulfilled;
         dispatch(api.util.resetApiState());
 
-        dispatch(setCredentials({ email: data.email, roles: data.roles }));
+        dispatch(setCredentials({ email: data.email, roles: data.roles, expiresAt: data.expiresAt }));
       },
     }),
 
@@ -72,12 +72,12 @@ export const authApi = api.injectEndpoints({
       },
     }),
 
-    getMe: builder.query<{ email: string; roles: string[] }, void>({
+    getMe: builder.query<{ email: string; roles: string[]; expiresAt?: string }, void>({
       query: () => "/auth/me",
       onQueryStarted: async (_arg, { dispatch, queryFulfilled }) => {
         try {
           const { data } = await queryFulfilled;
-          dispatch(setCredentials({ email: data.email, roles: data.roles }));
+          dispatch(setCredentials({ email: data.email, roles: data.roles, expiresAt: data.expiresAt }));
         } catch {
           dispatch(logout());
           dispatch(api.util.invalidateTags([...DATA_TAGS]));

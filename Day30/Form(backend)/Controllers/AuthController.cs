@@ -82,7 +82,16 @@ public class AuthController(IAuthService _authService, IConfiguration _config) :
         var roles = User.FindAll(System.Security.Claims.ClaimTypes.Role)
                 .Select(c => c.Value)
                 .ToList();
-        return Ok(new { email, roles });
+
+        // Read the token expiry from the JWT claim so the frontend can schedule
+        // a proactive refresh without waiting for a 401.
+        DateTime? expiresAt = null;
+        var expClaim = User.FindFirst(System.Security.Claims.ClaimTypes.Expiration)?.Value
+                    ?? User.FindFirst("exp")?.Value;
+        if (long.TryParse(expClaim, out var expUnix))
+            expiresAt = DateTimeOffset.FromUnixTimeSeconds(expUnix).UtcDateTime;
+
+        return Ok(new { email, roles, expiresAt });
     }
 
     [AllowAnonymous]

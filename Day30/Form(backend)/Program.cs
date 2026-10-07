@@ -182,6 +182,19 @@ app.UseExceptionHandler(errApp =>
         var ex = feature?.Error;
         var traceId = System.Diagnostics.Activity.Current?.Id ?? context.TraceIdentifier;
 
+        // Client disconnected (e.g. browser navigated away, component unmounted, or the
+        // frontend retried after a token refresh and cancelled the original request).
+        // This is normal — log at Debug level and return without writing a response body,
+        // because the connection is already gone.
+        if (ex is OperationCanceledException or TaskCanceledException
+            || context.RequestAborted.IsCancellationRequested)
+        {
+            Log.Debug("Request cancelled by client on {Method} {Path}",
+                context.Request.Method, context.Request.Path);
+            context.Response.StatusCode = 499; // "Client Closed Request" (nginx convention)
+            return;
+        }
+
         var (status, message, isExpected) = ex switch
         {
             ValidateException v => (StatusCodes.Status400BadRequest, v.Message, true),
