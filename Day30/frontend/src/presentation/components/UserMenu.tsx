@@ -45,12 +45,6 @@ export function UserMenu() {
     toast.success("Logged out.");
     navigate(Paths.login);
   };
-  // const toggleTheme = () => {
-  //   const next = !dark;
-  //   setDark(next);
-  //   console.log("toggled, now dark =", next);
-  // };
-
   return (
     <>
       <div className="flex flex-end gap-4">

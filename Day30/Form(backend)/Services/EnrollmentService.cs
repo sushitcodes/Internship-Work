@@ -19,7 +19,6 @@ public class EnrollmentService : IEnrollmentService
         _profileRepository = profileRepository;
     }
 
-    // ── The single source of truth for "one class at a time" ──
     // The single source of truth for "one class at a time".
     // Uses the version that also sees inactive enrollments, because the
     // unique index on StudentUserId counts them.
@@ -34,22 +33,26 @@ public class EnrollmentService : IEnrollmentService
 
     public async Task<EnrollmentDto> EnrollAsync(CreateEnrollmentRequest request)
     {
+        // CHECK 1: Does the student exist?
         var student = await _userRepository.GetByIdAsync(request.StudentUserId)
             ?? throw new InvalidOperationException("Student not found.");
 
+        // CHECK 2: Does the student have the "Student" role?
         if (!student.RoleAssignments.Any(r => r.Role == UserRole.Student))
             throw new InvalidOperationException("Only users with the Student role can be enrolled.");
 
-        // This line alone prevents the 500 you saw in the logs.
+        // CHECK 3: Is the student active?
         if (!student.IsActive)
-            throw new InvalidOperationException(
-                "This account is deactivated. Reactivate it before enrolling.");
+            throw new InvalidOperationException("This account is deactivated. Reactivate it before enrolling.");
 
+        // CHECK 4: Is the student already enrolled in THIS class?
         if (await _repository.ExistsAsync(request.StudentUserId, request.ClassRoomId))
             throw new InvalidOperationException("This student is already enrolled in this class.");
 
+        // CHECK 5: Is the student enrolled in ANOTHER class?
         await EnsureStudentNotInAnotherClassAsync(request.StudentUserId, request.ClassRoomId);
 
+        // ALL CHECKS PASSED — save!
         var saved = await _repository.AddAsync(new Enrollment
         {
             StudentUserId = request.StudentUserId,
@@ -57,7 +60,7 @@ public class EnrollmentService : IEnrollmentService
         });
 
         var profile = await _profileRepository.GetByUserIdAsync(student.Id);
-
+        // return to the dto after saving
         return new EnrollmentDto
         {
             Id = saved.Id,
@@ -70,15 +73,21 @@ public class EnrollmentService : IEnrollmentService
             EnrolledAt = saved.EnrolledAt,
         };
     }
-
     public async Task<List<EnrollmentDto>> GetByClassRoomAsync(Guid classRoomId)
     {
+        // Step 1: Get enrollments (1 query)
         var enrollments = await _repository.GetByClassRoomIdAsync(classRoomId);
+
+        // Step 2: Extract ALL student IDs into one list
         var userIds = enrollments.Select(e => e.StudentUserId).ToList();
 
+        // Step 3: Fetch ALL profiles in ONE query
         var profiles = await _profileRepository.GetByUserIdsAsync(userIds);
+
+        // Step 4: Build a Dictionary for fast lookup
         var profileByUserId = profiles.ToDictionary(p => p.UserId);
 
+        // Step 5: Combine data in memory (no more DB calls)
         return enrollments.Select(e =>
         {
             profileByUserId.TryGetValue(e.StudentUserId, out var profile);
